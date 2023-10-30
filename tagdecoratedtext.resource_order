@@ -1,6 +1,23 @@
 {
-  "FolderOrderSettings": [],
+  "FolderOrderSettings": [
+    {"name":"TagDecoratedText","order":16,"path":"folders/TagDecoratedText.yy",},
+    {"name":"AnimatedText","order":1,"path":"folders/TagDecoratedText/AnimatedText.yy",},
+    {"name":"StyleableText","order":2,"path":"folders/TagDecoratedText/StyleableText.yy",},
+    {"name":"TypedText","order":3,"path":"folders/TagDecoratedText/TypedText.yy",},
+  ],
   "ResourceOrderSettings": [
+    {"name":"StyleableTextStyle","order":5,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
+    {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
+    {"name":"fnt_handwriting","order":4,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
+    {"name":"spr_button","order":7,"path":"sprites/spr_button/spr_button.yy",},
+    {"name":"obj_textsystem_test","order":5,"path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},
+    {"name":"StyleableTextDrawable","order":4,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
+    {"name":"StyleableTextCharacter","order":3,"path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},
+    {"name":"TagDecoratedText","order":8,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
+    {"name":"spr_styleable_text_sprite_default","order":1,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},
+    {"name":"StyleableText","order":2,"path":"scripts/StyleableText/StyleableText.yy",},
+    {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
     {"name":"Room1","order":15,"path":"rooms/Room1/Room1.yy",},
   ],
 }
