@@ -1,0 +1,17 @@
+30th of October, 2023
+
+We're going to review our text library. Last time we were able to make something that was useable, and achieved most of the goals we set out for. But The pagination at the end was messy, and I seriously lost track of how things worked under the hood. Also I got confused about how to handle different types of effects. I'm confident the linked list system could accomodate almost any effect. I remember rotation being kind of weird, but I'll come back to that one.
+
+Let me get a few thoughts down first. I remember the jitter effect being problematic. That's the one were random characters would jump out of position for a few frames. This one is tricky because it affects different characters at different times. I believe we can review and make our system that affects the linked list more solid. We should focus on making it easy to manipulate the linked list first before remaking text parsing.
+
+We also need to take pagination into account sooner.
+
+We should also consider using the same logic we're considering for the jitter effect for typing. In-fact "typing" could actually be an effect just like any other. I suppose they'd need to be slightly different so the user can affect typing state at any point, but we'll get to that. So in summary:
+
+Review linked list system so effects can easily be made for it.
+Ensure pagination is considered for all steps.
+Consider making typing an "effect" just like all other effects.
+
+Perhaps for grouping effects, we should ask the user to supply a "name" for the effect. This way our normal closing tag of <> would apply to everything except named effects. Here's an example I'm thinking of:
+
+"Hello world. <jitter-myeffectname:1,2,3>Everything shakes today.<myeffectname> But I feel <wave> solid<>."
