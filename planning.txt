@@ -15,3 +15,8 @@ Consider making typing an "effect" just like all other effects.
 Perhaps for grouping effects, we should ask the user to supply a "name" for the effect. This way our normal closing tag of <> would apply to everything except named effects. Here's an example I'm thinking of:
 
 "Hello world. <jitter-myeffectname:1,2,3>Everything shakes today.<myeffectname> But I feel <wave> solid<>."
+
+
+2nd of November, 2023
+
+Something that feels wrong is the upward and circular references that exist in the current system. A character array should contain references to characters. But characters have references to drawables. And drawables have references to the same character array that references the characters. I wonder if there's a way to disconnect these references so lower level building blocks aren't aware of each other. I do know why we did this in the first place. It was so that all characters were always aware of what drawable was drawing them, and so drawables could reference the original styles based on the character array. Although this system worked, it doesn't feel right. Let's see if we can't think of a way to remove circular references.
