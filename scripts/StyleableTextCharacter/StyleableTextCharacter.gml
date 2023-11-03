@@ -1,14 +1,15 @@
 /**
  * Get a new StyleableCharacter instance.
- * @param {string} _character character
+ *
+ * @param {string} char Single character string.
  * @ignore
  */
-function StyleableTextCharacter(_character) constructor {
-	if (string_length(_character) != 1) {
+function StyleableTextCharacter(char) constructor {
+	if (string_length(char) != 1) {
 		show_error("string _character must be length 1", true);
 	}
 	/// @ignore
-	character = _character;
+	character = char;
 	/// @ignore
 	sprite = spr_styleable_text_sprite_default; // treated as undefined
 	/// @ignore

@@ -2,6 +2,7 @@ global.tag_decorated_text_default_font = fnt_styleable_text_font_default
 
 /**
  * Get a new StyleableTextStyle instance.
+ *
  * @ignore
  */
 function StyleableTextStyle() constructor {
@@ -24,6 +25,7 @@ function StyleableTextStyle() constructor {
 	
 	/**
 	 * Get boolean indicating if the given style is equal to this one.
+	 *
 	 * @param {struct.StyleableTextStyle} style style
 	 * @ignore
 	 */
@@ -41,6 +43,7 @@ function StyleableTextStyle() constructor {
 	
 	/**
 	 * Sets this styles parameters to the same as the given style.
+	 *
 	 * @param {struct.StyleableTextStyle} style the style to copy
 	 * @ignore
 	 */
