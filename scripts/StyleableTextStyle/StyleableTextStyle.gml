@@ -24,34 +24,34 @@ function StyleableTextStyle() constructor {
 	
 	/**
 	 * Get boolean indicating if the given style is equal to this one.
-	 * @param {struct.StyleableTextStyle} _style style
+	 * @param {struct.StyleableTextStyle} style style
 	 * @ignore
 	 */
-	is_equal = function(_style) {
-		if (_style.font != font) return false;
-		if (_style.style_color != style_color) return false;
-		if (_style.alpha != alpha) return false;
-		if (_style.scale_x != scale_x) return false;
-		if (_style.scale_y != scale_y) return false;
-		if (_style.mod_x != mod_x) return false;
-		if (_style.mod_y != mod_y) return false;
-		if (_style.mod_angle != mod_angle) return false;
+	is_equal = function(style) {
+		if (style.font != font) return false;
+		if (style.style_color != style_color) return false;
+		if (style.alpha != alpha) return false;
+		if (style.scale_x != scale_x) return false;
+		if (style.scale_y != scale_y) return false;
+		if (style.mod_x != mod_x) return false;
+		if (style.mod_y != mod_y) return false;
+		if (style.mod_angle != mod_angle) return false;
 		return true;
 	};
 	
 	/**
 	 * Sets this styles parameters to the same as the given style.
-	 * @param {struct.StyleableTextStyle} _style the style to copy
+	 * @param {struct.StyleableTextStyle} style the style to copy
 	 * @ignore
 	 */
-	set_to = function(_style) {
-		font = _style.font;
-		style_color = _style.style_color;
-		alpha = _style.alpha;
-		scale_x = _style.scale_x;
-		scale_y = _style.scale_y;
-		mod_x = _style.mod_x;
-		mod_y = _style.mod_y;
-		mod_angle = _style.mod_angle;
+	set_to = function(style) {
+		font = style.font;
+		style_color = style.style_color;
+		alpha = style.alpha;
+		scale_x = style.scale_x;
+		scale_y = style.scale_y;
+		mod_x = style.mod_x;
+		mod_y = style.mod_y;
+		mod_angle = style.mod_angle;
 	};
 }
