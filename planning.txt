@@ -20,3 +20,58 @@ Perhaps for grouping effects, we should ask the user to supply a "name" for the 
 2nd of November, 2023
 
 Something that feels wrong is the upward and circular references that exist in the current system. A character array should contain references to characters. But characters have references to drawables. And drawables have references to the same character array that references the characters. I wonder if there's a way to disconnect these references so lower level building blocks aren't aware of each other. I do know why we did this in the first place. It was so that all characters were always aware of what drawable was drawing them, and so drawables could reference the original styles based on the character array. Although this system worked, it doesn't feel right. Let's see if we can't think of a way to remove circular references.
+
+
+21st of November, 2023
+
+I found myself wishing I could use this library recently, for a typing game. I wanted to be able to set the color of text mid-way. Green at the start and red at the end. We should definitely rework this library a bit so it's easy to do that. And in that case, we wouldn't want to use in-text tags. We'd want something like:
+
+text_set_color(text, color, index_start, index_end);
+
+I have some vague memory of trying to design it like this originally. And design the text typing and animation effects to use these functions.
+
+Yes, on looking it over it looks like that's exactly how we designed it. However I left all the style setting functions internal. Also, it's clear that it's in the styleable text that pagination should occur. If we reflect on our original thoughts, the alterable values of any text are:
+
+font
+color
+alpha
+scale_x
+scale_y
+mod_x
+mod_y
+angle
+sprite (now quite a style but matters)
+
+And of those: font, scale_x/y, and sprite change how text could actually be positioned. So anytime we change one of those, we need to recalculate line breaks.
+
+We're going to continue using our concept of drawables, items that exist in a linked list that contain information about how to draw text. And our animations/styles will modify these drawables.
+
+Something to note is that when we modify any of these styles, we'll have to recalculate drawables. In our original design we had an array of characters, each containing a default style, from which drawables were calculated. And animations would update drawables after calculated from styles. 
+
+I was thinking to myself "Why even have the character array? Can't we just have drawables modified on the fly?" But I'm pretty sure we ran into situations where we needed to "reset" drawables. But how do you know what to reset the styles to? We need some sort of anchor. This is also a key difference between how animations will work and regular styles. Actually, let's quickly check the render function for our text. There was something important about the order of when we cut and merge drawables. Ah, I think it was as simple as merging drawables, then splitting them, then updating the styles on those drawables. The draw function is this:
+
+loop over drawables and reset styles for each
+loop over animations and merge drawables
+remove finished animations
+loop over animations and split drawables
+loop over animations and update drawables
+
+We'll remember this for the future.
+
+So the logic of handling animations makes sense to me. And our model of style, character, and drawable mostly makes sense too. Earlier we discussed removing the circular reference between characters and drawables. I think we can accomplish this by making characters store a reference to drawables, and drawables do not store a reference to character. And the functions for splitting and merging drawables will exist outside of the drawable model.
+
+So, let's review how we could redo the initial text logic to include pagination. Actually this might be very simple. First recall that we'll execute this logic whenever a space altering style changes somewhere. And these changes are applied to the character array. Also recall we keep track of what line a character is on with a line_index field in the character. So to determine line breaks, we simply assign this incrementing number to each character. Once we've done this, we can determine the height of lines by finding the highest character in each line. Now that we have that information we could easily determine which lines should be on which pages based on the height limitation given by the user. 
+
+Perhaps we could assign pages to characters the same way we assign lines. With an index value. And the text class could store the page to display with a basic variable as well. When it comes to drawing, we can know which drawable to start with by finding the first character of the current page, and using whatever drawable it points to. Luckily because of our concept of splitting and merging, drawables will never overlap with the next page. So we could just draw drawables until we find a drawable whos character isn't the current page (or we find the last drawable). Actually it occured to me we may not even need the linked list concept anymore if the character array is going to reference drawables.
+
+This system makes sense to me. Let's summarize:
+
+New verison will retain models of styles, characters, and drawables. Characters contain a line and page index. The text class on creation will determine the x/y position, line index, and page index of every character. Then, drawables will be generated for the text. The text is now complete and ready to be rendered.
+
+Brief note: during parsing we might also want to store information about start and ends of lines excluding spaces. Later this will help us draw text with different alignments.
+
+Once text is created, the user will have access to functions which change the styles of the characters. For starters, since we'll already have logic which generates characters from drawables, we can simply run that again. But for performance we may want to only run the entire logic again for styles which change size of characters.
+
+Finally we'll need to create draw functions for the text class which only draw the current page. 
+
+Once we create this we could experiment with a crude typing system that just sets the alpha of text. And possibly a few other animations. The new system makes sense to me. I think we can try implementing this next time.

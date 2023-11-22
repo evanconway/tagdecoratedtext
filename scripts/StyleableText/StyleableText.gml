@@ -16,7 +16,7 @@ function StyleableText(_source, _width = -1) constructor {
 	
 	/*
 	Width is determined automatically if not given by the user. If width is specified then
-	the width will be used to determine line breaks. Heigh is always automatically
+	the width will be used to determine line breaks. Height is always automatically
 	calculated.
 	*/
 	auto_calculate_width = _width < 0;
