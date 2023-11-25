@@ -1,6 +1,7 @@
 {
   "FolderOrderSettings": [
-    {"name":"TagDecoratedText","order":16,"path":"folders/TagDecoratedText.yy",},
+    {"name":"NewVersion","order":2,"path":"folders/NewVersion.yy",},
+    {"name":"TagDecoratedText","order":1,"path":"folders/TagDecoratedText.yy",},
     {"name":"AnimatedText","order":1,"path":"folders/TagDecoratedText/AnimatedText.yy",},
     {"name":"StyleableText","order":2,"path":"folders/TagDecoratedText/StyleableText.yy",},
     {"name":"TypedText","order":3,"path":"folders/TagDecoratedText/TypedText.yy",},
@@ -14,10 +15,10 @@
     {"name":"StyleableTextDrawable","order":4,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},
     {"name":"StyleableTextCharacter","order":3,"path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},
     {"name":"TagDecoratedText","order":8,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
-    {"name":"spr_styleable_text_sprite_default","order":1,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"spr_styleable_text_sprite_default","order":4,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
     {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},
     {"name":"StyleableText","order":2,"path":"scripts/StyleableText/StyleableText.yy",},
+    {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
     {"name":"AnimatedTextAnimation","order":1,"path":"scripts/AnimatedTextAnimation/AnimatedTextAnimation.yy",},
-    {"name":"Room1","order":15,"path":"rooms/Room1/Room1.yy",},
   ],
 }

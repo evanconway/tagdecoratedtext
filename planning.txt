@@ -66,12 +66,17 @@ Perhaps we could assign pages to characters the same way we assign lines. With a
 
 This system makes sense to me. Let's summarize:
 
-New verison will retain models of styles, characters, and drawables. Characters contain a line and page index. The text class on creation will determine the x/y position, line index, and page index of every character. Then, drawables will be generated for the text. The text is now complete and ready to be rendered.
+New verison will retain models of styles, characters, and drawables. Characters contain a line and page index. The text class on creation will determine the x/y position, line index, and page index of every character. Then, drawables will be generated from the characters. The text is now complete and ready to be rendered.
 
-Brief note: during parsing we might also want to store information about start and ends of lines excluding spaces. Later this will help us draw text with different alignments.
+Note: during parsing we might also want to store information about start and ends of lines excluding spaces. Later this will help us draw text with different alignments.
 
 Once text is created, the user will have access to functions which change the styles of the characters. For starters, since we'll already have logic which generates characters from drawables, we can simply run that again. But for performance we may want to only run the entire logic again for styles which change size of characters.
 
 Finally we'll need to create draw functions for the text class which only draw the current page. 
 
 Once we create this we could experiment with a crude typing system that just sets the alpha of text. And possibly a few other animations. The new system makes sense to me. I think we can try implementing this next time.
+
+
+25th of Novemeber, 2023
+
+It occured to me we may not need line index. We could just use the y position of characters. 

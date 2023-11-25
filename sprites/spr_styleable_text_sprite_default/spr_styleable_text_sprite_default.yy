@@ -25,8 +25,8 @@
   "nineSlice": null,
   "origin": 0,
   "parent": {
-    "name": "StyleableText",
-    "path": "folders/TagDecoratedText/StyleableText.yy",
+    "name": "tagdecoratedtext",
+    "path": "tagdecoratedtext.yyp",
   },
   "preMultiplyAlpha": false,
   "sequence": {

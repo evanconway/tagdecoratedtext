@@ -11,6 +11,7 @@
   },
   "defaultScriptType": 1,
   "Folders": [
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"NewVersion","folderPath":"folders/NewVersion.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"TagDecoratedText","folderPath":"folders/TagDecoratedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"AnimatedText","folderPath":"folders/TagDecoratedText/AnimatedText.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"StyleableText","folderPath":"folders/TagDecoratedText/StyleableText.yy",},
@@ -20,12 +21,13 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.8.2.108",
+    "IDEVersion": "2023.8.1.102",
   },
   "resources": [
     {"id":{"name":"StyleableTextStyle","path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},},
     {"id":{"name":"AnimatedTextMisc","path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
+    {"id":{"name":"New_StyleableText","path":"scripts/New_StyleableText/New_StyleableText.yy",},},
     {"id":{"name":"spr_button","path":"sprites/spr_button/spr_button.yy",},},
     {"id":{"name":"obj_textsystem_test","path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},},
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},

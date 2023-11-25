@@ -119,8 +119,8 @@
   "lineHeight": 0,
   "maintainGms1Font": false,
   "parent": {
-    "name": "StyleableText",
-    "path": "folders/TagDecoratedText/StyleableText.yy",
+    "name": "tagdecoratedtext",
+    "path": "tagdecoratedtext.yyp",
   },
   "pointRounding": 0,
   "ranges": [
