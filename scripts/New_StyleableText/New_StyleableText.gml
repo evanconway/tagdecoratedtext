@@ -167,7 +167,14 @@ function new_text_draw_char_array(x, y, text) {
 				draw_set_font(c.style.font);
 				draw_set_color(c.style.color);
 				draw_set_alpha(c.style.alpha);
-				draw_text(x + c.x, y + c.y, c.char);
+				var width_diff = text_width - ds_map_find_value(text_line_widths, c.line_index);
+				var x_offset = 0;
+				var original_halign = draw_get_halign();
+				if (original_halign == fa_right) x_offset = width_diff;
+				if (original_halign == fa_center) x_offset = floor(width_diff / 2);
+				draw_set_halign(fa_left);
+				draw_text(x + c.x + x_offset, y + c.y, c.char);
+				draw_set_halign(original_halign);
 			}
 		}
 	}
