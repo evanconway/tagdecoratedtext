@@ -44,7 +44,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	
 	calculate_char_positions = function() {
 		var char_arr_length = array_length(character_array);
-		var page_index = 0;
 		var word_i_start = 0;
 		var word_i_end = 0;	// inclusive
 		var word_width = 0;	// width of letter chars, excludes trailing spaces
@@ -52,6 +51,10 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var char_x = 0;
 		var char_y = 0;
 		var word_complete = false; // space encountered
+		
+		// mapping of line y positions to height
+		var line_heights = ds_map_create();
+		
 		for (var i = 0; i <= char_arr_length; i++) {
 			var add_word_to_line = false;
 		
@@ -80,11 +83,29 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 					char_x += get_char_width(character_array[w]);
 					var char_height = get_char_height(character_array[w]);
 					if (char_height > line_height) line_height = char_height;
+					ds_map_set(line_heights, char_y, line_height);
 				}
 				word_i_start = i;
 				word_i_end = i;
-				word_width = 0;
+				word_width = i < char_arr_length ? get_char_width(character_array[i]) : 0;
 				word_complete = false;
+			}
+		}
+		
+		// skip page index calculation if no height set
+		if (text_height < 0) return;
+		
+		// determine page index
+		var line_keys = ds_map_keys_to_array(line_heights);
+		var page_height = ds_map_find_value(line_heights, line_keys[0]);
+		var page_index = 0;
+		var page_index_line_mapping = ds_map_create();
+		ds_map_set(page_index_line_mapping, line_keys[0], page_index);
+		for (var k = 1; k < array_length(line_keys); k++) {
+			var line_height = ds_map_find_value(line_heights, line_keys[k]);
+			if (line_height + page_height > text_height) {
+				page_index++;
+				page_height = line_height;
 			}
 		}
 	};
