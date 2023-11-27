@@ -7,6 +7,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	character_array = [];
 	text_width = width;
 	text_height = height;
+	text_page_index = 0;
+	text_page_index_max = 0;
 	
 	static get_char_width = function(char) {
 		if (char.sprite != spr_styleable_text_sprite_default) return sprite_get_width(char.sprite) * char.style.scale_x;
@@ -38,6 +40,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			new_line: false, // forces new line start
 			x: 0,
 			y: 0,
+			line_index: 0,
 			page_index: 0
 		});
 	}
@@ -47,9 +50,10 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var word_i_start = 0;
 		var word_i_end = 0;	// inclusive
 		var word_width = 0;	// width of letter chars, excludes trailing spaces
-		var line_height = 0;
+		var char_max_height = 0;
 		var char_x = 0;
 		var char_y = 0;
+		var line_index = 0;
 		var word_complete = false; // space encountered
 		
 		// mapping of line y positions to height
@@ -70,20 +74,22 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				add_word_to_line = true;
 			}
 
-			if (add_word_to_line && text_width > 0 && char_x + word_width >= text_width) {
+			if (add_word_to_line && text_width >= 0 && char_x + word_width >= text_width) {
 				char_x = 0;
-				char_y += line_height;
-				line_height = 0;
+				char_y += char_max_height;
+				char_max_height = 0;
+				line_index++;
 			}
 		
 			if (add_word_to_line) {
 				for (var w = word_i_start; w <= word_i_end; w++) {
 					character_array[w].x = char_x;
 					character_array[w].y = char_y;
+					character_array[w].line_index = line_index;
 					char_x += get_char_width(character_array[w]);
 					var char_height = get_char_height(character_array[w]);
-					if (char_height > line_height) line_height = char_height;
-					ds_map_set(line_heights, char_y, line_height);
+					if (char_height > char_max_height) char_max_height = char_height;
+					ds_map_set(line_heights, line_index, char_max_height);
 				}
 				word_i_start = i;
 				word_i_end = i;
@@ -92,25 +98,41 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 		}
 		
-		// skip page index calculation if no height set
-		if (text_height < 0) return;
+		// determine y position and page index of line indexes
+		var page_height = ds_map_find_value(line_heights, 0);
+		text_page_index_max = 0;
+		var line_index_y_pos_map = ds_map_create();
+		var line_index_page_index_map = ds_map_create();
+		ds_map_set(line_index_y_pos_map, 0, 0);
+		ds_map_set(line_index_page_index_map, 0, text_page_index_max);
 		
-		// determine page index
-		var line_keys = ds_map_keys_to_array(line_heights);
-		var page_height = ds_map_find_value(line_heights, line_keys[0]);
-		var page_index = 0;
-		var page_index_line_mapping = ds_map_create();
-		ds_map_set(page_index_line_mapping, line_keys[0], page_index);
-		for (var k = 1; k < array_length(line_keys); k++) {
-			var line_height = ds_map_find_value(line_heights, line_keys[k]);
-			if (line_height + page_height > text_height) {
-				page_index++;
-				page_height = line_height;
+		for (var i = 1; i < ds_map_size(line_heights); i++) {
+			var line_height = ds_map_find_value(line_heights, i);
+			if (text_height >= 0 && line_height + page_height > text_height) {
+				text_page_index_max++;
+				page_height = 0;
 			}
+			ds_map_set(line_index_y_pos_map, i, page_height);
+			ds_map_set(line_index_page_index_map, i, text_page_index_max);
+			page_height += line_height;
+		}
+		
+		// assign page indexes and y positions to characters
+		for (var i = 0; i < char_arr_length; i++) {
+			character_array[i].y = ds_map_find_value(line_index_y_pos_map, character_array[i].line_index);
+			character_array[i].page_index = ds_map_find_value(line_index_page_index_map, character_array[i].line_index);
 		}
 	};
 	
 	calculate_char_positions();
+}
+
+function new_text_page_previous(text) {
+	text.text_page_index = max(text.text_page_index - 1, 0);
+}
+
+function new_text_page_next(text) {
+	text.text_page_index = min(text.text_page_index + 1, text.text_page_index_max);
 }
 
 function new_text_draw_char_array(x, y, text) {
@@ -118,10 +140,12 @@ function new_text_draw_char_array(x, y, text) {
 		var char_arr_length = array_length(character_array);
 		for (var i = 0; i < char_arr_length; i++) {
 			var c = character_array[i];
-			draw_set_font(c.style.font);
-			draw_set_color(c.style.color);
-			draw_set_alpha(c.style.alpha);
-			draw_text(x + c.x, y + c.y, c.char);
+			if (c.page_index == text_page_index) {
+				draw_set_font(c.style.font);
+				draw_set_color(c.style.color);
+				draw_set_alpha(c.style.alpha);
+				draw_text(x + c.x, y + c.y, c.char);
+			}
 		}
 	}
 }
