@@ -7,20 +7,9 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	character_array = [];
 	text_width = width;
 	text_height = height;
+	text_line_widths = ds_map_create(); // mapping of line indexes to line widths excluding trailing spaces
 	text_page_index = 0;
 	text_page_index_max = 0;
-	
-	static get_char_width = function(char) {
-		if (char.sprite != spr_styleable_text_sprite_default) return sprite_get_width(char.sprite) * char.style.scale_x;
-		draw_set_font(char.style.font);
-		return string_width(char.char) * char.style.scale_x;
-	};
-	
-	static get_char_height = function(char) {
-		if (char.sprite != spr_styleable_text_sprite_default) return sprite_get_height(char.sprite) * char.style.scale_y;
-		draw_set_font(char.style.font);
-		return string_height(char.char) * char.style.scale_y;
-	};
 	
 	// create char array
 	var text_length = string_length(text);
@@ -45,6 +34,24 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		});
 	}
 	
+	/**
+	 * @return {real}
+	 */
+	static get_char_width = function(char) {
+		if (char.sprite != spr_styleable_text_sprite_default) return sprite_get_width(char.sprite) * char.style.scale_x;
+		draw_set_font(char.style.font);
+		return string_width(char.char) * char.style.scale_x;
+	};
+	
+	/**
+	 * @return {real}
+	 */
+	static get_char_height = function(char) {
+		if (char.sprite != spr_styleable_text_sprite_default) return sprite_get_height(char.sprite) * char.style.scale_y;
+		draw_set_font(char.style.font);
+		return string_height(char.char) * char.style.scale_y;
+	};
+	
 	calculate_char_positions = function() {
 		var char_arr_length = array_length(character_array);
 		var word_i_start = 0;
@@ -52,13 +59,13 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var word_width = 0;	// width of letter chars, excludes trailing spaces
 		var char_max_height = 0;
 		var char_x = 0;
-		var char_y = 0;
 		var line_index = 0;
 		var word_complete = false; // space encountered
 		
 		// mapping of line y positions to height
 		var line_heights = ds_map_create();
 		
+		// determine line breaks and x position
 		for (var i = 0; i <= char_arr_length; i++) {
 			var add_word_to_line = false;
 		
@@ -76,7 +83,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 
 			if (add_word_to_line && text_width >= 0 && char_x + word_width >= text_width) {
 				char_x = 0;
-				char_y += char_max_height;
 				char_max_height = 0;
 				line_index++;
 			}
@@ -84,7 +90,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			if (add_word_to_line) {
 				for (var w = word_i_start; w <= word_i_end; w++) {
 					character_array[w].x = char_x;
-					character_array[w].y = char_y;
 					character_array[w].line_index = line_index;
 					char_x += get_char_width(character_array[w]);
 					var char_height = get_char_height(character_array[w]);
@@ -117,10 +122,28 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			page_height += line_height;
 		}
 		
-		// assign page indexes and y positions to characters
+		// ensure line widths has default value for each index
+		for (var i = 0; i < ds_map_size(line_heights); i++) {
+			ds_map_set(text_line_widths, i, 0);
+		}
+		
+		// assign page indexes, y positions and determine line widths
+		var space_width = 0;
+		var li_prev = 0;
 		for (var i = 0; i < char_arr_length; i++) {
-			character_array[i].y = ds_map_find_value(line_index_y_pos_map, character_array[i].line_index);
-			character_array[i].page_index = ds_map_find_value(line_index_page_index_map, character_array[i].line_index);
+			var char = character_array[i];
+			if (char.line_index != li_prev) {
+				li_prev = char.line_index;
+				space_width = 0;
+			}
+			if (char.char == " ") space_width += get_char_width(char);
+			else {
+				var line_width = ds_map_find_value(text_line_widths, char.line_index);
+				ds_map_set(text_line_widths, char.line_index, line_width + get_char_width(char) + space_width);
+				space_width = 0;
+			}
+			char.y = ds_map_find_value(line_index_y_pos_map, char.line_index);
+			char.page_index = ds_map_find_value(line_index_page_index_map, char.line_index);
 		}
 	};
 	
