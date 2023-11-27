@@ -108,7 +108,7 @@
     "124": {"character":124,"h":18,"offset":1,"shift":4,"w":2,"x":23,"y":22,},
     "125": {"character":125,"h":18,"offset":0,"shift":5,"w":5,"x":16,"y":22,},
     "126": {"character":126,"h":18,"offset":0,"shift":9,"w":9,"x":197,"y":62,},
-    "9647": {"character":9647,"h":18,"offset":3,"shift":16,"w":10,"x":208,"y":62,},
+    "9647": {"character":9647,"h":18,"offset":2,"shift":10,"w":6,"x":208,"y":62,},
   },
   "hinting": 0,
   "includeTTF": false,
@@ -116,7 +116,7 @@
   "italic": false,
   "kerningPairs": [],
   "last": 0,
-  "lineHeight": 0,
+  "lineHeight": 18,
   "maintainGms1Font": false,
   "parent": {
     "name": "tagdecoratedtext",
