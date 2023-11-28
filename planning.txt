@@ -132,3 +132,5 @@ Our default style setters appear to be working. I've noticed a small issue I thi
 Making the lines center wasn't too bad. I think we should finish implementing text alignment. It should copy the way the existing draw text works, where right or center align draw the text right or center aligned from the given x/y position, in addition to changing the position of the text lines. The big thing that must be added for this is stored dimensions for each page.
 
 Although we've gotten the text alginment working, something is off. We have text extending passed our debug border. Will have to do some exploring to figure out why this is happening. After fixing this we'll have to do some reflecting to determine what feature to work on next.
+
+Nevermind figured it out. The issue was using text_width instead of page_width to determine offset.

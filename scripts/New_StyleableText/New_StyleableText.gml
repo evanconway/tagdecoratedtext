@@ -495,7 +495,7 @@ function new_text_draw(x, y, text) {
 				draw_set_alpha(drawable.style.alpha);
 				draw_set_font(drawable.style.font);
 				
-				var width_diff = text_width - text_line_widths[c.line_index];
+				var width_diff = page_width - text_line_widths[c.line_index];
 				var halign_offset = 0;
 				
 				var drawable_height = drawable.style.scale_y * (drawable.style.sprite == spr_styleable_text_sprite_default ? string_height(drawable.text) : sprite_get_height(drawable.style.sprite));
