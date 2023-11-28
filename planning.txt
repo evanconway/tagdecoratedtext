@@ -107,3 +107,7 @@ That was pretty simple to solve. I think getting the heights of pages might also
 It occurs to me that we can initiate each character with its own drawable. And all we have to make is the merge drawables function.
 
 Another observation. I was thinking we could do away with drawable styles completely, but of course, the whole point of having these things is so we can modify how characters are drawn temporarily. Emphasis there on "temporary". If the style change is temporary we have to store it separately from the base style which is stored on the characters. 
+
+Adding drawables wasn't too bad. Now I'm considering how our logic for splitting, and merging drawables originally worked. The issue is right now drawables could merge together if their styles are equal. But what if the base styles for the underlying characters are different within one drawables, which somehow has gotten temporarily set as the same? If we wanted to reset the styles of that drawable we'd have to somehow know that the drawable must be split. Frankly I can't think of any sort of elegant way to track this. And the only way to check if the drawable has a base style change mid-way is to iterate over each character, which is exactly what we're trying to avoid. Therefor I think we shouldn't allow drawables to merge if the base styles of the characters couldn't also merge. This way, whenever we reset the styles of drawables, we just have to reset them to the styles of the first character, and we can be confident this is correct.
+
+

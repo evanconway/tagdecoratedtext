@@ -207,12 +207,14 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	/**
 	 * This function is used to determine if drawables can be merged. returns false if there are any
 	 * qualities about the 2 chars at the indexes given that would prevent their drawables from
-	 * being merged.
+	 * being merged. Drawables cannot be merged if the drawable styles differ, or if the underlying
+	 * styles of the base characters differ.
 	 */
 	char_drawables_mergeable = function(index_a, index_b) {
 		var char_a = character_array[index_a];
 		var char_b = character_array[index_b];
 		if (char_a.drawable.index_end + 1 != char_b.drawable.index_start) return false;
+		if (!char_a.drawable.style.is_equal(char_b.drawable.style)) return false;
 		if (!char_a.style.is_equal(char_b.style)) return false;
 		if (char_a.y != char_b.y) return false;
 		return true;
