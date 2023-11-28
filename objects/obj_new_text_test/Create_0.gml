@@ -5,6 +5,6 @@ text_set_default_font(test, 20, 60, fnt_handwriting);
 text_set_default_color(test, 30, 40, c_red);
 text_set_default_alpha(test, 75, 105, 0.3);
 
-text_set_default_new_line(test, 145, true);
+text_set_default_new_line(test, 140, true);
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
