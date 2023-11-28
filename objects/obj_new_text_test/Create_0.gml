@@ -4,7 +4,12 @@ test = new New_StyleableText(moby_dick, 200, 200);
 text_set_default_font(test, 20, 60, fnt_handwriting);
 text_set_default_color(test, 30, 40, c_red);
 text_set_default_alpha(test, 75, 105, 0.3);
+text_set_default_offset_x(test, 115, 125, 7);
+text_set_default_offset_y(test, 130, 145, -7);
+text_set_default_scale_x(test, 165, 175, 4);
+text_set_default_scale_y(test, 185, 195, 4);
+text_set_default_new_line(test, 153, true);
 
-text_set_default_new_line(test, 140, true);
+text_set_default_sprite(test, 211, spr_button);
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");

@@ -455,7 +455,7 @@ function new_text_draw(x, y, text) {
 				if (original_halign == fa_right) x_offset = width_diff;
 				if (original_halign == fa_center) x_offset = floor(width_diff / 2);
 				var draw_x = x + c.x + x_offset + drawable.style.offset_x;
-				var draw_y = y + c.y + drawable.style.offset_x;
+				var draw_y = y + c.y + drawable.style.offset_y;
 				
 				if (drawable.style.sprite == spr_styleable_text_sprite_default) {
 					draw_set_font(drawable.style.font);
