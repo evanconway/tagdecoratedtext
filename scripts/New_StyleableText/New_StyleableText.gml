@@ -65,6 +65,9 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_page_index = 0;
 	text_page_index_max = 0;
 	
+	text_page_widths = [];
+	text_page_heights = [];
+	
 	// remove later, just for debugging
 	drawables_debug = [];
 	
@@ -115,6 +118,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	
 	calculate_char_positions = function() {
 		text_line_widths = [];
+		text_line_heights = [];
 		var word_i_start = 0;
 		var word_i_end = 0;	// inclusive
 		var word_width = 0;	// width of letter chars, excludes trailing spaces
@@ -122,8 +126,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var char_x = 0;
 		var line_index = 0;
 		var word_complete = false; // space encountered
-		
-		text_line_heights = [];
 		
 		// determine line breaks and x position
 		for (var i = 0; i <= character_array_length; i++) {
@@ -209,6 +211,12 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		// assign page indexes, y positions and determine line widths
 		var space_width = 0;
 		var li_prev = 0;
+		
+		text_page_widths = [];
+		text_page_heights = [];
+		
+		var line_heights_added_to_page = []; // used to track if a line height has been accounted for in page heights
+		
 		for (var i = 0; i < character_array_length; i++) {
 			var char = character_array[i];
 			if (char.line_index != li_prev) {
@@ -223,6 +231,22 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 			char.y = line_index_y_pos_map[char.line_index];
 			char.page_index = line_index_page_index_map[char.line_index];
+			
+			// page dimensions
+			if (char.page_index >= array_length(text_page_widths)) {
+				text_page_widths[char.page_index] = text_line_widths[char.line_index];
+			}
+			text_page_widths[char.page_index] = max(text_page_widths[char.page_index], text_line_widths[char.line_index]);
+			if (char.line_index >= array_length(line_heights_added_to_page)) {
+				line_heights_added_to_page[char.line_index] = false;
+			}
+			if (!line_heights_added_to_page[char.line_index]) {
+				if (char.page_index >= array_length(text_page_heights)) {
+					text_page_heights[char.page_index] = 0;
+				}
+				text_page_heights[char.page_index] += text_line_heights[char.line_index];
+				line_heights_added_to_page[char.line_index] = true;
+			}
 		}
 	};
 	
@@ -437,14 +461,26 @@ function new_text_draw(x, y, text) {
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
-		var index = 0;
+		var page_width = text_page_widths[text_page_index];
+		var page_height = text_page_heights[text_page_index];
+		
+		var box_x = x;
+		var box_y = y;
+		if (original_halign == fa_center) box_x -= floor(page_width / 2);
+		if (original_halign == fa_right) box_x -= page_width;
+		if (original_valign == fa_middle) box_y -= floor(page_height / 2);
+		if (original_valign == fa_bottom) box_y -= page_height;
 		
 		// debug, remove later
 		draw_set_alpha(1);
 		draw_set_font(fnt_styleable_text_font_default);
 		draw_set_color(c_lime);
-		draw_text(x, y - 30, $"drawables: {array_length(drawables_debug)}");
+		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables_debug)}");
+		draw_rectangle(box_x, box_y, box_x + page_width, box_y + page_height, true);
+		draw_set_color(c_fuchsia);
+		draw_rectangle(x, y, x + 1, y + 1, false);
 		
+		var index = 0;
 		while (index < character_array_length) {
 			var c = character_array[index];
 			var drawable = c.drawable;
@@ -462,8 +498,8 @@ function new_text_draw(x, y, text) {
 				
 				if (original_halign == fa_right) halign_offset = width_diff;
 				if (original_halign == fa_center) halign_offset = floor(width_diff / 2);
-				var draw_x = x + c.x + halign_offset + drawable.style.offset_x;
-				var draw_y = y + c.y + drawable.style.offset_y + vcentering;
+				var draw_x = box_x + c.x + halign_offset + drawable.style.offset_x;
+				var draw_y = box_y + c.y + drawable.style.offset_y + vcentering;
 				
 				if (drawable.style.sprite == spr_styleable_text_sprite_default) {
 					draw_text_transformed(draw_x, draw_y, drawable.text, drawable.style.scale_x, drawable.style.scale_y, 0);
