@@ -92,6 +92,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		});
 	}
 	
+	character_array_length = array_length(character_array);
+	
 	/**
 	 * @return {real}
 	 */
@@ -112,7 +114,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	
 	calculate_char_positions = function() {
 		text_line_widths = [];
-		var char_arr_length = array_length(character_array);
 		var word_i_start = 0;
 		var word_i_end = 0;	// inclusive
 		var word_width = 0;	// width of letter chars, excludes trailing spaces
@@ -125,12 +126,11 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var line_heights = [];
 		
 		// determine line breaks and x position
-		for (var i = 0; i <= char_arr_length; i++) {
+		for (var i = 0; i <= character_array_length; i++) {
 			var add_word_to_line = false;
 		
 			// reset drawables
-			/*
-			if (i < char_arr_length) {
+			if (i < character_array_length) {
 				character_array[i].drawable = {
 					index_start: i,
 					index_end: i,
@@ -138,9 +138,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 					style: character_array[i].style.get_copy(),
 				}
 			}
-			*/
 		
-			if (i >= char_arr_length) {
+			if (i >= character_array_length) {
 				add_word_to_line = true; // always add when done with array
 			} else if (character_array[i].char == " ") {
 				word_complete = true;
@@ -152,7 +151,10 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				add_word_to_line = true;
 			}
 
-			if (add_word_to_line && text_width >= 0 && char_x + word_width >= text_width) {
+			var reset_line = add_word_to_line && text_width >= 0 && char_x + word_width >= text_width;
+			if (i < character_array_length && character_array[i].style.new_line) reset_line = true;
+
+			if (reset_line) {
 				char_x = 0;
 				char_max_height = 0;
 				line_index++;
@@ -169,7 +171,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				}
 				word_i_start = i;
 				word_i_end = i;
-				word_width = i < char_arr_length ? get_char_width(character_array[i]) : 0;
+				word_width = i < character_array_length ? get_char_width(character_array[i]) : 0;
 				word_complete = false;
 			}
 		}
@@ -201,7 +203,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		// assign page indexes, y positions and determine line widths
 		var space_width = 0;
 		var li_prev = 0;
-		for (var i = 0; i < char_arr_length; i++) {
+		for (var i = 0; i < character_array_length; i++) {
 			var char = character_array[i];
 			if (char.line_index != li_prev) {
 				li_prev = char.line_index;
@@ -236,8 +238,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	
 	merge_drawables = function() {
 		var index = 0;
-		var char_arr_length = array_length(character_array);
-		while (character_array[index].drawable.index_end + 1 < char_arr_length) {
+		while (character_array[index].drawable.index_end + 1 < character_array_length) {
 			// while possible, merge drawable with drawable at next index
 			var can_merge = char_drawables_mergeable(index, character_array[index].drawable.index_end + 1);
 			var drawable = character_array[index].drawable;
@@ -256,7 +257,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		// remove later, just for debugging
 		drawables_debug = [];
 		index = 0;
-		while (index < char_arr_length) {
+		while (index < character_array_length) {
 			array_push(drawables_debug, character_array[index].drawable);
 			index = character_array[index].drawable.index_end + 1;
 		}
@@ -278,13 +279,6 @@ function new_text_page_next(text) {
 }
 
 /*
-	font = fnt_styleable_text_font_default;
-	color = c_white;
-	alpha = 1;
-	scale_x = 1;
-	scale_y = 1;
-	offset_x = 0;
-	offset_y = 0;
 	sprite = spr_styleable_text_sprite_default;
 	new_line = false; // forces new line start
 */
@@ -295,12 +289,132 @@ function new_text_page_next(text) {
  * @param {real} index_end
  * @param {Asset.GMFont} font
  */
-function new_text_set_default_font(text, index_start, index_end, font) {
+function text_set_default_font(text, index_start, index_end, font) {
 	with (text) {
 		var index_stop = min(array_length(character_array) - 1, index_end);
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.font = font;
 		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {Constant.Color} color
+ */
+function text_set_default_color(text, index_start, index_end, color) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.color = color;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} alpha
+ */
+function text_set_default_alpha(text, index_start, index_end, alpha) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.alpha = alpha;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} scale_x
+ */
+function text_set_default_scale_x(text, index_start, index_end, scale_x) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.scale_x = scale_x;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} scale_y
+ */
+function text_set_default_scale_y(text, index_start, index_end, scale_y) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.scale_y = scale_y;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} offset_x
+ */
+function text_set_default_offset_x(text, index_start, index_end, offset_x) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.offset_x = offset_x;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} offset_y
+ */
+function text_set_default_offset_y(text, index_start, index_end, offset_y) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.offset_y = offset_y;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index
+ * @param {Asset.GMSprite} sprite
+ */
+function text_set_default_sprite(text, index, sprite) {
+	with (text) {
+		character_array[index].style.sprite = sprite;
+		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index
+ * @param {bool} new_line
+ */
+function text_set_default_new_line(text, index, new_line) {
+	with (text) {
+		character_array[index].style.new_line = new_line;
 		rebuild();
 	}
 }
@@ -316,7 +430,6 @@ function new_text_draw(x, y, text) {
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
-		var char_arr_length = array_length(character_array);
 		var index = 0;
 		
 		// debug, remove later
@@ -325,11 +438,10 @@ function new_text_draw(x, y, text) {
 		draw_set_color(c_lime);
 		draw_text(x, y - 30, $"drawables: {array_length(drawables_debug)}");
 		
-		while (index < char_arr_length) {
+		while (index < character_array_length) {
 			var c = character_array[index];
 			var drawable = c.drawable;
 			if (c.page_index == text_page_index) {
-				draw_set_font(drawable.style.font);
 				draw_set_color(drawable.style.color);
 				draw_set_alpha(drawable.style.alpha);
 				var width_diff = text_width - text_line_widths[c.line_index];
@@ -338,8 +450,13 @@ function new_text_draw(x, y, text) {
 				if (original_halign == fa_center) x_offset = floor(width_diff / 2);
 				var draw_x = x + c.x + x_offset + drawable.style.offset_x;
 				var draw_y = y + c.y + drawable.style.offset_x;
-				draw_set_alpha(drawable.style.alpha);
-				draw_text_transformed(draw_x, draw_y, drawable.text, drawable.style.scale_x, drawable.style.scale_y, 0);
+				
+				if (drawable.style.sprite == spr_styleable_text_sprite_default) {
+					draw_set_font(drawable.style.font);
+					draw_text_transformed(draw_x, draw_y, drawable.text, drawable.style.scale_x, drawable.style.scale_y, 0);
+				} else {
+					draw_sprite_ext(drawable.style.sprite, 0, draw_x, draw_y, drawable.style.scale_x, drawable.style.scale_y, 0, drawable.style.color, drawable.style.alpha);
+				}
 			}
 			index = drawable.index_end + 1;
 		}
