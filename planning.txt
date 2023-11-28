@@ -101,3 +101,9 @@ It would be most elegant to figure out how to assign pages to characters as we'r
 Actually, now that I'm getting my head back into the old logic, I think it does make sense to give a line index to each character. Although we can easily give y positions to characters while determining line breaks, we'll have to redo y positions when assigning pages. And using the existing y position for an "index" just ends up being messy.
 
 We've got functioning page break now. I'm also reminded we don't have a way to do right or center aligned text. Perhaps we should also think through tracking the ends of lines now. Actually, if I'm thinking about this correctly, we just need to store the width of the line. Once we have that we can use the width of the text box, the width of the line, and the difference between the two to determine center or right aligned text. Maybe we can shove a mapping of that into our existing logic.
+
+That was pretty simple to solve. I think getting the heights of pages might also be a bit tricky but if we already have logic to handle something as strange as space excluded width, we should be able to add page width/heights in quickly too. Let's not worry about making a char array draw version of thsi since we won't use that in the final version. I think recreating the drawable logic is the next major step. 
+
+It occurs to me that we can initiate each character with its own drawable. And all we have to make is the merge drawables function.
+
+Another observation. I was thinking we could do away with drawable styles completely, but of course, the whole point of having these things is so we can modify how characters are drawn temporarily. Emphasis there on "temporary". If the style change is temporary we have to store it separately from the base style which is stored on the characters. 
