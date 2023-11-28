@@ -61,6 +61,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_width = width;
 	text_height = height;
 	text_line_widths = []; // mapping of line indexes to line widths excluding trailing spaces
+	text_line_heights = [];
 	text_page_index = 0;
 	text_page_index_max = 0;
 	
@@ -122,8 +123,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var line_index = 0;
 		var word_complete = false; // space encountered
 		
-		// mapping of line y positions to height
-		var line_heights = [];
+		text_line_heights = [];
 		
 		// determine line breaks and x position
 		for (var i = 0; i <= character_array_length; i++) {
@@ -168,7 +168,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 					char_x += get_char_width(character_array[w]);
 					var char_height = get_char_height(character_array[w]);
 					if (char_height > char_max_height) char_max_height = char_height;
-					line_heights[line_index] = char_max_height;
+					text_line_heights[line_index] = char_max_height;
 				}
 				word_i_start = i;
 				word_i_end = i;
@@ -183,15 +183,15 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 		
 		// determine y position and page index of line indexes
-		var page_height = line_heights[0];
+		var page_height = text_line_heights[0];
 		text_page_index_max = 0;
 		var line_index_y_pos_map = [];
 		var line_index_page_index_map = [];
 		line_index_y_pos_map[0] =  0;
 		line_index_page_index_map[0] = text_page_index_max;
 		
-		for (var i = 1; i < array_length(line_heights); i++) {
-			var line_height = line_heights[i];
+		for (var i = 1; i < array_length(text_line_heights); i++) {
+			var line_height = text_line_heights[i];
 			if (text_height >= 0 && line_height + page_height > text_height) {
 				text_page_index_max++;
 				page_height = 0;
@@ -202,7 +202,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 		
 		// ensure line widths has default value for each index
-		for (var i = 0; i < array_length(line_heights); i++) {
+		for (var i = 0; i < array_length(text_line_heights); i++) {
 			text_line_widths[i] = 0;
 		}
 		
@@ -433,6 +433,7 @@ function text_set_default_new_line(text, index, new_line) {
 function new_text_draw(x, y, text) {
 	with (text) {
 		var original_halign = draw_get_halign();
+		var original_valign = draw_get_valign();
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
@@ -450,15 +451,21 @@ function new_text_draw(x, y, text) {
 			if (c.page_index == text_page_index) {
 				draw_set_color(drawable.style.color);
 				draw_set_alpha(drawable.style.alpha);
+				draw_set_font(drawable.style.font);
+				
 				var width_diff = text_width - text_line_widths[c.line_index];
-				var x_offset = 0;
-				if (original_halign == fa_right) x_offset = width_diff;
-				if (original_halign == fa_center) x_offset = floor(width_diff / 2);
-				var draw_x = x + c.x + x_offset + drawable.style.offset_x;
-				var draw_y = y + c.y + drawable.style.offset_y;
+				var halign_offset = 0;
+				
+				var drawable_height = drawable.style.scale_y * (drawable.style.sprite == spr_styleable_text_sprite_default ? string_height(drawable.text) : sprite_get_height(drawable.style.sprite));
+				var line_height = text_line_heights[c.line_index];
+				var vcentering = floor((line_height - drawable_height) / 2);
+				
+				if (original_halign == fa_right) halign_offset = width_diff;
+				if (original_halign == fa_center) halign_offset = floor(width_diff / 2);
+				var draw_x = x + c.x + halign_offset + drawable.style.offset_x;
+				var draw_y = y + c.y + drawable.style.offset_y + vcentering;
 				
 				if (drawable.style.sprite == spr_styleable_text_sprite_default) {
-					draw_set_font(drawable.style.font);
 					draw_text_transformed(draw_x, draw_y, drawable.text, drawable.style.scale_x, drawable.style.scale_y, 0);
 				} else {
 					draw_sprite_ext(drawable.style.sprite, 0, draw_x, draw_y, drawable.style.scale_x, drawable.style.scale_y, 0, drawable.style.color, drawable.style.alpha);
@@ -467,5 +474,6 @@ function new_text_draw(x, y, text) {
 			index = drawable.index_end + 1;
 		}
 		draw_set_halign(original_halign);
+		draw_set_valign(original_valign);
 	}
 }
