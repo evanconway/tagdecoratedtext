@@ -143,11 +143,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		
 			if (force_new_line) {
 				add_word_to_line = true;
-				/*
-				The logic here is wrong. When we encounter a forced new line, we need to add the existing word first.
-				But that existing word might trigger a new line on its own. We have to perform new line logic for that,
-				then force the next character to begin a new line.
-				*/
 			} else if (i >= character_array_length) {
 				add_word_to_line = true; // always add when done with array
 			} else if (character_array[i].char == " ") {
@@ -160,10 +155,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				add_word_to_line = true;
 			}
 
-			var reset_line = add_word_to_line && text_width >= 0 && char_x + word_width >= text_width;
-			if (force_new_line) reset_line = true;
-
-			if (reset_line) {
+			if (add_word_to_line && text_width >= 0 && char_x + word_width >= text_width) {
 				char_x = 0;
 				char_max_height = 0;
 				line_index++;
@@ -182,6 +174,11 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				word_i_end = i;
 				word_width = i < character_array_length ? get_char_width(character_array[i]) : 0;
 				word_complete = false;
+				if (force_new_line) {
+					char_x = 0;
+					char_max_height = 0;
+					line_index++;
+				}
 			}
 		}
 		

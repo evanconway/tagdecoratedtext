@@ -121,3 +121,8 @@ I've hit a logic roadblock. It's not clear to me how best to rebuild drawables w
 Another observation about garbage collection. At least on the machine I'm using now, the garbage collection might happen around 600mb of memory usage. I added one field to the text class "text_source", which is just the string the text is built from. This triggered the memory usage to grow. But I know string references shouldn't be a major data usage. So from this I'm comfortable claiming there's no reason to be concerned about memory usage unless we go past that 600mb amount (might be different on other machines).
 
 Uh, I've decided I have no idea how the garbage collection works. I'm going to try and not worry too much about memory growing with repeated text creations. Unless I see it really skyrocket I'm pretending this isn't a problem.
+
+
+28th of November, 2023
+
+We realized a flaw in our force new line logic. When a character is marked as the start of a new line, the process is simpler than I thought. We already have logic to start a new line if the existing word is too long. It's just a few lines of simple code. So when a character forces a new line, we simply perform our existing logic to add current word to the current line (which already brings that word to a new line if needed). But then also start a new line after that.
