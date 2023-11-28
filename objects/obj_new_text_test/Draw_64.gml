@@ -9,6 +9,6 @@ if (keyboard_check_pressed(vk_left)) new_text_page_previous(test);
 
 new_text_draw(600, 400, other_test);
 
-draw_set_halign(fa_center);
-draw_set_valign(fa_middle);
+draw_set_halign(fa_right);
+//draw_set_valign(fa_middle);
 new_text_draw(200, 250, test);

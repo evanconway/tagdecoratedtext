@@ -455,6 +455,8 @@ function text_set_default_new_line(text, index, new_line) {
  * @param {struct.New_StyleableText} text
  */
 function new_text_draw(x, y, text) {
+	x = floor(x);
+	y = floor(y);
 	with (text) {
 		var original_halign = draw_get_halign();
 		var original_valign = draw_get_valign();
@@ -476,7 +478,11 @@ function new_text_draw(x, y, text) {
 		draw_set_font(fnt_styleable_text_font_default);
 		draw_set_color(c_lime);
 		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables_debug)}");
-		draw_rectangle(box_x, box_y, box_x + page_width, box_y + page_height, true);
+		// debug border overlaps text area on all sides
+		draw_rectangle(box_x, box_y, box_x + 1, box_y + page_height, false);
+		draw_rectangle(box_x + page_width - 1, box_y, box_x + page_width, box_y + page_height, false);
+		draw_rectangle(box_x, box_y, box_x + page_width, box_y + 1, false);
+		draw_rectangle(box_x, box_y + page_height - 1, box_x + page_width, box_y + page_height, false);
 		draw_set_color(c_fuchsia);
 		draw_rectangle(x, y, x + 1, y + 1, false);
 		
