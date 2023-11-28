@@ -1,3 +1,4 @@
+/// @ignore
 function TextStyle() constructor {
 	font = fnt_styleable_text_font_default;
 	color = c_white;
@@ -31,20 +32,22 @@ function TextStyle() constructor {
 	};
 	
 	/**
-	 * Sets this styles parameters to the same as the given style.
+	 * Get a copy of this style.
 	 *
-	 * @param {struct.TextStyle} style the style to copy
 	 * @ignore
 	 */
-	set_to = function(style) {
-		font = style.font;
-		style_color = style.style_color;
-		alpha = style.alpha;
-		scale_x = style.scale_x;
-		scale_y = style.scale_y;
-		mod_x = style.mod_x;
-		mod_y = style.mod_y;
-		mod_angle = style.mod_angle;
+	get_copy = function() {
+		var copy = new TextStyle();
+		copy.font = font;
+		copy.color = color;
+		copy.alpha = alpha;
+		copy.scale_x = scale_x;
+		copy.scale_y = scale_y;
+		copy.offset_x = offset_x;
+		copy.offset_y = offset_y;
+		copy.sprite = sprite;
+		copy.new_line = new_line;
+		return copy;
 	};
 };
 
@@ -57,7 +60,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	character_array = [];
 	text_width = width;
 	text_height = height;
-	text_line_widths = ds_map_create(); // mapping of line indexes to line widths excluding trailing spaces
+	text_line_widths = []; // mapping of line indexes to line widths excluding trailing spaces
 	text_page_index = 0;
 	text_page_index_max = 0;
 	
@@ -108,6 +111,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	};
 	
 	calculate_char_positions = function() {
+		text_line_widths = [];
 		var char_arr_length = array_length(character_array);
 		var word_i_start = 0;
 		var word_i_end = 0;	// inclusive
@@ -118,11 +122,23 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var word_complete = false; // space encountered
 		
 		// mapping of line y positions to height
-		var line_heights = ds_map_create();
+		var line_heights = [];
 		
 		// determine line breaks and x position
 		for (var i = 0; i <= char_arr_length; i++) {
 			var add_word_to_line = false;
+		
+			// reset drawables
+			/*
+			if (i < char_arr_length) {
+				character_array[i].drawable = {
+					index_start: i,
+					index_end: i,
+					text: character_array[i].char,
+					style: character_array[i].style.get_copy(),
+				}
+			}
+			*/
 		
 			if (i >= char_arr_length) {
 				add_word_to_line = true; // always add when done with array
@@ -149,7 +165,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 					char_x += get_char_width(character_array[w]);
 					var char_height = get_char_height(character_array[w]);
 					if (char_height > char_max_height) char_max_height = char_height;
-					ds_map_set(line_heights, line_index, char_max_height);
+					line_heights[line_index] = char_max_height;
 				}
 				word_i_start = i;
 				word_i_end = i;
@@ -159,27 +175,27 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 		
 		// determine y position and page index of line indexes
-		var page_height = ds_map_find_value(line_heights, 0);
+		var page_height = line_heights[0];
 		text_page_index_max = 0;
-		var line_index_y_pos_map = ds_map_create();
-		var line_index_page_index_map = ds_map_create();
-		ds_map_set(line_index_y_pos_map, 0, 0);
-		ds_map_set(line_index_page_index_map, 0, text_page_index_max);
+		var line_index_y_pos_map = [];
+		var line_index_page_index_map = [];
+		line_index_y_pos_map[0] =  0;
+		line_index_page_index_map[0] = text_page_index_max;
 		
-		for (var i = 1; i < ds_map_size(line_heights); i++) {
-			var line_height = ds_map_find_value(line_heights, i);
+		for (var i = 1; i < array_length(line_heights); i++) {
+			var line_height = line_heights[i];
 			if (text_height >= 0 && line_height + page_height > text_height) {
 				text_page_index_max++;
 				page_height = 0;
 			}
-			ds_map_set(line_index_y_pos_map, i, page_height);
-			ds_map_set(line_index_page_index_map, i, text_page_index_max);
+			line_index_y_pos_map[i] = page_height;
+			line_index_page_index_map[i] = text_page_index_max;
 			page_height += line_height;
 		}
 		
 		// ensure line widths has default value for each index
-		for (var i = 0; i < ds_map_size(line_heights); i++) {
-			ds_map_set(text_line_widths, i, 0);
+		for (var i = 0; i < array_length(line_heights); i++) {
+			text_line_widths[i] = 0;
 		}
 		
 		// assign page indexes, y positions and determine line widths
@@ -193,16 +209,14 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 			if (char.char == " ") space_width += get_char_width(char);
 			else {
-				var line_width = ds_map_find_value(text_line_widths, char.line_index);
-				ds_map_set(text_line_widths, char.line_index, line_width + get_char_width(char) + space_width);
+				var line_width = text_line_widths[char.line_index];
+				text_line_widths[char.line_index] = line_width + get_char_width(char) + space_width;
 				space_width = 0;
 			}
-			char.y = ds_map_find_value(line_index_y_pos_map, char.line_index);
-			char.page_index = ds_map_find_value(line_index_page_index_map, char.line_index);
+			char.y = line_index_y_pos_map[char.line_index];
+			char.page_index = line_index_page_index_map[char.line_index];
 		}
 	};
-	
-	calculate_char_positions();
 	
 	/**
 	 * This function is used to determine if drawables can be merged. returns false if there are any
@@ -247,7 +261,12 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			index = character_array[index].drawable.index_end + 1;
 		}
 	};
-	merge_drawables();
+	
+	rebuild = function() {
+		calculate_char_positions();
+		merge_drawables();
+	};
+	rebuild();
 }
 
 function new_text_page_previous(text) {
@@ -258,6 +277,39 @@ function new_text_page_next(text) {
 	text.text_page_index = min(text.text_page_index + 1, text.text_page_index_max);
 }
 
+/*
+	font = fnt_styleable_text_font_default;
+	color = c_white;
+	alpha = 1;
+	scale_x = 1;
+	scale_y = 1;
+	offset_x = 0;
+	offset_y = 0;
+	sprite = spr_styleable_text_sprite_default;
+	new_line = false; // forces new line start
+*/
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {Asset.GMFont} font
+ */
+function new_text_set_default_font(text, index_start, index_end, font) {
+	with (text) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			character_array[i].style.font = font;
+		}
+		rebuild();
+	}
+}
+
+/**
+ * @param {real} x
+ * @param {real} y
+ * @param {struct.New_StyleableText} text
+ */
 function new_text_draw(x, y, text) {
 	with (text) {
 		var original_halign = draw_get_halign();
@@ -280,7 +332,7 @@ function new_text_draw(x, y, text) {
 				draw_set_font(drawable.style.font);
 				draw_set_color(drawable.style.color);
 				draw_set_alpha(drawable.style.alpha);
-				var width_diff = text_width - ds_map_find_value(text_line_widths, c.line_index);
+				var width_diff = text_width - text_line_widths[c.line_index];
 				var x_offset = 0;
 				if (original_halign == fa_right) x_offset = width_diff;
 				if (original_halign == fa_center) x_offset = floor(width_diff / 2);
