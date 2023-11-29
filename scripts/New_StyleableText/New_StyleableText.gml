@@ -70,12 +70,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	// remove later, just for debugging
 	drawables_debug = [];
 	
-	static get_new_style = function() {
-		return {
-			
-		};
-	};
-	
 	// create char array
 	var text_length = string_length(text);
 	for (var i = 1; i <= text_length; i++) {
