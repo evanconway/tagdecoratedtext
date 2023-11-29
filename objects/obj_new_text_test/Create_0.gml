@@ -17,7 +17,9 @@ setup_test_text = function() {
 
 test = setup_test_text();
 
-text_set_color(test, 250, 400, c_red);
+text_set_color(test, 250, 400, c_aqua);
+text_set_alpha(test, 300, 330, 0.1);
+text_set_font(test, 340, 368, fnt_handwriting);
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
 text_make_drawable(other_test);

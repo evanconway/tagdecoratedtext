@@ -265,7 +265,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		return true;
 	};
 	
-	merge_drawables = function() {
+	merge_all_drawables = function() {
 		var index = 0;
 		while (character_array[index].drawable.index_end + 1 < character_array_length) {
 			// while possible, merge drawable with drawable at next index
@@ -343,7 +343,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
  */
 function text_make_drawable(text) {
 	text.calculate_char_positions();
-	text.merge_drawables();
+	text.merge_all_drawables();
 }
 
 /**
@@ -358,150 +358,6 @@ function new_text_page_previous(text) {
  */
 function new_text_page_next(text) {
 	text.text_page_index = min(text.text_page_index + 1, text.text_page_index_max);
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {Asset.GMFont} font
- */
-function text_set_default_font(text, index_start, index_end, font) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.font = font;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {Constant.Color} color
- */
-function text_set_default_color(text, index_start, index_end, color) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.color = color;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {real} alpha
- */
-function text_set_default_alpha(text, index_start, index_end, alpha) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.alpha = alpha;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {real} scale_x
- */
-function text_set_default_scale_x(text, index_start, index_end, scale_x) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.scale_x = scale_x;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {real} scale_y
- */
-function text_set_default_scale_y(text, index_start, index_end, scale_y) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.scale_y = scale_y;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {real} offset_x
- */
-function text_set_default_offset_x(text, index_start, index_end, offset_x) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.offset_x = offset_x;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {real} offset_y
- */
-function text_set_default_offset_y(text, index_start, index_end, offset_y) {
-	with (text) {
-		var index_stop = min(array_length(character_array) - 1, index_end);
-		for (var i = index_start; i <= index_stop; i++) {
-			character_array[i].style.offset_y = offset_y;
-		}
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index
- * @param {Asset.GMSprite} sprite
- */
-function text_set_default_sprite(text, index, sprite) {
-	with (text) {
-		character_array[index].style.sprite = sprite;
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index
- * @param {bool} new_line
- */
-function text_set_default_new_line(text, index, new_line) {
-	with (text) {
-		character_array[index].style.new_line = new_line;
-	}
-}
-
-/**
- * @param {struct.New_StyleableText} text
- * @param {real} index_start
- * @param {real} index_end
- * @param {Constant.Color} color
- */
-function text_set_color(text, index_start, index_end, color) {
-	with (text) {
-		split_drawables_at_index_range(index_start, index_end);
-		var index = index_start;
-		while (index <= index_end) {
-			character_array[index].drawable.style.color = color;
-			index = character_array[index].drawable.index_end + 1;
-		}
-	}
 }
 
 /**

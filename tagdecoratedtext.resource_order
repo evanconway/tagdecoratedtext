@@ -9,6 +9,7 @@
   "ResourceOrderSettings": [
     {"name":"StyleableTextStyle","order":5,"path":"scripts/StyleableTextStyle/StyleableTextStyle.yy",},
     {"name":"AnimatedTextMisc","order":2,"path":"scripts/AnimatedTextMisc/AnimatedTextMisc.yy",},
+    {"name":"Setters","order":2,"path":"scripts/Setters/Setters.yy",},
     {"name":"fnt_handwriting","order":4,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"obj_new_text_test","order":1,"path":"objects/obj_new_text_test/obj_new_text_test.yy",},
     {"name":"spr_button","order":7,"path":"sprites/spr_button/spr_button.yy",},
