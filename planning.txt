@@ -134,3 +134,11 @@ Making the lines center wasn't too bad. I think we should finish implementing te
 Although we've gotten the text alginment working, something is off. We have text extending passed our debug border. Will have to do some exploring to figure out why this is happening. After fixing this we'll have to do some reflecting to determine what feature to work on next.
 
 Nevermind figured it out. The issue was using text_width instead of page_width to determine offset.
+
+The next major step is creating temporary style changes. These are changes that only affect drawables. As part of this addition, I think we should do a small rework to how the text gets initially built. Instead of having the entire text rebuild when any default changes occur, we should demand the user "build_drawables" for a text. This will set the library up for better performance later when we need to actually use it for text where the effects are parsed from tags.
+
+Actually, let's rethink this a bit. The whole point of changing to requiring a build function before drawing is so we can apply styles without require a rebuild of the entire string. However, this is exactly what temporary styling will let us do. In-fact I believe the only reason we have default styles is so that typing effects, or other animations which will eventually give up control of the style of a character, will have a style to return to.
+
+Well, actually, I've reconvinced myself of the value of requiring a build function. I was starting to think requiring default styles at all was unecessary since for something simple like changing the color of text or whatever doesn't need some whole rewrite of the system. But actually, it does. Especially stuff that triggers line breaks. So let's go with the rebuild requirement for now. Next step is temporary styles.
+
+

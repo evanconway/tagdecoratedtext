@@ -11,9 +11,13 @@ setup_test_text = function() {
 	text_set_default_scale_y(result, 185, 195, 4);
 	text_set_default_new_line(result, 153, true);
 	text_set_default_sprite(result, 211, spr_button);
+	text_make_drawable(result);
 	return result;
 };
 
 test = setup_test_text();
 
+text_set_color(test, 250, 400, c_red);
+
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
+text_make_drawable(other_test);

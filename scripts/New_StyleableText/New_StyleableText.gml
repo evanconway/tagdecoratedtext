@@ -64,7 +64,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_line_heights = [];
 	text_page_index = 0;
 	text_page_index_max = 0;
-	
 	text_page_widths = [];
 	text_page_heights = [];
 	
@@ -293,25 +292,73 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 	};
 	
-	rebuild = function() {
-		calculate_char_positions();
-		merge_drawables();
+	/**
+	 * @param {real} index_start first index to split at
+	 * @param {real} index_end last index to split at, inclusive
+	 */
+	split_drawables_at_index_range = function(index_start, index_end) {
+		var drawable_left = character_array[index_start].drawable;
+		if (drawable_left.index_start != index_start) {
+			var left_original_end = drawable_left.index_end;
+			drawable_left.index_end = index_start - 1;
+			drawable_left.text = "";
+			for (var i = drawable_left.index_start; i <= drawable_left.index_end; i++) {
+				drawable_left.text += character_array[i].char;
+			}
+			var new_drawable_left = {
+				index_start: index_start,
+				index_end: left_original_end,
+				text: "",
+				style: drawable_left.style.get_copy()
+			};
+			for (var i = index_start; i <= left_original_end; i++) {
+				character_array[i].drawable = new_drawable_left;
+				new_drawable_left.text += character_array[i].char;
+			}
+		}
+		var drawable_right = character_array[index_end].drawable;
+		if (drawable_right.index_end != index_end) {
+			var right_original_end = drawable_right.index_end;
+			drawable_right.index_end = index_end;
+			drawable_right.text = "";
+			for (var i = drawable_right.index_start; i <= drawable_right.index_end; i++) {
+				drawable_right.text += character_array[i].char;
+			}
+			var new_drawable_right = {
+				index_start: index_end + 1,
+				index_end: right_original_end,
+				text: "",
+				style: drawable_right.style.get_copy()
+			};
+			for (var i = new_drawable_right.index_start; i <= new_drawable_right.index_end; i++) {
+				character_array[i].drawable = new_drawable_right;
+				new_drawable_right.text += character_array[i].char;
+			}
+		}
 	};
-	rebuild();
 }
 
+/**
+ * @param {struct.New_StyleableText} text
+ */
+function text_make_drawable(text) {
+	text.calculate_char_positions();
+	text.merge_drawables();
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ */
 function new_text_page_previous(text) {
 	text.text_page_index = max(text.text_page_index - 1, 0);
 }
 
+/**
+ * @param {struct.New_StyleableText} text
+ */
 function new_text_page_next(text) {
 	text.text_page_index = min(text.text_page_index + 1, text.text_page_index_max);
 }
-
-/*
-	sprite = spr_styleable_text_sprite_default;
-	new_line = false; // forces new line start
-*/
 
 /**
  * @param {struct.New_StyleableText} text
@@ -325,7 +372,6 @@ function text_set_default_font(text, index_start, index_end, font) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.font = font;
 		}
-		rebuild();
 	}
 }
 
@@ -341,7 +387,6 @@ function text_set_default_color(text, index_start, index_end, color) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.color = color;
 		}
-		rebuild();
 	}
 }
 
@@ -357,7 +402,6 @@ function text_set_default_alpha(text, index_start, index_end, alpha) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.alpha = alpha;
 		}
-		rebuild();
 	}
 }
 
@@ -373,7 +417,6 @@ function text_set_default_scale_x(text, index_start, index_end, scale_x) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.scale_x = scale_x;
 		}
-		rebuild();
 	}
 }
 
@@ -389,7 +432,6 @@ function text_set_default_scale_y(text, index_start, index_end, scale_y) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.scale_y = scale_y;
 		}
-		rebuild();
 	}
 }
 
@@ -405,7 +447,6 @@ function text_set_default_offset_x(text, index_start, index_end, offset_x) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.offset_x = offset_x;
 		}
-		rebuild();
 	}
 }
 
@@ -421,7 +462,6 @@ function text_set_default_offset_y(text, index_start, index_end, offset_y) {
 		for (var i = index_start; i <= index_stop; i++) {
 			character_array[i].style.offset_y = offset_y;
 		}
-		rebuild();
 	}
 }
 
@@ -433,7 +473,6 @@ function text_set_default_offset_y(text, index_start, index_end, offset_y) {
 function text_set_default_sprite(text, index, sprite) {
 	with (text) {
 		character_array[index].style.sprite = sprite;
-		rebuild();
 	}
 }
 
@@ -445,7 +484,23 @@ function text_set_default_sprite(text, index, sprite) {
 function text_set_default_new_line(text, index, new_line) {
 	with (text) {
 		character_array[index].style.new_line = new_line;
-		rebuild();
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {Constant.Color} color
+ */
+function text_set_color(text, index_start, index_end, color) {
+	with (text) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.color = color;
+			index = character_array[index].drawable.index_end + 1;
+		}
 	}
 }
 
@@ -462,6 +517,14 @@ function new_text_draw(x, y, text) {
 		var original_valign = draw_get_valign();
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
+		
+		if (array_length(text_page_widths) <= 0) {
+			draw_set_alpha(1);
+			draw_set_color(c_white);
+			draw_set_font(fnt_styleable_text_font_default);
+			draw_text(x, y, "Text must be made drawable.");
+			return;
+		}
 		
 		var page_width = text_page_widths[text_page_index];
 		var page_height = text_page_heights[text_page_index];
