@@ -141,4 +141,6 @@ Actually, let's rethink this a bit. The whole point of changing to requiring a b
 
 Well, actually, I've reconvinced myself of the value of requiring a build function. I was starting to think requiring default styles at all was unecessary since for something simple like changing the color of text or whatever doesn't need some whole rewrite of the system. But actually, it does. Especially stuff that triggers line breaks. So let's go with the rebuild requirement for now. Next step is temporary styles.
 
+Adding temporary styles wasn't too hard. Since our system has functioning drawables, all we really needed to do was add the drawable split function, and then a bunch of functions that set the styles of drawables at indexes. 
 
+Next, we should review how to handle animations. Luckily our system last time was quite good IMO. We just need to adapt it. Entry (and exit) animations might be the trickiest.
