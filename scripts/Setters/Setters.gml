@@ -175,3 +175,83 @@ function text_set_font(text, index_start, index_end, font) {
 		}
 	}
 }
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} scale_x
+ */
+function text_set_scale_x(text, index_start, index_end, scale_x) {
+	with (text) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.scale_x = scale_x;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} scale_y
+ */
+function text_set_scale_y(text, index_start, index_end, scale_y) {
+	with (text) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.scale_y = scale_y;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} offset_x
+ */
+function text_set_offset_x(text, index_start, index_end, offset_x) {
+	with (text) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.offset_x = offset_x;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {real} offset_y
+ */
+function text_set_offset_y(text, index_start, index_end, offset_y) {
+	with (text) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.offset_y = offset_y;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+}
+
+/**
+ * @param {struct.New_StyleableText} text
+ * @param {real} index
+ * @param {Asset.GMSprite} sprite
+ */
+function text_set_sprite(text, index, sprite) {
+	with (text) {
+		split_drawables_at_index_range(index, index);
+		character_array[index].drawable.style.sprite = sprite;
+	}
+}

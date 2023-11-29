@@ -20,6 +20,11 @@ test = setup_test_text();
 text_set_color(test, 250, 400, c_aqua);
 text_set_alpha(test, 300, 330, 0.1);
 text_set_font(test, 340, 368, fnt_handwriting);
+text_set_scale_x(test, 410, 420, 2);
+text_set_scale_y(test, 425, 435, 2);
+text_set_offset_x(test, 440, 450, 7);
+text_set_offset_y(test, 455, 465, 7);
+text_set_sprite(test, 470, spr_button);
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
 text_make_drawable(other_test);
