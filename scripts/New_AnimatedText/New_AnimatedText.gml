@@ -15,6 +15,7 @@ enum ANIMATED_TEXT_ANIMATIONS {
 global.animated_text_default_fadein_duration = 200;
 
 global.animated_text_default_risein_duration = 200;
+global.animated_text_default_risein_offset = 5;
 
 global.animated_text_default_fade_alpha_min = 0.3;
 global.animated_text_default_fade_alpha_max = 1;
@@ -78,8 +79,30 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		/// @param {real} update_time_ms
 		update = function(update_time_ms) {
 			time_ms += update_time_ms;
-			if (time_ms/duration >= 1) finished = true;
-			text_set_alpha(text, animation_index_end, animation_index_end, time_ms/duration);
+			var drawn_alpha = min(1, time_ms/duration);
+			if (drawn_alpha == 1) finished = true;
+			text_set_alpha(text, animation_index_end, animation_index_end, drawn_alpha);
+			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
+		};
+	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.RISEIN) {
+		can_finish = true;
+		duration = global.animated_text_default_risein_duration;
+		offset = global.animated_text_default_risein_offset;
+		
+		if (array_length(params) == 2) {
+			duration = params[0];
+			offset = params[1];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for risein animation!", true);
+		}
+
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			var drawn_offset = max(0, offset - time_ms/duration*offset);
+			if (drawn_offset == 0) finished = true;
+			text_set_offset_y(text, animation_index_start, animation_index_end, drawn_offset);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}

@@ -190,4 +190,4 @@ Added some framework for animations, and tested a fadein animation. Merging all 
 
 Just realized our temporary style setters are true setters. But we don't want that. We want the changes to be additive. For example, our alpha setter should multiply the existing style by the given alpha, not set it to that. This additive nature is why the system works. Consider fading in text that's set to an alpha of 0.5. Or a rise-in animation for text that has a y offset. 
 
-
+Questioning if we even need global defaults.

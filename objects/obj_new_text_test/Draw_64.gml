@@ -11,6 +11,11 @@ if (keyboard_check_pressed(vk_left)) new_text_page_previous(test);
 
 if (keyboard_check_pressed(vk_space)) {
 	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
+	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 0, 0, []);
+}
+
+if (keyboard_check_pressed(ord("R"))) {
+	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 5, 7, []);
 }
 
 animation_test.update();
