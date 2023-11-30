@@ -132,6 +132,77 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			text_set_alpha(text, animation_index_start, animation_index_end, alpha);
 		};
 	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE || animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE) {
+		offset_time = animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_time_ms : global.animated_text_default_tremble_time_ms;
+		magnitude = animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
+		offset_individual_chars = animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
+		
+		if (array_length(params) == 2) {
+			offset_time = params[0];
+			magnitude = params[1];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for shake/tremble animation!", true);
+		}
+		/// @ignore
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			
+			var index_x = floor(time_ms / offset_time);
+			var index_y = index_x + 4321; // arbitrary character index offset 
+			if (offset_individual_chars) {
+				for (var i = animation_index_start; i <= animation_index_end; i++) {
+					var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x + i * 4321)) - magnitude;
+					var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y + i * 4321)) - magnitude;
+					text_set_offset_x(text, i, i, offset_x);
+					text_set_offset_y(text, i, i, offset_y);
+				}
+			} else {
+				var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x)) - magnitude;
+				var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y)) - magnitude;
+				text_set_offset_x(text, animation_index_start, animation_index_end, offset_x);
+				text_set_offset_y(text, animation_index_start, animation_index_end, offset_y);
+			}
+		};
+	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC || animation_enum == ANIMATED_TEXT_ANIMATIONS.WCHROMATIC) {
+		change_ms = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_change_ms : global.animated_text_default_wchromatic_change_ms;
+		steps_per_change = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_steps_per_change : global.animated_text_default_wchromatic_steps_per_change;
+		char_offset = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_char_offset : 0;
+
+		// use char offset to determine if chromatic or wchromatic
+		if (char_offset == undefined) {
+			if (array_length(params) == 2) {
+				change_ms = params[0];
+				steps_per_change = params[1];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for wchromatic animation!", true);
+			}
+		} else {
+			if (array_length(params) == 3) {
+				change_ms = params[0];
+				steps_per_change = params[1];
+				char_offset = params[2];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for chromatic animation!", true);
+			}
+		}
+
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			var index = floor(time_ms/change_ms) * steps_per_change;
+			
+			// use char offset to determine if chromatic or wchromatic
+			if (char_offset != 0) {
+				for (var i = animation_index_start; i <= animation_index_end; i++) {
+					text_set_color(text, i, i, animated_text_get_chromatic_color_at(index + char_offset * i));
+				}
+			} else {
+				text_set_color(text, animation_index_start, animation_index_end, animated_text_get_chromatic_color_at(index));
+			}	
+		};
+	}
 }
 
 
