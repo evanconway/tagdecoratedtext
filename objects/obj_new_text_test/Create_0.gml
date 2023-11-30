@@ -2,15 +2,15 @@ moby_dick = "Call me Ishmael. Some years ago-never mind how long precisely-havin
 
 setup_test_text = function() {
 	var result = new New_StyleableText(moby_dick, 200, 200);
-	text_set_default_font(result, 20, 60, fnt_handwriting);
-	text_set_default_color(result, 30, 40, c_red);
-	text_set_default_alpha(result, 75, 105, 0.3);
-	text_set_default_offset_x(result, 115, 125, 7);
-	text_set_default_offset_y(result, 130, 145, -7);
-	text_set_default_scale_x(result, 165, 175, 4);
-	text_set_default_scale_y(result, 185, 195, 4);
-	text_set_default_new_line(result, 153, true);
-	text_set_default_sprite(result, 211, spr_button);
+	result.set_character_font(20, 60, fnt_handwriting);
+	result.set_character_color(30, 40, c_red);
+	result.set_character_alpha(75, 105, 0.3);
+	result.set_character_offset_x(115, 125, 7);
+	result.set_character_offset_y(130, 145, -7);
+	result.set_character_scale_x(165, 175, 4);
+	result.set_character_scale_y(185, 195, 4);
+	result.set_character_new_line(153, true);
+	result.set_character_sprite(211, spr_button);
 	text_make_drawable(result);
 	return result;
 };

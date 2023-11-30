@@ -345,6 +345,63 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 		return result;
 	};
+	
+	invoke_callback_on_character_range = function(index_start, index_end, callback) {
+		var index_stop = min(array_length(character_array) - 1, index_end);
+		for (var i = index_start; i <= index_stop; i++) {
+			callback(character_array[i]);
+		}
+	};
+	
+	set_character_font = function(index_start, index_end, font) {
+		invoke_callback_on_character_range(index_start, index_end, method({ font }, function(c) {
+			c.style.font = font;
+		}));
+	};
+	
+	set_character_color = function(index_start, index_end, color) {
+		invoke_callback_on_character_range(index_start, index_end, method({ color }, function(c) {
+			c.style.color = color;
+		}));
+	};
+	
+	set_character_alpha = function(index_start, index_end, alpha) {
+		invoke_callback_on_character_range(index_start, index_end, method({ alpha }, function(c) {
+			c.style.alpha = alpha;
+		}));
+	};
+	
+	set_character_scale_x = function(index_start, index_end, scale_x) {
+		invoke_callback_on_character_range(index_start, index_end, method({ scale_x }, function(c) {
+			c.style.scale_x = scale_x;
+		}));
+	};
+	
+	set_character_scale_y = function(index_start, index_end, scale_y) {
+		invoke_callback_on_character_range(index_start, index_end, method({ scale_y }, function(c) {
+			c.style.scale_y = scale_y;
+		}));
+	};
+	
+	set_character_offset_x = function(index_start, index_end, offset_x) {
+		invoke_callback_on_character_range(index_start, index_end, method({ offset_x }, function(c) {
+			c.style.offset_x = offset_x;
+		}));
+	};
+	
+	set_character_offset_y = function(index_start, index_end, offset_y) {
+		invoke_callback_on_character_range(index_start, index_end, method({ offset_y }, function(c) {
+			c.style.offset_y = offset_y;
+		}));
+	};
+	
+	set_character_new_line = function(index, new_line) {
+		character_array[index].style.new_line = new_line;
+	};
+	
+	set_character_sprite = function(index, sprite) {
+		character_array[index].style.sprite = sprite;
+	};
 }
 
 /**
