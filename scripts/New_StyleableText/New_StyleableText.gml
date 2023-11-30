@@ -67,9 +67,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_page_widths = [];
 	text_page_heights = [];
 	
-	// remove later, just for debugging
-	drawables_debug = [];
-	
 	// create char array
 	var text_length = string_length(text);
 	for (var i = 1; i <= text_length; i++) {
@@ -259,9 +256,15 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		return true;
 	};
 	
-	merge_all_drawables = function() {
-		var index = 0;
-		while (character_array[index].drawable.index_end + 1 < character_array_length) {
+	/**
+	 * Should probably replace merge_all_drawables with this function, but called on the entire system
+	 *
+	 * @param {real} index_start first index to merge at
+	 * @param {real} index_end last index to merge at, inclusive
+	 */
+	merge_drawables_at_index_range = function(index_start, index_end) {
+		var index = index_start == 0 ? 0 : index_start - 1;
+		while (index <= index_end && character_array[index].drawable.index_end + 1 < character_array_length) {
 			// while possible, merge drawable with drawable at next index
 			var can_merge = char_drawables_mergeable(index, character_array[index].drawable.index_end + 1);
 			var drawable = character_array[index].drawable;
@@ -276,14 +279,10 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				index = next_drawable.index_start;
 			}
 		}
-		
-		// remove later, just for debugging
-		drawables_debug = [];
-		index = 0;
-		while (index < character_array_length) {
-			array_push(drawables_debug, character_array[index].drawable);
-			index = character_array[index].drawable.index_end + 1;
-		}
+	};
+	
+	merge_all_drawables = function() {
+		merge_drawables_at_index_range(0, character_array_length - 1);
 	};
 	
 	/**
@@ -329,6 +328,18 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				new_drawable_right.text += character_array[i].char;
 			}
 		}
+	};
+	
+	// for debugging, remove later
+	get_drawables = function() {
+		var result = [];
+		var index = 0;
+		while (index < character_array_length) {
+			var drawable = character_array[index].drawable;
+			array_push(result, drawable);
+			index = drawable.index_end + 1;
+		}
+		return result;
 	};
 }
 
@@ -390,7 +401,8 @@ function new_text_draw(x, y, text) {
 		draw_set_alpha(1);
 		draw_set_font(fnt_styleable_text_font_default);
 		draw_set_color(c_lime);
-		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables_debug)}");
+		var drawables = get_drawables();
+		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables)}");
 		// debug border overlaps text area on all sides
 		draw_rectangle(box_x, box_y, box_x + 1, box_y + page_height, false);
 		draw_rectangle(box_x + page_width - 1, box_y, box_x + page_width, box_y + page_height, false);

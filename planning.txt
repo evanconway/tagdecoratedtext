@@ -185,3 +185,5 @@ I also think we need to add the targeted merge function we had before. This will
 Or, maybe not? We do want to give users the ability to change styles temporarily, and the drawable cuts from those style changes will need to be merged at some time. Maybe we'll just merge all drawables at some point during the update cycle for now, and worry about optimization later.
 
 Just realized we could think of the animation wrapper as an "animator". And ask it to pass in an existing styleable text instance.
+
+Added some framework for animations, and tested a fadein animation. Merging all drawables after drawing is very inefficient. I think it's worth adding in the targeted merge function.

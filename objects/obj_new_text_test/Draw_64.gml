@@ -9,6 +9,12 @@ draw_text(0, 0, fps_real);
 if (keyboard_check_pressed(vk_right)) new_text_page_next(test);
 if (keyboard_check_pressed(vk_left)) new_text_page_previous(test);
 
+if (keyboard_check_pressed(vk_space)) {
+	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
+}
+
+animation_test.update();
+
 new_text_draw(600, 400, other_test);
 
 draw_set_halign(fa_center);

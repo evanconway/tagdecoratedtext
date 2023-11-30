@@ -44,12 +44,34 @@ global.animated_text_default_blink_alpha_min = 0.2;
 global.animated_text_default_blink_alpha_max = 1;
 global.animated_text_default_blink_cycle_time_ms = 1000;
 
-function New_Animation(animation_enum, index_start, index_end, aargs) {
-	animation_index_start = _index_start;
-	animation_index_end = _index_end;
+/**
+ * @param {Struct.New_StyleableText} styleable_text
+ * @param {real} animation_enum
+ * @param {real} index_start
+ * @param {real} index_end
+ * @param {array} aargs array of parameters for this animation
+ */
+function New_Animation(styleable_text, animation_enum, index_start, index_end, aargs) constructor {
+	text = styleable_text;
+	animation_index_start = index_start;
+	animation_index_end = index_end;
 	params = aargs;
 	
+	can_finish = false;
+	finished = false;
+	
 	update = function() {};
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
+		can_finish = true;
+		alpha = 0;
+		update = function() {
+			alpha += 0.02;
+			if (alpha >= 1) finished = true;
+			text_set_alpha(text, animation_index_end, animation_index_end, alpha);
+			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
+		};
+	}
 }
 
 
@@ -66,15 +88,21 @@ function StyleableTextAnimator(styleable_text) constructor {
 	};
 	
 	/**
-	 * @param {real} _animation_enum_value entry in the ANIMATED_TEXT_ANIMATIONS enum
-	 * @param {real} _index_start index of first character animation acts on
-	 * @param {real} _index_end index of last character animation acts on
-	 * @param {array} _aargs array of parameters for this animation
-	 * @ignore
+	 * @param {real} animation_enum
+	 * @param {real} index_start
+	 * @param {real} index_end
+	 * @param {array} aargs array of parameters for this animation
 	 */
-	 /*
-	add_animation = function(animation_enum_value, _index_start, _index_end, _aargs) {
-		array_push(animations, new AnimatedTextAnimation(_animation_enum_value, text, _index_start, _index_end, _aargs));
-	}
-	*/
+	add_animation = function(animation_enum, index_start, index_end, aargs) {
+		struct_set(animations, get_new_animation_id(), new New_Animation(text, animation_enum, index_start, index_end, aargs));
+	};
+	
+	update = function() {
+		var animation_ids = struct_get_names(animations);
+		for (var i = 0; i < array_length(animation_ids); i++)  {
+			var animation = struct_get(animations, animation_ids[i]);
+			animation.update();
+			if (animation.can_finish && animation.finished) struct_remove(animations, animation_ids[i]);
+		}
+	};
 }
