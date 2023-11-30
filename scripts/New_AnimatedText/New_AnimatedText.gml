@@ -203,6 +203,68 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			}	
 		};
 	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE || animation_enum == ANIMATED_TEXT_ANIMATIONS.FLOAT) {
+		cycle_time = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_cycle_time_ms : global.animated_text_default_float_cycle_time_ms;
+		magnitude = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_magnitude : global.animated_text_default_float_magnitude;
+		char_offset = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_char_offset : 0;
+		
+		// use char offset to determine if wave or float
+		if (char_offset == undefined) {
+			if (array_length(params) == 2) {
+				cycle_time = params[0];
+				magnitude = params[1];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for float animation!", true);
+			}
+		} else {
+			if (array_length(params) == 3) {
+				cycle_time = params[0];
+				magnitude = params[1];
+				char_offset = params[2];
+			} else if (array_length(params) != 0) {
+				show_error("Improper number of args for wave animation!", true);
+			}
+		}
+
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			var time_into_cylce = time_ms % cycle_time;
+			var percent = time_into_cylce / cycle_time;
+			if (char_offset == 0) {
+				var mod_y = sin(percent * -2 * pi) * magnitude;
+				text_set_offset_y(text, animation_index_start, animation_index_end, mod_y);
+			} else {
+				for (var i = animation_index_start; i <= animation_index_end; i++) {
+					var mod_y = sin(percent * -2 * pi + char_offset * i) * magnitude;
+					text_set_offset_y(text, i, i, mod_y);
+				}
+			}
+		};
+	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.BLINK) {
+		alpha_min = global.animated_text_default_blink_alpha_min;
+		alpha_max = global.animated_text_default_blink_alpha_max;
+		cycle_time = global.animated_text_default_blink_cycle_time_ms;
+		
+		if (array_length(params) == 3) {
+			alpha_min = params[0];
+			alpha_max = params[1];
+			cycle_time = params[2];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for blink animation!", true);
+		}
+
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			if ((time_ms % (cycle_time * 2)) <= cycle_time) {
+				text_set_alpha(text, animation_index_start, animation_index_end, alpha_max);
+			} else {
+				text_set_alpha(text, animation_index_start, animation_index_end, alpha_min);
+			}
+		};
+	}
 }
 
 

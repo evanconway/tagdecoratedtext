@@ -34,6 +34,8 @@ animation_test = new StyleableTextAnimator(test);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, 34, 60, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, 70, 80, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, 90, 100, []);
-
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, 110, 120, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, 130, 140, []);
+animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, 150, 160, []);
+animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, 170, 180, []);
+animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, 190, 200, []);
