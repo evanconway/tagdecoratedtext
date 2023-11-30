@@ -60,15 +60,26 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	can_finish = false;
 	finished = false;
 	
-	update = function() {};
+	time_ms = 0;
+	
+	update = function(update_time_ms) {};
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
 		can_finish = true;
 		alpha = 0;
-		update = function() {
-			alpha += 0.02;
-			if (alpha >= 1) finished = true;
-			text_set_alpha(text, animation_index_end, animation_index_end, alpha);
+		duration = global.animated_text_default_fadein_duration;
+		
+		if (array_length(params) == 1) {
+			duration = params[0];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for fadein animation!", true);
+		}
+		
+		/// @param {real} update_time_ms
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			if (time_ms/duration >= 1) finished = true;
+			text_set_alpha(text, animation_index_end, animation_index_end, time_ms/duration);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}
@@ -97,11 +108,11 @@ function StyleableTextAnimator(styleable_text) constructor {
 		struct_set(animations, get_new_animation_id(), new New_Animation(text, animation_enum, index_start, index_end, aargs));
 	};
 	
-	update = function() {
+	update = function(update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 		var animation_ids = struct_get_names(animations);
 		for (var i = 0; i < array_length(animation_ids); i++)  {
 			var animation = struct_get(animations, animation_ids[i]);
-			animation.update();
+			animation.update(update_time_ms);
 			if (animation.can_finish && animation.finished) struct_remove(animations, animation_ids[i]);
 		}
 	};
