@@ -1,3 +1,4 @@
+/*
 enum ANIMATED_TEXT_ANIMATIONS {
 	FADEIN,
 	RISEIN,
@@ -10,6 +11,7 @@ enum ANIMATED_TEXT_ANIMATIONS {
 	FLOAT,
 	BLINK
 }
+*/
 
 // DEFAULTs
 global.animated_text_default_fadein_duration = 200;

@@ -403,7 +403,7 @@ function new_text_draw(x, y, text) {
 		while (index < character_array_length) {
 			var c = character_array[index];
 			var drawable = c.drawable;
-			if (c.page_index == text_page_index) {
+			if (c.page_index == text_page_index && drawable.style.alpha > 0) {
 				draw_set_color(drawable.style.color);
 				draw_set_alpha(drawable.style.alpha);
 				draw_set_font(drawable.style.font);

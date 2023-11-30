@@ -12,6 +12,7 @@
     {"name":"Setters","order":2,"path":"scripts/Setters/Setters.yy",},
     {"name":"fnt_handwriting","order":4,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"obj_new_text_test","order":1,"path":"objects/obj_new_text_test/obj_new_text_test.yy",},
+    {"name":"New_AnimatedText","order":3,"path":"scripts/New_AnimatedText/New_AnimatedText.yy",},
     {"name":"spr_button","order":7,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"obj_textsystem_test","order":5,"path":"objects/obj_textsystem_test/obj_textsystem_test.yy",},
     {"name":"StyleableTextDrawable","order":4,"path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},

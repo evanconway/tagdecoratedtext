@@ -2,6 +2,8 @@
 
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
+draw_set_alpha(1);
+draw_set_color(c_white);
 draw_text(0, 0, fps_real);
 
 if (keyboard_check_pressed(vk_right)) new_text_page_next(test);

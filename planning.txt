@@ -169,3 +169,19 @@ Given this, let's think of how our tag decorated wrapper will work. One thing to
 Oh, I wonder if we could just rig up the draw/update function so animation updates happen after drawing. This way the user would never be able to have their changes overwritten by the draw. Though we would still need to inform the user their changes are overwritten by draw itself. I think this is inevitable because we need drawables to revert their styles to the default characters in order for animations to work properly. This makes sense. I think what we need to do next is create an animation wrapper class, and animations. Then make the tag parser wrapper class, and any utility functions.
 
 Ack... I'm flip flopping. After looking over the old animation code, it does seem elegant to integrate typing directly into the system. I mean we basically had something working originally. It was just inefficient. And indeed that's the whole reason we started redoing this, just to fix the efficiency. Screw it. We'll do it the old way. We'll just remember to do animations with a mix of functional and non-functional. Also the animations won't have reference to the text. We'll have the parent animation class update the animations, then modify the text based on the updated animation.
+
+Man I've done a lot of planning writing today instead of coding.
+
+Just came back to write up animations but browsed over the old code again. Had to remind myself how we handled keeping track of "typed" characters. We would modify a "visible" field that determined if a character could even be drawn. It looks like the modification didn't immediately affect the drawables. So I'm guessing the drawables would be initialized to the characters?
+
+Either way. I think we don't have to do this. We actually pointed this out earlier. The typing system could simply set the alpha of untyped characters to 0. We got distracted from this idea because we were considering separating the logic of displaying animations from typing. truthfully, I think our old system basically did this. For characters that have been typed, we simply don't set their alpha to 0. And if we want cool typing effects, our concept of animations that delete themselves should work fine. Ok, let's start adding animations in.
+
+Apparently structs can be used like maps. You can even use integers as field names. That's wonderful.
+
+We have default setters, which only set the style of the character array. I think we should change these. These functions should not be publicly accessible as it seems wrong to ask the user to understand what "drawables" are and to "build" them after setting character values. Instead these should be internal. But we will make new versions of these functions which change the underlying character style as well as the drawable.
+
+I also think we need to add the targeted merge function we had before. This will be needed by typing animations. Remember that we really don't need to be cutting apart and merging the drawables on a finished set of text. And similarly, we don't need to iterate through all mergeables except for on text creation.
+
+Or, maybe not? We do want to give users the ability to change styles temporarily, and the drawable cuts from those style changes will need to be merged at some time. Maybe we'll just merge all drawables at some point during the update cycle for now, and worry about optimization later.
+
+Just realized we could think of the animation wrapper as an "animator". And ask it to pass in an existing styleable text instance.

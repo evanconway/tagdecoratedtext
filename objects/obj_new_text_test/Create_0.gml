@@ -28,3 +28,5 @@ text_set_sprite(test, 470, spr_button);
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
 text_make_drawable(other_test);
+
+animation_test = new StyleableTextAnimator(test);
