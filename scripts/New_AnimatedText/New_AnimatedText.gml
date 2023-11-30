@@ -88,7 +88,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			time_ms += update_time_ms;
 			var drawn_alpha = min(1, time_ms/duration);
 			if (drawn_alpha == 1) finished = true;
-			text_set_alpha(text, animation_index_end, animation_index_end, drawn_alpha);
+			text_apply_alpha(text, animation_index_end, animation_index_end, drawn_alpha);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}
@@ -109,7 +109,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			time_ms += update_time_ms;
 			var drawn_offset = max(0, offset - time_ms/duration*offset);
 			if (drawn_offset == 0) finished = true;
-			text_set_offset_y(text, animation_index_start, animation_index_end, drawn_offset);
+			text_add_offset_y(text, animation_index_start, animation_index_end, drawn_offset);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}
@@ -136,7 +136,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 				check -= cycle_time;
 			}
 			var alpha = alpha_min + check/cycle_time * (alpha_max - alpha_min);
-			text_set_alpha(text, animation_index_start, animation_index_end, alpha);
+			text_apply_alpha(text, animation_index_start, animation_index_end, alpha);
 		};
 	}
 	
@@ -161,14 +161,14 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
 					var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x + i * 4321)) - magnitude;
 					var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y + i * 4321)) - magnitude;
-					text_set_offset_x(text, i, i, offset_x);
-					text_set_offset_y(text, i, i, offset_y);
+					text_add_offset_x(text, i, i, offset_x);
+					text_add_offset_y(text, i, i, offset_y);
 				}
 			} else {
 				var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x)) - magnitude;
 				var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y)) - magnitude;
-				text_set_offset_x(text, animation_index_start, animation_index_end, offset_x);
-				text_set_offset_y(text, animation_index_start, animation_index_end, offset_y);
+				text_add_offset_x(text, animation_index_start, animation_index_end, offset_x);
+				text_add_offset_y(text, animation_index_start, animation_index_end, offset_y);
 			}
 		};
 	}
@@ -240,11 +240,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			var percent = time_into_cylce / cycle_time;
 			if (char_offset == 0) {
 				var mod_y = sin(percent * -2 * pi) * magnitude;
-				text_set_offset_y(text, animation_index_start, animation_index_end, mod_y);
+				text_add_offset_y(text, animation_index_start, animation_index_end, mod_y);
 			} else {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
 					var mod_y = sin(percent * -2 * pi + char_offset * i) * magnitude;
-					text_set_offset_y(text, i, i, mod_y);
+					text_add_offset_y(text, i, i, mod_y);
 				}
 			}
 		};
@@ -266,9 +266,9 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		update = function(update_time_ms) {
 			time_ms += update_time_ms;
 			if ((time_ms % (cycle_time * 2)) <= cycle_time) {
-				text_set_alpha(text, animation_index_start, animation_index_end, alpha_max);
+				text_apply_alpha(text, animation_index_start, animation_index_end, alpha_max);
 			} else {
-				text_set_alpha(text, animation_index_start, animation_index_end, alpha_min);
+				text_apply_alpha(text, animation_index_start, animation_index_end, alpha_min);
 			}
 		};
 	}
@@ -315,15 +315,15 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 						index = irandom_range(animation_index_start, animation_index_end);
 						state = 1;
 					} else if (state == 1 && time_ms < 0) {
-						text_set_offset_x(text, index, index, 0);
-						text_set_offset_y(text, index, index, 0);
+						text_add_offset_x(text, index, index, 0);
+						text_add_offset_y(text, index, index, 0);
 						text.merge_drawables_at_index_range(index, index);
 						time_ms = irandom_range(wait_min, wait_max);
 						state = 0;
 					}
 					if (state == 1) {
-						text_set_offset_x(text, index, index, offset_x);
-						text_set_offset_y(text, index, index, offset_y);
+						text_add_offset_x(text, index, index, offset_x);
+						text_add_offset_y(text, index, index, offset_y);
 					}
 				}
 			});

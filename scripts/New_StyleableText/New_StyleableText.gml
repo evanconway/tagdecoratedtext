@@ -31,6 +31,18 @@ function TextStyle() constructor {
 		return true;
 	};
 	
+	set_to = function(style) {
+		font = style.font;
+		color = style.color;
+		alpha = style.alpha;
+		scale_x = style.scale_x;
+		scale_y = style.scale_y;
+		offset_x = style.offset_x;
+		offset_y = style.offset_y;
+		sprite = style.sprite;
+		new_line = style.new_line;
+	};
+	
 	/**
 	 * Get a copy of this style.
 	 *
@@ -38,15 +50,7 @@ function TextStyle() constructor {
 	 */
 	get_copy = function() {
 		var copy = new TextStyle();
-		copy.font = font;
-		copy.color = color;
-		copy.alpha = alpha;
-		copy.scale_x = scale_x;
-		copy.scale_y = scale_y;
-		copy.offset_x = offset_x;
-		copy.offset_y = offset_y;
-		copy.sprite = sprite;
-		copy.new_line = new_line;
+		copy.set_to(self);
 		return copy;
 	};
 };
@@ -439,6 +443,7 @@ function new_text_draw(x, y, text) {
 				}
 			}
 			index = drawable.index_end + 1;
+			drawable.style.set_to(c.style);
 		}
 		draw_set_halign(original_halign);
 		draw_set_valign(original_valign);
