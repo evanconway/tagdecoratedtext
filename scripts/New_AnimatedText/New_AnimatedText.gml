@@ -106,6 +106,32 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADE) {
+		alpha_min = global.animated_text_default_fade_alpha_min;
+		alpha_max = global.animated_text_default_fade_alpha_max;
+		cycle_time = global.animated_text_default_fade_cycle_time_ms;
+		
+		if (array_length(params) == 3) {
+			alpha_min = params[0];
+			alpha_max = params[1];
+			cycle_time = params[2];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for fade animation!", true);
+		}
+		
+		update = function(update_time_ms) {
+			time_ms += update_time_ms;
+			var check = time_ms % (cycle_time * 2);
+			if (check <= cycle_time) {
+				check = cycle_time - check;
+			} else {
+				check -= cycle_time;
+			}
+			var alpha = alpha_min + check/cycle_time * (alpha_max - alpha_min);
+			text_set_alpha(text, animation_index_start, animation_index_end, alpha);
+		};
+	}
 }
 
 

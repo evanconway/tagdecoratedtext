@@ -30,3 +30,5 @@ other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.
 text_make_drawable(other_test);
 
 animation_test = new StyleableTextAnimator(test);
+
+animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, 34, 60, []);
