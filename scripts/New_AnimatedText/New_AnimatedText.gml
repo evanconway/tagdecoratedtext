@@ -8,7 +8,8 @@ enum ANIMATED_TEXT_ANIMATIONS {
 	WCHROMATIC,
 	WAVE,
 	FLOAT,
-	BLINK
+	BLINK,
+	TWITCH
 }
 
 // DEFAULTs
@@ -44,6 +45,11 @@ global.animated_text_default_float_magnitude = 3;
 global.animated_text_default_blink_alpha_min = 0.2;
 global.animated_text_default_blink_alpha_max = 1;
 global.animated_text_default_blink_cycle_time_ms = 1000;
+
+global.animated_text_default_twitch_magnitude = 1;
+global.animated_text_default_twitch_offset_time_ms = 40;
+global.animated_text_default_twitch_wait_min = 200;
+global.animated_text_default_twitch_wait_max = 600;
 
 /**
  * @param {Struct.New_StyleableText} styleable_text
@@ -262,6 +268,51 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 				text_set_alpha(text, animation_index_start, animation_index_end, alpha_max);
 			} else {
 				text_set_alpha(text, animation_index_start, animation_index_end, alpha_min);
+			}
+		};
+	}
+	
+	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.TWITCH) {
+		magnitude = global.animated_text_default_twitch_magnitude;
+		offset_time = global.animated_text_default_twitch_offset_time_ms;
+		wait_min = global.animated_text_default_twitch_wait_min;
+		wait_max = global.animated_text_default_twitch_wait_max;
+		
+		index = irandom_range(animation_index_start, animation_index_end);
+		offset_x = irandom_range(-1 * magnitude, magnitude);
+		offset_y = irandom_range(-1 * magnitude, magnitude);
+		
+		state = 1; // 0: wait, 1: twitch
+		
+		time_ms = offset_time; // unlike other animations, we subtract time here
+		
+		if (array_length(params) == 4) {
+			magnitude = params[0];
+			offset_time = params[1];
+			wait_min = params[2];
+			wait_max = params[3];
+		} else if (array_length(params) != 0) {
+			show_error("Improper number of args for twitch animation!", true);
+		}
+		
+		update = function(update_time_ms) {
+			time_ms -= update_time_ms;
+			if (state == 0 && time_ms < 0) {
+				time_ms = offset_time;
+				offset_x = irandom_range(-1 * magnitude, magnitude);
+				offset_y = irandom_range(-1 * magnitude, magnitude);
+				index = irandom_range(animation_index_start, animation_index_end);
+				state = 1;
+			} else if (state == 1 && time_ms < 0) {
+				text_set_offset_x(text, index, index, 0);
+				text_set_offset_y(text, index, index, 0);
+				text.merge_drawables_at_index_range(index, index);
+				time_ms = irandom_range(wait_min, wait_max);
+				state = 0;
+			}
+			if (state == 1) {
+				text_set_offset_x(text, index, index, offset_x);
+				text_set_offset_y(text, index, index, offset_y);
 			}
 		};
 	}
