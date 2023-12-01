@@ -70,6 +70,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_page_index_max = 0;
 	text_page_widths = [];
 	text_page_heights = [];
+	text_page_char_index_start = [];
+	text_page_char_index_end = [];
 	
 	// create char array
 	var text_length = string_length(text);
@@ -225,6 +227,15 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 			char.y = line_index_y_pos_map[char.line_index];
 			char.page_index = line_index_page_index_map[char.line_index];
+			
+			// set page start and ends
+			if (char.page_index >= array_length(text_page_char_index_start)) text_page_char_index_start[char.page_index] = i;
+			if (i == character_array_length - 1) {
+				text_page_char_index_end[char.page_index] = i;
+			}
+			if (i > 0 && char.page_index != character_array[i - 1].page_index) {
+				text_page_char_index_end[character_array[i - 1].page_index] = i - 1;
+			}
 			
 			// page dimensions
 			if (char.page_index >= array_length(text_page_widths)) {
@@ -472,8 +483,8 @@ function new_text_draw(x, y, text) {
 		draw_set_color(c_fuchsia);
 		draw_rectangle(x, y, x + 1, y + 1, false);
 		
-		var index = 0;
-		while (index < character_array_length) {
+		var index = text_page_char_index_start[text_page_index]; // start starting character of current page
+		while (index <= text_page_char_index_end[text_page_index]) {
 			var c = character_array[index];
 			var drawable = c.drawable;
 			if (c.page_index == text_page_index && drawable.style.alpha > 0) {
