@@ -413,6 +413,31 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	set_character_sprite = function(index, sprite) {
 		character_array[index].style.sprite = sprite;
 	};
+	
+	/*
+	Only drawables of current page are initialized after each draw. So
+	on page switch the drawables must be initialized or there could be
+	graphical errors.
+	*/
+	init_page_drawables = function() {
+		var index = text_page_char_index_start[text_page_index];
+		while (index <= text_page_char_index_end[text_page_index]) {
+			character_array[index].drawable.style.set_to(character_array[index].style);
+			index = character_array[index].drawable.index_end + 1;
+		}
+	};
+	
+	page_previous = function() {
+		var prev = text_page_index;
+		text_page_index = max(text_page_index - 1, 0);
+		if (text_page_index != prev) init_page_drawables();
+	};
+	
+	page_next = function() {
+		var prev = text_page_index;
+		text_page_index = min(text_page_index + 1, text_page_index_max);
+		if (text_page_index != prev) init_page_drawables();
+	};
 }
 
 /**
@@ -421,20 +446,6 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 function text_make_drawable(text) {
 	text.calculate_char_positions();
 	text.merge_all_drawables();
-}
-
-/**
- * @param {struct.New_StyleableText} text
- */
-function new_text_page_previous(text) {
-	text.text_page_index = max(text.text_page_index - 1, 0);
-}
-
-/**
- * @param {struct.New_StyleableText} text
- */
-function new_text_page_next(text) {
-	text.text_page_index = min(text.text_page_index + 1, text.text_page_index_max);
 }
 
 /**
