@@ -106,6 +106,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	
 	styleable_text = new New_StyleableText(displayed_text, width, height);
 	animator = new StyleableTextAnimator(styleable_text);
+	typer = new StyleableTextTyper(styleable_text, animator);
 	
 	// apply commands
 	for (var i = 0; i < array_length(commands); i++) {
@@ -116,31 +117,50 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		var s = commands[i].command_index_start - 1;
 		var e = commands[i].command_index_end - 1;
 		
+		// apply character base styles first
+		
 		// colors
-		// animation and style setters must be applied here
-		if (cmd == "aqua") _typed_animated_text.animated_text.text.set_default_color(s, e, c_aqua);
-		if (cmd == "black") _typed_animated_text.animated_text.text.set_default_color(s, e, c_black);
-		if (cmd == "blue") _typed_animated_text.animated_text.text.set_default_color(s, e, c_blue);
-		if (cmd == "dkgray" || cmd == "dkgrey") _typed_animated_text.animated_text.text.set_default_color(s, e, c_dkgray);
-		if (cmd == "pink" || cmd == "fuchsia") _typed_animated_text.animated_text.text.set_default_color(s, e, c_fuchsia);
-		if (cmd == "gray" || cmd == "grey") _typed_animated_text.animated_text.text.set_default_color(s, e, c_gray);
-		if (cmd == "green") _typed_animated_text.animated_text.text.set_default_color(s, e, c_green);
-		if (cmd == "lime") _typed_animated_text.animated_text.text.set_default_color(s, e, c_lime);
-		if (cmd == "ltgray" || cmd == "ltgrey") _typed_animated_text.animated_text.text.set_default_color(s, e, c_ltgray);
-		if (cmd == "maroon") _typed_animated_text.animated_text.text.set_default_color(s, e, c_maroon);
-		if (cmd == "navy") _typed_animated_text.animated_text.text.set_default_color(s, e, c_navy);
-		if (cmd == "olive") _typed_animated_text.animated_text.text.set_default_color(s, e, c_olive);
-		if (cmd == "orange") _typed_animated_text.animated_text.text.set_default_color(s, e, c_orange);
-		if (cmd == "purple") _typed_animated_text.animated_text.text.set_default_color(s, e, c_purple);
-		if (cmd == "red") _typed_animated_text.animated_text.text.set_default_color(s, e, c_red);
-		if (cmd == "silver") _typed_animated_text.animated_text.text.set_default_color(s, e, c_silver);
-		if (cmd == "teal") _typed_animated_text.animated_text.text.set_default_color(s, e, c_teal);
-		if (cmd == "white") _typed_animated_text.animated_text.text.set_default_color(s, e, c_white);
-		if (cmd == "yellow") _typed_animated_text.animated_text.text.set_default_color(s, e, c_yellow);
-		if (cmd == "rgb") _typed_animated_text.animated_text.text.set_default_color(s, e, make_color_rgb(aargs[0], aargs[1], aargs[2]));
+		if (cmd == "aqua") styleable_text.set_character_color(s, e, c_aqua);
+		if (cmd == "black") styleable_text.set_character_color(s, e, c_black);
+		if (cmd == "blue") styleable_text.set_character_color(s, e, c_blue);
+		if (cmd == "dkgray" || cmd == "dkgrey") styleable_text.set_character_color(s, e, c_dkgray);
+		if (cmd == "pink" || cmd == "fuchsia") styleable_text.set_character_color(s, e, c_fuchsia);
+		if (cmd == "gray" || cmd == "grey") styleable_text.set_character_color(s, e, c_gray);
+		if (cmd == "green") styleable_text.set_character_color(s, e, c_green);
+		if (cmd == "lime") styleable_text.set_character_color(s, e, c_lime);
+		if (cmd == "ltgray" || cmd == "ltgrey") styleable_text.set_character_color(s, e, c_ltgray);
+		if (cmd == "maroon") styleable_text.set_character_color(s, e, c_maroon);
+		if (cmd == "navy") styleable_text.set_character_color(s, e, c_navy);
+		if (cmd == "olive") styleable_text.set_character_color(s, e, c_olive);
+		if (cmd == "orange") styleable_text.set_character_color(s, e, c_orange);
+		if (cmd == "purple") styleable_text.set_character_color(s, e, c_purple);
+		if (cmd == "red") styleable_text.set_character_color(s, e, c_red);
+		if (cmd == "silver") styleable_text.set_character_color(s, e, c_silver);
+		if (cmd == "teal") styleable_text.set_character_color(s, e, c_teal);
+		if (cmd == "white") styleable_text.set_character_color(s, e, c_white);
+		if (cmd == "yellow") styleable_text.set_character_color(s, e, c_yellow);
+		if (cmd == "rgb") styleable_text.set_character_color(s, e, make_color_rgb(aargs[0], aargs[1], aargs[2]));
+		
+		// page break changing styles
+		if (cmd == "n" || cmd == "br") _typed_animated_text.animated_text.text.set_new_line_at(s, true);
+		if (cmd == "f" || cmd == "font") _typed_animated_text.animated_text.text.set_default_font(s, e, aargs[0]);
+		if (cmd == "a" || cmd == "alpha") _typed_animated_text.animated_text.text.set_default_alpha(s, e, aargs[0]);
+		if (cmd == "x") _typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
+		if (cmd == "y") _typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[0]);
+		if (cmd == "xy") {
+			_typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
+			_typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[1]);
+		}
+		if (cmd == "scalex") _typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
+		if (cmd == "scaley") _typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[0]);
+		if (cmd == "scalexy") {
+			_typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
+			_typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[1]);
+		}
+		if (cmd == "s" || cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(s, aargs[0]);
 		
 		// animations
-		if (cmd == "fade") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, s, e, aargs);
+		if (cmd == "fade") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, s, e, aargs);
 		if (cmd == "shake") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, s, e, aargs);
 		if (cmd == "tremble") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, s, e, aargs);
 		if (cmd == "chromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, s, e, aargs);
@@ -160,23 +180,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 				_typed_animated_text.add_entry_animation_at(k, ANIMATED_TEXT_ANIMATIONS.RISEIN, aargs);
 			}
 		}
-		
-		// other
-		if (cmd == "n" || cmd == "br") _typed_animated_text.animated_text.text.set_new_line_at(s, true);
-		if (cmd == "f" || cmd == "font") _typed_animated_text.animated_text.text.set_default_font(s, e, aargs[0]);
-		if (cmd == "a" || cmd == "alpha") _typed_animated_text.animated_text.text.set_default_alpha(s, e, aargs[0]);
-		if (cmd == "x") _typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
-		if (cmd == "y") _typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[0]);
-		if (cmd == "xy") {
-			_typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
-			_typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[1]);
-		}
-		if (cmd == "scalex") _typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
-		if (cmd == "scaley") _typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[0]);
-		if (cmd == "scalexy") {
-			_typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
-			_typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[1]);
-		}
-		if (cmd == "s" || cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(s, aargs[0]);
 	}
+	
+	styleable_text.build();
 }

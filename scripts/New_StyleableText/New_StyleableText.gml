@@ -414,6 +414,11 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		character_array[index].style.sprite = sprite;
 	};
 	
+	build = function() {
+		calculate_char_positions();
+		merge_all_drawables();
+	};
+	
 	/*
 	Only drawables of current page are initialized after each draw. So
 	on page switch the drawables must be initialized or there could be
@@ -438,14 +443,9 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		text_page_index = min(text_page_index + 1, text_page_index_max);
 		if (text_page_index != prev) init_page_drawables();
 	};
-}
-
-/**
- * @param {struct.New_StyleableText} text
- */
-function text_make_drawable(text) {
-	text.calculate_char_positions();
-	text.merge_all_drawables();
+	
+	draw = function(x, y) {
+	};
 }
 
 /**

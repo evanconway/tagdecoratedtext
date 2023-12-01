@@ -15,14 +15,14 @@ setup_test_text = function() {
 	
 	result.set_character_color(500, 500, c_yellow);
 	
-	text_make_drawable(result);
+	result.build();
 	return result;
 };
 
 test = setup_test_text();
 
 other_test = new New_StyleableText("The quick brown fox jumps over the lazy dog.");
-text_make_drawable(other_test);
+other_test.build();
 
 animation_test = new StyleableTextAnimator(test);
 
