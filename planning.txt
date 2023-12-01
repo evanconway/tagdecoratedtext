@@ -208,3 +208,31 @@ We were able to add typing. Our old system honestly was pretty good. We're still
 Adding correct page information for displaying drawables and typing wasn't too bad. We're still missing entry animations. I think these are technically low priority, but let's get them in now while our head is still in the typing code. After this I think it makes sense to carefully think through the interface we want for typing. Advancing pages, advancing typing, returning to previous pages... that sort of stuff.
 
 Entry animations are in. I realized it I might want to have custom pause timings on characters, so I'm going to add that real quick. It shouldn't be too bad. Actually, we could have a custom callback when typing a specific character too. This is much more powerful now that we know how to bind variables to the scope of callback functions.
+
+Individual character pause timings and on_type callbacks are in. I was saying we should consider what we want our typing state interface to look like. But I realized we can figure this out later after we've created the tag decoration parsing part, and have used the library more. I'm not exactly sure what we'll want. I suspect I'll want my earlier concept of the "advance" function, which completes typing a page if it's not finished, and goes to next page if typing page is finished.
+
+Therefore I think our next step is to re-implement the tag parsing system. This is the last major step! We'll look over our old code to understand how it worked, then formulate a new plan.
+
+Ok. It looks like we iterate over the source text and remove the tags, building an array of command objects from them. Getting the commands is not too tricky, it's finding where they start and end that's tricky. In the older version I had a function I don't fully understand:
+
+set_command_unset_ends
+
+This is proof I need to name things better going forward. This function appears to loop backwards over the commands array, and set the end index to the given index for any commands that don't have an end index set. Except it closes the loop on the first command it finds with the end index set. OH! It's called "unset_ends" because it sets the "ends" of all commands with "unset" ends. That makes sense.
+
+So this strategy would work going forward obviously. But I'm remembering we were worried about the lack of ability to start a style, and set other styles, but only end certain styles. For example, something like this:
+
+<outerstyle> text <innerstyle> text <close_innerstyle> text <close_outerstyle>
+
+Or what about styles that overlap with eachother:
+
+<style_a> text <style_b> text <close_style_a> text <close_style_b>
+
+It's completely possible users will never use this, but it feels wrong to not enable this feature. My immediate idea is to let users specify an ID or something for style tags, and close it by stating just the id again. Something like this:
+
+<a-fade:20,20> text <b-wave:2> text <a> text <b>
+
+Part of me feels like this is clumsy, but on the other hand what do you do? Maybe we should just commit to it and see how it plays out. 
+
+Side note, we don't have correct logic for text width. We definitely will need to know the dimensions of text later. If the users specifies the width/height, we can use those. But if they don't we'll need to automatically calculate it.
+
+Anyway, let's commit to the id system for overlapping commands and see how that feels.
