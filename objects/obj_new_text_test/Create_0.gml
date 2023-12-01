@@ -41,3 +41,8 @@ for (var i = 0; i < 1000; i++) {
 	typer.add_type_animation_at(i, ANIMATED_TEXT_ANIMATIONS.FADEIN, []);
 	typer.add_type_animation_at(i, ANIMATED_TEXT_ANIMATIONS.RISEIN, []);
 }
+
+typer.on_type = function() {
+	audio_stop_sound(snd_chirp);
+	audio_play_sound(snd_chirp, 0, false);
+};
