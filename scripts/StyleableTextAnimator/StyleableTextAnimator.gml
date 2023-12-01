@@ -345,8 +345,11 @@ function StyleableTextAnimator(styleable_text) constructor {
 	
 	animations = {}; // struct used as mapping of ids to animations
 	
+	next_animation_id = 0;
 	get_new_animation_id = function() {
-		return struct_names_count(animations);
+		var result = next_animation_id;
+		next_animation_id++;
+		return result;
 	};
 	
 	/**
