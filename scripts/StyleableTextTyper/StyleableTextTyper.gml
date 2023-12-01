@@ -65,7 +65,10 @@ function StyleableTextTyper(text, animator) constructor {
 	
 	update = function(update_time_ms = 1000/game_get_speed(gamespeed_fps)) {
 		var hide = pages_hide_start_end[typer_text.text_page_index];
-		if (hide.index_current >= hide.index_end) return;
+		if (hide.index_current >= hide.index_end) {
+			time_ms = time_between_types_ms; // avoids long pauses on next page
+			return;
+		}
 		time_ms -= update_time_ms;
 		if (time_ms >= 0) {
 			text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
