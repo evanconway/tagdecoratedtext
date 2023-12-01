@@ -245,7 +245,7 @@ function tag_draw_no_update(tag_decorated_text, x, y) {
 /**
  * Updates and draws the given tag decorated text instance.
  *
- * @param {Struct.TagDecoratedText} tag_decorated_text
+ * @param {Struct.New_Tag} tag_decorated_text
  * @param {real} _x
  * @param {real} _y
  * @param {real} update_time_ms
@@ -254,3 +254,28 @@ function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_spe
 	tag_update(tag_decorated_text);
 	tag_draw_no_update(tag_decorated_text, x, y);
 }
+
+
+/**
+ * Resets the state of all animations of the given tag decorated text instance.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_reset_animations(tag_decorated_text) {
+	tag_decorated_text.animator.reset();
+}
+
+/**
+ * Resets typing state of given tag_decorated_text instance. Tag decorated text instances
+ * are "typed" by default. This function must be called before typing update will have
+ * any effect.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_reset_typing(tag_decorated_text) {
+	tag_decorated_text.animator.reset();
+	tag_decorated_text.typer.reset_typing();
+	tag_decorated_text.styleable_text.text_page_index = 0;
+}
+
+

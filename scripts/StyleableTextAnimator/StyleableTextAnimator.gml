@@ -72,6 +72,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	
 	update = function(update_time_ms) {};
 	
+	// animations with other internal state must receive an updated reset function
+	reset = function() {
+		time_ms = 0;
+	};
+	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
 		can_finish = true;
 		alpha = 0;
@@ -90,6 +95,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			if (drawn_alpha == 1) finished = true;
 			text_apply_alpha(text, animation_index_end, animation_index_end, drawn_alpha);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
+		};
+		
+		reset = function() {
+			time_ms = 0;
+			alpha = 0;
 		};
 	}
 	
@@ -334,6 +344,13 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 				sub_animations[a].update(update_time_ms);
 			}
 		};
+		
+		reset = function() {
+			for (var a = 0; a < array_length(sub_animations); a++) {
+				sub_animations[a].time_ms = offset_time;
+				sub_animations[a].state = 1;
+			}
+		};
 	}
 }
 
@@ -368,6 +385,24 @@ function StyleableTextAnimator(styleable_text) constructor {
 			var animation = struct_get(animations, animation_ids[i]);
 			animation.update(update_time_ms);
 			if (animation.can_finish && animation.finished) struct_remove(animations, animation_ids[i]);
+		}
+	};
+	
+	remove_finishable_animations = function() {
+		var animation_ids = struct_get_names(animations);
+		for (var i = 0; i < array_length(animation_ids); i++)  {
+			var animation = struct_get(animations, animation_ids[i]);
+			if (animation.can_finish) struct_remove(animations, animation_ids[i]);
+		}
+	};
+	
+	// reset the state of all animations, finishable animations are removed
+	reset = function() {
+		var animation_ids = struct_get_names(animations);
+		for (var i = 0; i < array_length(animation_ids); i++)  {
+			var animation = struct_get(animations, animation_ids[i]);
+			if (animation.can_finish) struct_remove(animations, animation_ids[i]);
+			else animation.reset();
 		}
 	};
 }

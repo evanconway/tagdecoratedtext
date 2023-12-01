@@ -55,4 +55,4 @@ typer.set_character_index_on_type(200, function() {
 	show_debug_message("Character 200 just got typed!");
 });
 
-tag = new NewTagDecoratedText("The <tremble>quick<> <brown>brown<> <orange>fox<> <wave>jumps<> over the <fade>lazy<> <red>dog<>.", "twitch");
+tag = new NewTagDecoratedText("The <tremble>quick<> <pink>brown<> <orange>fox<> <wave>jumps<> over the <fade>lazy<> <red>dog<>.", "twitch");

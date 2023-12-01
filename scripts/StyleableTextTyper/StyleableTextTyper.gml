@@ -9,7 +9,7 @@ function StyleableTextTyper(text, animator) constructor {
 	if (typer_animator.text != typer_text) show_error("Given animator for StyleableTextTyper does not reference given StyleableText!", true);
 	
 	time_between_types_ms = 80;
-	time_ms = time_between_types_ms;
+	time_ms = 0;
 	chars_per_type = 2.4;
 	
 	// mapping between indexes of chars and array of entry animations for said chars
@@ -61,7 +61,7 @@ function StyleableTextTyper(text, animator) constructor {
 		struct_set(character_on_type_map, index, callback);
 	};
 	
-	// Characters are hidden by default. They get "typed" by leaving the hidden index range.
+	// Characters are hidden by default. They get "typed" by leaving the range of hidden indexs.
 	// Initially no characters are hidden. User must manually tell typing to "reset".
 	pages_hide_start_end = [];
 	for (var i = 0; i <= typer_text.text_page_index_max; i++) {
@@ -72,18 +72,27 @@ function StyleableTextTyper(text, animator) constructor {
 	}
 	
 	reset_typing = function() {
-		time_ms = time_between_types_ms;
+		time_ms = 0;
+		typer_animator.remove_finishable_animations();
 		for (var i = 0; i < array_length(pages_hide_start_end); i++) {
 			pages_hide_start_end[i].index_current = typer_text.text_page_char_index_start[i];
 		}
 	};
 	
+	finish_typing_current_page = function() {
+		time_ms = 0;
+		typer_animator.remove_finishable_animations();
+		pages_hide_start_end[typer_text.text_page_index].index_current = typer_text.text_page_char_index_end[typer_text.text_page_index] + 1;
+	};
+	
+	// a page is considered "typed" if the current hide index is greater than the end index
+	get_current_page_finished = function() {
+		return pages_hide_start_end[typer_text.text_page_index].index_current > typer_text.text_page_char_index_end[typer_text.text_page_index];
+	}
+	
 	update = function(update_time_ms = 1000/game_get_speed(gamespeed_fps)) {
 		var hide = pages_hide_start_end[typer_text.text_page_index];
-		if (hide.index_current >= hide.index_end) {
-			time_ms = time_between_types_ms; // avoids long pauses on next page
-			return;
-		}
+		if (hide.index_current >= hide.index_end) return;
 		time_ms -= update_time_ms;
 		if (time_ms >= 0) {
 			text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
@@ -116,5 +125,6 @@ function StyleableTextTyper(text, animator) constructor {
 		}
 		on_type();
 		text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
+		if (hide.index_current >= hide.index_end) time_ms = 0; // avoid pauses on next page
 	};
 }
