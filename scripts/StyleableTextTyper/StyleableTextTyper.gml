@@ -86,7 +86,6 @@ function StyleableTextTyper(text, animator) constructor {
 			hide.index_current++;
 			chars_typed++;
 			while (hide.index_current < hide.index_end && typer_text.character_array[hide.index_current].char == " ") {
-				start_type_animation_at(hide.index_current);
 				hide.index_current++;
 			}
 			if (hide.index_current >= hide.index_end || chars_typed >= chars_per_type) {
