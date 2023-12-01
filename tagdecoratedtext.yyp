@@ -37,6 +37,7 @@
     {"id":{"name":"StyleableTextDrawable","path":"scripts/StyleableTextDrawable/StyleableTextDrawable.yy",},},
     {"id":{"name":"AnimatedText","path":"scripts/AnimatedText/AnimatedText.yy",},},
     {"id":{"name":"StyleableTextCharacter","path":"scripts/StyleableTextCharacter/StyleableTextCharacter.yy",},},
+    {"id":{"name":"New_tag","path":"scripts/New_tag/New_tag.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},},
     {"id":{"name":"snd_chirp","path":"sounds/snd_chirp/snd_chirp.yy",},},
