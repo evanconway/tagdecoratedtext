@@ -9,6 +9,8 @@ draw_text(0, 0, fps_real);
 if (keyboard_check_pressed(vk_right)) test.page_next();
 if (keyboard_check_pressed(vk_left)) test.page_previous();
 
+if (keyboard_check_pressed(vk_space)) typer.reset_typing();
+
 //if (keyboard_check_pressed(vk_space)) {
 //	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
 //	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 0, 0, []);
