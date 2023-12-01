@@ -337,7 +337,6 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 }
 
-
 /**
  * @param {Struct.New_StyleableText} text
  */

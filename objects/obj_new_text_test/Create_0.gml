@@ -31,3 +31,5 @@ animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, 150, 160, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, 170, 180, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, 190, 200, []);
 animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.TWITCH, 210, 300, []);
+
+typer = new StyleableTextTyper(test, animation_test);

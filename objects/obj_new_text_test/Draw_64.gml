@@ -9,14 +9,14 @@ draw_text(0, 0, fps_real);
 if (keyboard_check_pressed(vk_right)) new_text_page_next(test);
 if (keyboard_check_pressed(vk_left)) new_text_page_previous(test);
 
-if (keyboard_check_pressed(vk_space)) {
-	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
-	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 0, 0, []);
-}
+//if (keyboard_check_pressed(vk_space)) {
+//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
+//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 0, 0, []);
+//}
 
-if (keyboard_check_pressed(ord("R"))) {
-	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 5, 7, []);
-}
+//if (keyboard_check_pressed(ord("R"))) {
+//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 5, 7, []);
+//}
 
 text_set_color(test, 250, 400, c_aqua);
 text_apply_alpha(test, 300, 330, 0.1);
@@ -28,6 +28,7 @@ text_add_offset_y(test, 455, 465, 7);
 text_set_sprite(test, 470, spr_button);
 
 animation_test.update();
+typer.update();
 
 new_text_draw(600, 400, other_test);
 
