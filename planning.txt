@@ -236,3 +236,11 @@ Part of me feels like this is clumsy, but on the other hand what do you do? Mayb
 Side note, we don't have correct logic for text width. We definitely will need to know the dimensions of text later. If the users specifies the width/height, we can use those. But if they don't we'll need to automatically calculate it.
 
 Anyway, let's commit to the id system for overlapping commands and see how that feels.
+
+
+1st of December, 2023
+
+We haven't gotten to the id system yet. Instead we're porting over the old code for the TagDecoratedString class. Ran into the old issue of applying the changes that animations make, but without updating their logic. Right now animations need to update to make changes to the original text. In our old system we had an ugly flag system where updating animations would set the flag to true. And when drawing the animations this flag would be checked. If it wasn't set to true, animations would be updated with an update value of 0. This would work but I feel like animation logic should be split out between applying animation logic and updating their own state. Ah... I'm not sure. There are animations where part of the update process is merging drawables they're no longer affecting. Also we already have a basically working system, and this change would require time and effort re-writing. Let's use the old strategy.
+
+
+
