@@ -46,6 +46,20 @@ function StyleableTextTyper(text, animator) constructor {
 	struct_set(punctuation_pause_map, ":", 500);
 	struct_set(punctuation_pause_map, ";", 500);
 	struct_set(punctuation_pause_map, "-", 500);
+
+	// pause timings for individual character indexes
+	character_pause_map = {};
+	
+	set_character_index_pause = function(index, pause_time) {
+		struct_set(character_pause_map, index, pause_time);
+	};
+	
+	// on_type callbacks for individual character indexes
+	character_on_type_map = {};
+	
+	set_character_index_on_type = function(index, callback) {
+		struct_set(character_on_type_map, index, callback);
+	};
 	
 	// Characters are hidden by default. They get "typed" by leaving the hidden index range.
 	pages_hide_start_end = [];
@@ -79,8 +93,15 @@ function StyleableTextTyper(text, animator) constructor {
 		var chars_typed = 0;
 		while (can_type_chars) {
 			if (struct_exists(punctuation_pause_map, typer_text.character_array[hide.index_current].char)) {
-				time_ms += struct_get(punctuation_pause_map, typer_text.character_array[hide.index_current].char);
+				time_ms = struct_get(punctuation_pause_map, typer_text.character_array[hide.index_current].char);
 				can_type_chars = false;
+			}
+			if (struct_exists(character_pause_map, hide.index_current)) {
+				time_ms = struct_get(character_pause_map, hide.index_current);
+				can_type_chars = false;
+			}
+			if (struct_exists(character_on_type_map, hide.index_current)) {
+				struct_get(character_on_type_map, hide.index_current)();
 			}
 			start_type_animation_at(hide.index_current);
 			hide.index_current++;

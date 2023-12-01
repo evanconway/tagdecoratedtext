@@ -13,6 +13,8 @@ setup_test_text = function() {
 	result.set_character_new_line(153, true);
 	result.set_character_sprite(211, spr_button);
 	
+	result.set_character_color(500, 500, c_yellow);
+	
 	text_make_drawable(result);
 	return result;
 };
@@ -46,3 +48,9 @@ typer.on_type = function() {
 	audio_stop_sound(snd_chirp);
 	audio_play_sound(snd_chirp, 0, false);
 };
+
+typer.set_character_index_pause(500, 2000);
+
+typer.set_character_index_on_type(200, function() {
+	show_debug_message("Character 200 just got typed!");
+});
