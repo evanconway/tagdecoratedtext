@@ -28,7 +28,7 @@ text_add_offset_y(test, 455, 465, 7);
 text_set_sprite(test, 470, spr_button);
 */
 animation_test.update();
-//typer.update();
+typer.update();
 
 new_text_draw(600, 400, other_test);
 

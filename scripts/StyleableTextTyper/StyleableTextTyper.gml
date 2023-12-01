@@ -8,11 +8,7 @@ function StyleableTextTyper(text, animator) constructor {
 	
 	if (typer_animator.text != typer_text) show_error("Given animator for StyleableTextTyper does not reference given StyleableText!", true);
 	
-	hide_start = 0;
-	hide_end = typer_text.character_array_length - 1;
-	
 	time_between_types_ms = 80;
-	time_ms = time_between_types_ms;
 	chars_per_type = 2.4;
 	
 	// mapping between indexes of chars and array of entry animations for said chars
@@ -28,11 +24,23 @@ function StyleableTextTyper(text, animator) constructor {
 	struct_set(punctuation_pause_map, ";", 500);
 	struct_set(punctuation_pause_map, "-", 500);
 	
+	// Characters are hidden by default. They get "typed" by leaving the hidden index range.
+	pages_hide_start_end = [];
+	for (var i = 0; i <= typer_text.text_page_index_max; i++) {
+		array_push(pages_hide_start_end, {
+			index_start: typer_text.text_page_char_index_start[i],
+			index_end: typer_text.text_page_char_index_end[i]
+		});
+	}
+	
+	time_ms = time_between_types_ms;
+	
 	update = function(update_time_ms = 1000/game_get_speed(gamespeed_fps)) {
-		if (hide_start >= hide_end) return;
+		var hide = pages_hide_start_end[typer_text.text_page_index];
+		if (hide.index_start >= hide.index_end) return;
 		time_ms -= update_time_ms;
 		if (time_ms >= 0) {
-			text_apply_alpha(typer_text, hide_start, hide_end, 0);
+			text_apply_alpha(typer_text, hide.index_start, hide.index_end, 0);
 			return;
 		}
 		time_ms = time_between_types_ms;
@@ -40,20 +48,20 @@ function StyleableTextTyper(text, animator) constructor {
 		var chars_typed = 0;
 		while (can_type_chars) {
 			// add animations or other type char logic here
-			if (struct_exists(punctuation_pause_map, typer_text.character_array[hide_start].char)) {
-				time_ms += struct_get(punctuation_pause_map, typer_text.character_array[hide_start].char);
+			if (struct_exists(punctuation_pause_map, typer_text.character_array[hide.index_start].char)) {
+				time_ms += struct_get(punctuation_pause_map, typer_text.character_array[hide.index_start].char);
 				can_type_chars = false;
 			}
-			hide_start++;
+			hide.index_start++;
 			chars_typed++;
-			while (hide_start < hide_end && typer_text.character_array[hide_start].char == " ") {
+			while (hide.index_start < hide.index_end && typer_text.character_array[hide.index_start].char == " ") {
 				// more type char logic here
-				hide_start++;
+				hide.index_start++;
 			}
-			if (hide_start >= hide_end || chars_typed >= chars_per_type) {
+			if (hide.index_start >= hide.index_end || chars_typed >= chars_per_type) {
 				can_type_chars = false;
 			}
 		}
-		text_apply_alpha(typer_text, hide_start, hide_end, 0);
+		text_apply_alpha(typer_text, hide.index_start, hide.index_end, 0);
 	};
 }
