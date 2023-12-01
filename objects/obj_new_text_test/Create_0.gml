@@ -54,3 +54,5 @@ typer.set_character_index_pause(500, 2000);
 typer.set_character_index_on_type(200, function() {
 	show_debug_message("Character 200 just got typed!");
 });
+
+tag = new NewTagDecoratedText("The <tremble>quick<> <brown>brown<> <orange>fox<> <wave>jumps<> over the <fade>lazy<> <red>dog<>.", "twitch");

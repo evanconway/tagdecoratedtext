@@ -445,18 +445,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	};
 	
 	draw = function(x, y) {
-	};
-}
-
-/**
- * @param {real} x
- * @param {real} y
- * @param {struct.New_StyleableText} text
- */
-function new_text_draw(x, y, text) {
-	x = floor(x);
-	y = floor(y);
-	with (text) {
+		x = floor(x);
+		y = floor(y);
 		var original_halign = draw_get_halign();
 		var original_valign = draw_get_valign();
 		draw_set_halign(fa_left);
@@ -494,7 +484,7 @@ function new_text_draw(x, y, text) {
 		draw_set_color(c_fuchsia);
 		draw_rectangle(x, y, x + 1, y + 1, false);
 		
-		var index = text_page_char_index_start[text_page_index]; // start starting character of current page
+		var index = text_page_char_index_start[text_page_index]; // starting character of current page
 		while (index <= text_page_char_index_end[text_page_index]) {
 			var c = character_array[index];
 			var drawable = c.drawable;
@@ -526,5 +516,5 @@ function new_text_draw(x, y, text) {
 		}
 		draw_set_halign(original_halign);
 		draw_set_valign(original_valign);
-	}
+	};
 }

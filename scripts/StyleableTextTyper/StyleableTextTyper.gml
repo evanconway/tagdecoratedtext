@@ -62,10 +62,11 @@ function StyleableTextTyper(text, animator) constructor {
 	};
 	
 	// Characters are hidden by default. They get "typed" by leaving the hidden index range.
+	// Initially no characters are hidden. User must manually tell typing to "reset".
 	pages_hide_start_end = [];
 	for (var i = 0; i <= typer_text.text_page_index_max; i++) {
 		array_push(pages_hide_start_end, {
-			index_current: typer_text.text_page_char_index_start[i],
+			index_current: typer_text.text_page_char_index_end[i] + 1,
 			index_end: typer_text.text_page_char_index_end[i]
 		});
 	}

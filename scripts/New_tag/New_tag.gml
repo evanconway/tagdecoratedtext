@@ -41,7 +41,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	var commands = [];
 	
 	// set the end indexes of commands which haven't had their ends set yet.
-	var set_command_unset_ends = function(end_index) {
+	var set_command_unset_ends = method({ commands }, function(end_index) {
 		// move through array backwards because commands missing index_end will always be at the end of array
 		for (var _k = array_length(commands) - 1; _k >= 0; _k--) {
 			if (commands[_k].command_index_end < 0) {
@@ -50,7 +50,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 				_k = -1; // end loop if index_end defined
 			}
 		}
-	};
+	});
 	
 	var displayed_text = "";
 	var index = 1; // index of character to add to string
@@ -106,7 +106,6 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	
 	styleable_text = new New_StyleableText(displayed_text, width, height);
 	animator = new StyleableTextAnimator(styleable_text);
-	typer = new StyleableTextTyper(styleable_text, animator);
 	
 	/*
 	Since applying default styles also requires rebuilding the styleable
@@ -166,6 +165,9 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	
 	styleable_text.build();
 	
+	// typer must be defined after text has been built because it required page data
+	typer = new StyleableTextTyper(styleable_text, animator);
+	
 	// add animations
 	for (var i = 0; i < array_length(commands); i++) {
 		var cmd = string_lower(commands[i].name);
@@ -184,6 +186,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		if (cmd == "wave") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, s, e, aargs);
 		if (cmd == "float") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, s, e, aargs);
 		if (cmd == "blink") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, s, e, aargs);
+		if (cmd == "twitch") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.TWITCH, s, e, aargs);
 		
 		// entry animations
 		if (cmd == "fadein") {
@@ -197,4 +200,57 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 			}
 		}
 	}
+	
+	/*
+	The effects of animations are not visible until they've been updated. The update function is when they
+	make cuts and edits to the drawables. But there are cases where we want to draw text with its current
+	animation state, but without progressing the animations. We use this flag to track whether animations
+	have been updated. And in situations where we want to draw without progressing animations, we'll
+	update animations by 0ms.
+	*/
+	animations_updated = false;
+}
+
+/**
+ * Updates the given tag decorated text instance by the given time in ms. If no time is specified
+ * the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ * @param {real} update_time_ms
+ */
+function tag_update(tag_decorated_text, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	with (tag_decorated_text) {
+		typer.update(update_time_ms);
+		animator.update(update_time_ms);
+		animations_updated = true;
+	}
+}
+
+/**
+ * Draws the given tag decorated text instance without updating it.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ * @param {real} x
+ * @param {real} y
+ * @param {Constant.HAlign} alignment
+ */
+function tag_draw_no_update(tag_decorated_text, x, y) {
+	with (tag_decorated_text) {
+		if (!animations_updated) animator.update(0);
+		styleable_text.draw(x, y);
+		animations_updated = false;
+	}
+}
+
+/**
+ * Updates and draws the given tag decorated text instance.
+ *
+ * @param {Struct.TagDecoratedText} tag_decorated_text
+ * @param {real} _x
+ * @param {real} _y
+ * @param {real} update_time_ms
+ */
+function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	tag_update(tag_decorated_text);
+	tag_draw_no_update(tag_decorated_text, x, y);
 }

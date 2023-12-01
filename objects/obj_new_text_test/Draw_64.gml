@@ -32,8 +32,10 @@ text_set_sprite(test, 470, spr_button);
 typer.update();
 animation_test.update();
 
-new_text_draw(600, 400, other_test);
+other_test.draw(600, 400);
 
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-new_text_draw(200, 250, test);
+test.draw(200, 250);
+
+tag_draw(tag, 600, 100);
