@@ -108,7 +108,13 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	animator = new StyleableTextAnimator(styleable_text);
 	typer = new StyleableTextTyper(styleable_text, animator);
 	
-	// apply commands
+	/*
+	Since applying default styles also requires rebuilding the styleable
+	text, we apply default character styles first, build the text, then
+	apply animations.
+	*/
+	
+	// apply base character styles first
 	for (var i = 0; i < array_length(commands); i++) {
 		var cmd = string_lower(commands[i].name);
 		var aargs = commands[i].aargs;
@@ -116,8 +122,6 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		// convert string index to array index for applying effects
 		var s = commands[i].command_index_start - 1;
 		var e = commands[i].command_index_end - 1;
-		
-		// apply character base styles first
 		
 		// colors
 		if (cmd == "aqua") styleable_text.set_character_color(s, e, c_aqua);
@@ -142,45 +146,55 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		if (cmd == "rgb") styleable_text.set_character_color(s, e, make_color_rgb(aargs[0], aargs[1], aargs[2]));
 		
 		// page break changing styles
-		if (cmd == "n" || cmd == "br") _typed_animated_text.animated_text.text.set_new_line_at(s, true);
-		if (cmd == "f" || cmd == "font") _typed_animated_text.animated_text.text.set_default_font(s, e, aargs[0]);
-		if (cmd == "a" || cmd == "alpha") _typed_animated_text.animated_text.text.set_default_alpha(s, e, aargs[0]);
-		if (cmd == "x") _typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
-		if (cmd == "y") _typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[0]);
+		if (cmd == "n" || cmd == "br") styleable_text.set_character_new_line(s, true);
+		if (cmd == "f" || cmd == "font") styleable_text.set_character_font(s, e, aargs[0]);
+		if (cmd == "a" || cmd == "alpha") styleable_text.set_character_alpha(s, e, aargs[0]);
+		if (cmd == "x") styleable_text.set_character_offset_x(s, e, aargs[0]);
+		if (cmd == "y") styleable_text.set_character_offset_y(s, e, aargs[0]);
 		if (cmd == "xy") {
-			_typed_animated_text.animated_text.text.set_default_mod_x(s, e, aargs[0]);
-			_typed_animated_text.animated_text.text.set_default_mod_y(s, e, aargs[1]);
+			styleable_text.set_character_offset_x(s, e, aargs[0]);
+			styleable_text.set_character_offset_y(s, e, aargs[1]);
 		}
-		if (cmd == "scalex") _typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
-		if (cmd == "scaley") _typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[0]);
+		if (cmd == "scalex") styleable_text.set_character_scale_x(s, e, aargs[0]);
+		if (cmd == "scaley") styleable_text.set_character_scale_y(s, e, aargs[0]);
 		if (cmd == "scalexy") {
-			_typed_animated_text.animated_text.text.set_default_scale_x(s, e, aargs[0]);
-			_typed_animated_text.animated_text.text.set_default_scale_y(s, e, aargs[1]);
+			styleable_text.set_character_scale_x(s, e, aargs[0]);
+			styleable_text.set_character_scale_y(s, e, aargs[1]);
 		}
-		if (cmd == "s" || cmd == "sprite") _typed_animated_text.animated_text.text.set_default_sprite(s, aargs[0]);
+		if (cmd == "s" || cmd == "sprite") styleable_text.set_character_sprite(s, aargs[0]);
+	}
+	
+	styleable_text.build();
+	
+	// add animations
+	for (var i = 0; i < array_length(commands); i++) {
+		var cmd = string_lower(commands[i].name);
+		var aargs = commands[i].aargs;
+		
+		// convert string index to array index for applying effects
+		var s = commands[i].command_index_start - 1;
+		var e = commands[i].command_index_end - 1;
 		
 		// animations
 		if (cmd == "fade") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, s, e, aargs);
-		if (cmd == "shake") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, s, e, aargs);
-		if (cmd == "tremble") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, s, e, aargs);
-		if (cmd == "chromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, s, e, aargs);
-		if (cmd == "wchromatic") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, s, e, aargs);
-		if (cmd == "wave") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, s, e, aargs);
-		if (cmd == "float") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, s, e, aargs);
-		if (cmd == "blink") _typed_animated_text.animated_text.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, s, e, aargs);
+		if (cmd == "shake") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.SHAKE, s, e, aargs);
+		if (cmd == "tremble") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.TREMBLE, s, e, aargs);
+		if (cmd == "chromatic") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.CHROMATIC, s, e, aargs);
+		if (cmd == "wchromatic") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.WCHROMATIC, s, e, aargs);
+		if (cmd == "wave") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.WAVE, s, e, aargs);
+		if (cmd == "float") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.FLOAT, s, e, aargs);
+		if (cmd == "blink") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.BLINK, s, e, aargs);
 		
 		// entry animations
 		if (cmd == "fadein") {
 			for (var k = s; k <= e; k++) {
-				_typed_animated_text.add_entry_animation_at(k, ANIMATED_TEXT_ANIMATIONS.FADEIN, aargs);
+				typer.add_type_animation_at(k, ANIMATED_TEXT_ANIMATIONS.FADEIN, aargs);
 			}
 		}
 		if (cmd == "risein") {
 			for (var k = s; k <= e; k++) {
-				_typed_animated_text.add_entry_animation_at(k, ANIMATED_TEXT_ANIMATIONS.RISEIN, aargs);
+				typer.add_type_animation_at(k, ANIMATED_TEXT_ANIMATIONS.RISEIN, aargs);
 			}
 		}
 	}
-	
-	styleable_text.build();
 }
