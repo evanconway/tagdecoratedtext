@@ -280,4 +280,53 @@ function tag_reset_typing(tag_decorated_text) {
 	tag_decorated_text.styleable_text.text_page_index = 0;
 }
 
+/**
+ * Sets the typing state of the current page to finished.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_type_current_page(tag_decorated_text) {
+	tag_decorated_text.typer.finish_typing_current_page();
+}
 
+/**
+ * Sets the typing state of all pages to finished.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_type_all_pages(tag_decorated_text) {
+	tag_decorated_text.typer.finish_typing_all_pages();
+}
+
+/**
+ * Go to the next page.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_page_next(tag_decorated_text) {
+	tag_decorated_text.styleable_text.page_next();
+}
+
+/**
+ * Go to the previous page.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_page_previous(tag_decorated_text) {
+	tag_decorated_text.styleable_text.page_previous();
+}
+
+/**
+ * Advances typing state in a logical way. If the current page is not
+ * typed, current page typing state is set to finished. If current page
+ * is typed, text is advanced to the next page.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_advance(tag_decorated_text) {
+	if (!tag_decorated_text.typer.get_current_page_finished()) {
+		tag_type_current_page(tag_decorated_text);
+		return;
+	}
+	tag_page_next(tag_decorated_text);
+}

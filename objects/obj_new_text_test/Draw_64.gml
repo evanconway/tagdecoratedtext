@@ -6,16 +6,13 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_text(0, 0, fps_real);
 
-if (keyboard_check_pressed(vk_right)) test.styleable_text.page_next();
-if (keyboard_check_pressed(vk_left)) test.styleable_text.page_previous();
-
-if (keyboard_check_pressed(ord("A"))) {
-	tag_reset_animations(test);
-}
-
-if (keyboard_check_pressed(ord("R"))) {
-	tag_reset_typing(test);
-}
+if (keyboard_check_pressed(vk_right)) tag_page_next(test);
+if (keyboard_check_pressed(vk_left)) tag_page_previous(test);
+if (keyboard_check_pressed(vk_space)) tag_advance(test);
+if (keyboard_check_pressed(ord("A"))) tag_reset_animations(test);
+if (keyboard_check_pressed(ord("R"))) tag_reset_typing(test);
+if (keyboard_check_pressed(ord("T"))) tag_type_current_page(test);
+if (keyboard_check_pressed(vk_enter)) tag_type_all_pages(test);
 
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);

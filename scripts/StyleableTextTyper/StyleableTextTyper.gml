@@ -85,6 +85,14 @@ function StyleableTextTyper(text, animator) constructor {
 		pages_hide_start_end[typer_text.text_page_index].index_current = typer_text.text_page_char_index_end[typer_text.text_page_index] + 1;
 	};
 	
+	finish_typing_all_pages = function() {
+		time_ms = 0;
+		typer_animator.remove_finishable_animations();
+		for (var i = 0; i <= typer_text.text_page_index_max; i++) {
+			pages_hide_start_end[i].index_current = typer_text.text_page_char_index_end[i] + 1;
+		}
+	}
+	
 	// a page is considered "typed" if the current hide index is greater than the end index
 	get_current_page_finished = function() {
 		return pages_hide_start_end[typer_text.text_page_index].index_current > typer_text.text_page_char_index_end[typer_text.text_page_index];
