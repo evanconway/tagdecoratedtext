@@ -6,39 +6,18 @@ draw_set_alpha(1);
 draw_set_color(c_white);
 draw_text(0, 0, fps_real);
 
-if (keyboard_check_pressed(vk_right)) test.page_next();
-if (keyboard_check_pressed(vk_left)) test.page_previous();
+if (keyboard_check_pressed(vk_right)) test.styleable_text.page_next();
+if (keyboard_check_pressed(vk_left)) test.styleable_text.page_previous();
 
-if (keyboard_check_pressed(vk_space)) {
-	//typer.reset_typing();
-	tag_reset_typing(tag);
+if (keyboard_check_pressed(ord("A"))) {
+	tag_reset_animations(test);
 }
 
-//if (keyboard_check_pressed(vk_space)) {
-//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.FADEIN, 0, 0, []);
-//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 0, 0, []);
-//}
-
-//if (keyboard_check_pressed(ord("R"))) {
-//	animation_test.add_animation(ANIMATED_TEXT_ANIMATIONS.RISEIN, 5, 7, []);
-//}
-/*
-text_set_color(test, 250, 400, c_aqua);
-text_apply_alpha(test, 300, 330, 0.1);
-text_set_font(test, 340, 368, fnt_handwriting);
-text_apply_scale_x(test, 410, 420, 2);
-text_apply_scale_y(test, 425, 435, 2);
-text_add_offset_x(test, 440, 450, 7);
-text_add_offset_y(test, 455, 465, 7);
-text_set_sprite(test, 470, spr_button);
-*/
-typer.update();
-animation_test.update();
-
-other_test.draw(600, 400);
+if (keyboard_check_pressed(ord("R"))) {
+	tag_reset_typing(test);
+}
 
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
-test.draw(200, 250);
 
-tag_draw(tag, 600, 100);
+tag_draw(test, 200, 200);

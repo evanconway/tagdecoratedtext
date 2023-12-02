@@ -151,12 +151,14 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		if (cmd == "x") styleable_text.set_character_offset_x(s, e, aargs[0]);
 		if (cmd == "y") styleable_text.set_character_offset_y(s, e, aargs[0]);
 		if (cmd == "xy") {
+			if (array_length(aargs) != 2) show_error("incorrect number of arguments given for offset xy command", true);
 			styleable_text.set_character_offset_x(s, e, aargs[0]);
 			styleable_text.set_character_offset_y(s, e, aargs[1]);
 		}
 		if (cmd == "scalex") styleable_text.set_character_scale_x(s, e, aargs[0]);
 		if (cmd == "scaley") styleable_text.set_character_scale_y(s, e, aargs[0]);
 		if (cmd == "scalexy") {
+			if (array_length(aargs) != 2) show_error("incorrect number of arguments given for scalexy command", true);
 			styleable_text.set_character_scale_x(s, e, aargs[0]);
 			styleable_text.set_character_scale_y(s, e, aargs[1]);
 		}
@@ -246,8 +248,8 @@ function tag_draw_no_update(tag_decorated_text, x, y) {
  * Updates and draws the given tag decorated text instance.
  *
  * @param {Struct.New_Tag} tag_decorated_text
- * @param {real} _x
- * @param {real} _y
+ * @param {real} x
+ * @param {real} y
  * @param {real} update_time_ms
  */
 function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {

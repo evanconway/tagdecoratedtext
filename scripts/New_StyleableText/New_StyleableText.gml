@@ -411,7 +411,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	};
 	
 	set_character_sprite = function(index, sprite) {
-		character_array[index].style.sprite = sprite;
+		if (is_string(sprite) && asset_get_type(sprite) != asset_sprite) show_error("name given for sprite command is not a sprite asset", true);
+		character_array[index].style.sprite = asset_get_index(sprite);
 	};
 	
 	build = function() {
