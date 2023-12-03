@@ -1,11 +1,16 @@
+// feather ignore all
+
 /**
  * @param {string} command
  * @param {real} index_start
+ * @ignore
  */
-function NewCommand(command, index_start) constructor {
+function __TagDecoratedTextCommand(command, index_start) constructor {
 	var command_aarg_split = string_split(command, ":");
 	
+	/// @ignore
 	name = command_aarg_split[0];
+	/// @ignore
 	original_aargs = array_length(command_aarg_split) > 1 ? command_aarg_split[1] : "";
 	
 	var aarg_string = array_length(command_aarg_split) > 1 ? command_aarg_split[1] : "";
@@ -19,9 +24,11 @@ function NewCommand(command, index_start) constructor {
 		// Feather disable once GM1035
 		return str;
 	};
-	
+	/// @ignore
 	aargs = aarg_string == "" ? [] : array_map(string_split(aarg_string, ","), f_map);
+	/// @ignore
 	command_index_start = index_start;
+	/// @ignore
 	command_index_end = -1;
 }
 
@@ -31,7 +38,7 @@ function NewCommand(command, index_start) constructor {
  * @param {string} source_string the string with decorative tags
  * @param {string} default_effects (make version without this later)
  */
-function NewTagDecoratedText(source_string, default_effects = "", width = -1, height = -1) constructor {
+function TagDecoratedText(source_string, default_effects = "", width = -1, height = -1) constructor {
 	/*
 	The source string contains both the tags and the text to actually display. From
 	this we need to build an array of commands and their index ranges as well as 
@@ -65,7 +72,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 			var command_text = string_copy(source_string, i + 1, end_index - i - 1);
 			var command_arr = string_split(command_text, " ", true);
 			for (var _k = 0; _k < array_length(command_arr); _k++) {
-				array_push(commands, new NewCommand(command_arr[_k], index));
+				array_push(commands, new __TagDecoratedTextCommand(command_arr[_k], index));
 			}
 			i = end_index;
 		}
@@ -95,7 +102,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	var default_commands = [];
 	var default_command_arr = string_split(default_effects, " ", true);
 	for (var d = 0; d < array_length(default_command_arr); d++) {
-		var new_command = new NewCommand(default_command_arr[d], 1);
+		var new_command = new __TagDecoratedTextCommand(default_command_arr[d], 1);
 		new_command.command_index_end = string_length(displayed_text);
 		array_push(default_commands, new_command);
 	}
@@ -103,7 +110,9 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		array_insert(commands, 0, array_pop(default_commands));
 	}
 	
-	styleable_text = new New_StyleableText(displayed_text, width, height);
+	/// @ignore
+	styleable_text = new __TagDecoratedTextStyleable(displayed_text, width, height);
+	/// @ignore
 	animator = new StyleableTextAnimator(styleable_text);
 	
 	/*
@@ -172,6 +181,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	styleable_text.build();
 	
 	// typer must be defined after text has been built because it required page data
+	/// @ignore
 	typer = new StyleableTextTyper(styleable_text, animator);
 	
 	// add animations
@@ -232,6 +242,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 	have been updated. And in situations where we want to draw without progressing animations, we'll
 	update animations by 0ms.
 	*/
+	/// @ignore
 	animations_updated = false;
 }
 
@@ -242,7 +253,7 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
  * @param {Struct.New_Tag} tag_decorated_text
  * @param {real} update_time_ms
  */
-function tag_update(tag_decorated_text, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+function tag_decorated_text_update(tag_decorated_text, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 	with (tag_decorated_text) {
 		typer.update(update_time_ms);
 		animator.update(update_time_ms);
@@ -258,7 +269,7 @@ function tag_update(tag_decorated_text, update_time_ms = 1000 / game_get_speed(g
  * @param {real} y
  * @param {Constant.HAlign} alignment
  */
-function tag_draw_no_update(tag_decorated_text, x, y) {
+function tag_decorated_text_draw_no_update(tag_decorated_text, x, y) {
 	with (tag_decorated_text) {
 		if (!animations_updated) animator.update(0);
 		styleable_text.draw(x, y);
@@ -274,9 +285,9 @@ function tag_draw_no_update(tag_decorated_text, x, y) {
  * @param {real} y
  * @param {real} update_time_ms
  */
-function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
-	tag_update(tag_decorated_text, update_time_ms);
-	tag_draw_no_update(tag_decorated_text, x, y);
+function tag_decorated_text_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
+	tag_decorated_text_update(tag_decorated_text, update_time_ms);
+	tag_decorated_text_draw_no_update(tag_decorated_text, x, y);
 }
 
 
@@ -285,7 +296,7 @@ function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_spe
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_reset_animations(tag_decorated_text) {
+function tag_decorated_text_reset_animations(tag_decorated_text) {
 	tag_decorated_text.animator.reset();
 }
 
@@ -296,7 +307,7 @@ function tag_reset_animations(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_reset_typing(tag_decorated_text) {
+function tag_decorated_text_reset_typing(tag_decorated_text) {
 	tag_decorated_text.animator.reset();
 	tag_decorated_text.typer.reset_typing();
 	tag_decorated_text.styleable_text.text_page_index = 0;
@@ -307,7 +318,7 @@ function tag_reset_typing(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_type_current_page(tag_decorated_text) {
+function tag_decorated_text_type_current_page(tag_decorated_text) {
 	tag_decorated_text.typer.finish_typing_current_page();
 }
 
@@ -316,7 +327,7 @@ function tag_type_current_page(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_type_all_pages(tag_decorated_text) {
+function tag_decorated_text_type_all_pages(tag_decorated_text) {
 	tag_decorated_text.typer.finish_typing_all_pages();
 }
 
@@ -325,7 +336,7 @@ function tag_type_all_pages(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_page_next(tag_decorated_text) {
+function tag_decorated_text_page_next(tag_decorated_text) {
 	tag_decorated_text.styleable_text.page_next();
 }
 
@@ -334,7 +345,7 @@ function tag_page_next(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_page_previous(tag_decorated_text) {
+function tag_decorated_text_page_previous(tag_decorated_text) {
 	tag_decorated_text.styleable_text.page_previous();
 }
 
@@ -345,12 +356,12 @@ function tag_page_previous(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_advance(tag_decorated_text) {
+function tag_decorated_text_advance(tag_decorated_text) {
 	if (!tag_decorated_text.typer.get_current_page_finished()) {
-		tag_type_current_page(tag_decorated_text);
+		tag_decorated_text_type_current_page(tag_decorated_text);
 		return;
 	}
-	tag_page_next(tag_decorated_text);
+	tag_decorated_text_page_next(tag_decorated_text);
 }
 
 /**
@@ -358,7 +369,7 @@ function tag_advance(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_get_page_count(tag_decorated_text) {
+function tag_decorated_text_get_page_count(tag_decorated_text) {
 	return tag_decorated_text.styleable_text.text_page_index_max + 1;
 }
 
@@ -367,7 +378,7 @@ function tag_get_page_count(tag_decorated_text) {
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
-function tag_get_current_page_index(tag_decorated_text) {
+function tag_decorated_text_get_current_page_index(tag_decorated_text) {
 	return tag_decorated_text.styleable_text.text_page_index;
 }
 
@@ -385,7 +396,7 @@ function tag_get_width(tag_decorated_text) {
  *
  * @param {Struct.TagDecoratedText} tag_decorated_text
  */
-function tag_get_height(tag_decorated_text) {
+function tag_decorated_text_get_height(tag_decorated_text) {
 	return tag_decorated_text.styleable_text.get_height();
 }
 
@@ -395,7 +406,7 @@ function tag_get_height(tag_decorated_text) {
  * @param {Struct.TagDecoratedText} tag_decorated_text
  * @param {function} on_type_callback
  */
-function tag_set_on_type_callback(tag_decorated_text, on_type_callback) {
+function tag_decorated_text_set_on_type_callback(tag_decorated_text, on_type_callback) {
 	tag_decorated_text.typer.on_type = on_type_callback;
 }
 
@@ -407,7 +418,7 @@ function tag_set_on_type_callback(tag_decorated_text, on_type_callback) {
  * @param {real} character_index
  * @param {function} on_type_callback
  */
-function tag_set_character_on_type_callback(tag_decorated_text, character_index, on_type_callback) {
+function tag_decorated_text_set_character_on_type_callback(tag_decorated_text, character_index, on_type_callback) {
 	tag_decorated_text.typer.set_character_index_on_type(character_index, on_type_callback);
 }
 
@@ -418,7 +429,7 @@ function tag_set_character_on_type_callback(tag_decorated_text, character_index,
  * @param {string} character
  * @param {real} pause_time_ms
  */
-function tag_set_character_pause(tag_decorated_text, character, pause_time_ms) {
+function tag_decorated_text_set_character_pause(tag_decorated_text, character, pause_time_ms) {
 	tag_decorated_text.typer.set_character_pause(character, pause_time_ms);
 }
 
@@ -429,7 +440,7 @@ function tag_set_character_pause(tag_decorated_text, character, pause_time_ms) {
  * @param {real} character_index
  * @param {real} pause_time_ms
  */
-function tag_set_character_index_pause(tag_decorated_text, character_index, pause_time_ms) {
+function tag_decorated_text_set_character_index_pause(tag_decorated_text, character_index, pause_time_ms) {
 	tag_decorated_text.typer.set_character_index_pause(character_index, pause_time_ms);
 }
 
@@ -440,7 +451,7 @@ function tag_set_character_index_pause(tag_decorated_text, character_index, paus
  * @param {real} time_between_types_ms
  * @param {real} chars_per_type
  */
-function tag_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
+function tag_decorated_text_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
 	tag_decorated_text.typer.time_between_types_ms = time_ms_between_types;
 	tag_decorated_text.typer.chars_per_type = chars_per_type;
 }

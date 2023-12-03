@@ -1,3 +1,5 @@
+// feather ignore all
+
 enum ANIMATED_TEXT_ANIMATIONS {
 	FADEIN,
 	RISEIN,
@@ -53,33 +55,42 @@ global.animated_text_default_twitch_wait_min = 200;
 global.animated_text_default_twitch_wait_max = 600;
 
 /**
- * @param {Struct.New_StyleableText} styleable_text
+ * @param {Struct.__TagDecoratedTextStyleable} styleable_text
  * @param {real} animation_enum
  * @param {real} index_start
  * @param {real} index_end
  * @param {array} aargs array of parameters for this animation
+ * @ignore
  */
-function New_Animation(styleable_text, animation_enum, index_start, index_end, aargs) constructor {
+function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, index_end, aargs) constructor {
+	/// @ignore
 	text = styleable_text;
+	/// @ignore
 	animation_index_start = index_start;
+	/// @ignore
 	animation_index_end = index_end;
+	/// @ignore
 	params = aargs;
-	
+	/// @ignore
 	can_finish = false;
+	/// @ignore
 	finished = false;
-	
+	/// @ignore
 	time_ms = 0;
-	
+	/// @ignore
 	update = function(update_time_ms) {};
 	
 	// animations with other internal state must receive an updated reset function
+	/// @ignore
 	reset = function() {
 		time_ms = 0;
 	};
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADEIN) {
 		can_finish = true;
+		/// @ignore
 		alpha = 0;
+		/// @ignore
 		duration = global.animated_text_default_fadein_duration;
 		
 		if (array_length(params) == 1) {
@@ -105,7 +116,9 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.RISEIN) {
 		can_finish = true;
+		/// @ignore
 		duration = global.animated_text_default_risein_duration;
+		/// @ignore
 		offset = global.animated_text_default_risein_offset;
 		
 		if (array_length(params) == 2) {
@@ -125,8 +138,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.FADE) {
+		/// @ignore
 		alpha_min = global.animated_text_default_fade_alpha_min;
+		/// @ignore
 		alpha_max = global.animated_text_default_fade_alpha_max;
+		/// @ignore
 		cycle_time = global.animated_text_default_fade_cycle_time_ms;
 		
 		if (array_length(params) == 3) {
@@ -151,13 +167,17 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE || animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE) {
+		/// @ignore
 		offset_time = animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_time_ms : global.animated_text_default_tremble_time_ms;
+		/// @ignore
 		magnitude = animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
+		/// @ignore
 		offset_individual_chars = animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
-		
+		/// @ignore
 		offset_x_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
+		/// @ignore
 		offset_y_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
-		
+		/// @ignore
 		calc_offsets = function() {
 			for (var i = 0; i < array_length(offset_x_arr); i++) {
 				offset_x_arr[i] = floor((magnitude + 1) * 2 * random(1)) - magnitude;
@@ -172,7 +192,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		} else if (array_length(params) != 0) {
 			show_error("Improper number of args for shake/tremble animation!", true);
 		}
-		/// @ignore
+		//// @ignore
 		update = function(update_time_ms) {
 			time_ms += update_time_ms;
 			if (time_ms > offset_time) {
@@ -191,6 +211,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		};
 	}
 
+	/// @ignore
 	static red_at = function(index) {
 		index = abs(index);
 		index %= 1536;
@@ -202,7 +223,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		if (index >= 1280 && index < 1536) return 255;
 		return 0;
 	}
-
+	/// @ignore
 	static green_at = function(index) {
 		index = abs(index);
 		index %= 1536;
@@ -214,7 +235,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		if (index >= 1280 && index < 1536) return 0;
 		return 0;
 	}
-
+	/// @ignore
 	static blue_at = function(index) {
 		index = abs(index);
 		index %= 1536;
@@ -226,17 +247,20 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		if (index >= 1280 && index < 1536) return 1535 - index;
 		return 0;
 	}
-
+	/// @ignore
 	static get_chromatic_color_at = function(index) {
-		var _red = red_at(index);
-		var _green = green_at(index);
-		var _blue = blue_at(index);
-		return make_color_rgb(_red, _green, _blue);
+		var red = red_at(index);
+		var green = green_at(index);
+		var blue = blue_at(index);
+		return make_color_rgb(red, green, blue);
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC || animation_enum == ANIMATED_TEXT_ANIMATIONS.WCHROMATIC) {
+		/// @ignore
 		change_ms = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_change_ms : global.animated_text_default_wchromatic_change_ms;
+		/// @ignore
 		steps_per_change = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_steps_per_change : global.animated_text_default_wchromatic_steps_per_change;
+		/// @ignore
 		char_offset = animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC ? global.animated_text_default_chromatic_char_offset : 0;
 
 		// use char offset to determine if chromatic or wchromatic
@@ -273,8 +297,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE || animation_enum == ANIMATED_TEXT_ANIMATIONS.FLOAT) {
+		/// @ignore
 		cycle_time = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_cycle_time_ms : global.animated_text_default_float_cycle_time_ms;
+		/// @ignore
 		magnitude = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_magnitude : global.animated_text_default_float_magnitude;
+		/// @ignore
 		char_offset = animation_enum == ANIMATED_TEXT_ANIMATIONS.WAVE ? global.animated_text_default_wave_char_offset : 0;
 		
 		// use char offset to determine if wave or float
@@ -312,8 +339,11 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.BLINK) {
+		/// @ignore
 		alpha_min = global.animated_text_default_blink_alpha_min;
+		/// @ignore
 		alpha_max = global.animated_text_default_blink_alpha_max;
+		/// @ignore
 		cycle_time = global.animated_text_default_blink_cycle_time_ms;
 		
 		if (array_length(params) == 3) {
@@ -335,10 +365,15 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.TWITCH) {
+		/// @ignore
 		count = global.animated_text_default_twitch_count;
+		/// @ignore
 		magnitude = global.animated_text_default_twitch_magnitude;
+		/// @ignore
 		offset_time = global.animated_text_default_twitch_offset_time_ms;
+		/// @ignore
 		wait_min = global.animated_text_default_twitch_wait_min;
+		/// @ignore
 		wait_max = global.animated_text_default_twitch_wait_max;
 		
 		if (array_length(params) == 5) {
@@ -352,6 +387,7 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		}
 		
 		// make multiple sub-animations
+		/// @ignore
 		sub_animations = [];
 		for (var a = 0; a < count; a++) {
 			array_push(sub_animations, {
@@ -406,14 +442,17 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 }
 
 /**
- * @param {Struct.New_StyleableText} text
+ * @param {Struct.StyleableText} styleable_text
+ * @ignore
  */
 function StyleableTextAnimator(styleable_text) constructor {
+	/// @ignore
 	text = styleable_text;
-	
+	/// @ignore
 	animations = {}; // struct used as mapping of ids to animations
-	
+	/// @ignore
 	next_animation_id = 0;
+	/// @ignore
 	get_new_animation_id = function() {
 		var result = next_animation_id;
 		next_animation_id++;
@@ -425,11 +464,12 @@ function StyleableTextAnimator(styleable_text) constructor {
 	 * @param {real} index_start
 	 * @param {real} index_end
 	 * @param {array} aargs array of parameters for this animation
+	 * @ignore
 	 */
 	add_animation = function(animation_enum, index_start, index_end, aargs) {
-		struct_set(animations, get_new_animation_id(), new New_Animation(text, animation_enum, index_start, index_end, aargs));
+		struct_set(animations, get_new_animation_id(), new TagDecoratedTextAnimation(text, animation_enum, index_start, index_end, aargs));
 	};
-	
+	/// @ignore
 	update = function(update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
 		var animation_ids = struct_get_names(animations);
 		for (var i = 0; i < array_length(animation_ids); i++)  {
@@ -438,7 +478,7 @@ function StyleableTextAnimator(styleable_text) constructor {
 			if (animation.can_finish && animation.finished) struct_remove(animations, animation_ids[i]);
 		}
 	};
-	
+	/// @ignore
 	remove_finishable_animations = function() {
 		var animation_ids = struct_get_names(animations);
 		for (var i = 0; i < array_length(animation_ids); i++)  {
@@ -448,6 +488,7 @@ function StyleableTextAnimator(styleable_text) constructor {
 	};
 	
 	// reset the state of all animations, finishable animations are removed
+	/// @ignore
 	reset = function() {
 		var animation_ids = struct_get_names(animations);
 		for (var i = 0; i < array_length(animation_ids); i++)  {

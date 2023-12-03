@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "NewVersion",
-    "path": "folders/NewVersion.yy",
+    "name": "TagDecoratedText",
+    "path": "folders/TagDecoratedText.yy",
   },
 }

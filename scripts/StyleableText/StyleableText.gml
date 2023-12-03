@@ -1,13 +1,24 @@
-/// @ignore
+// feather ignore all
+
+//// @ignore
 function TextStyle() constructor {
+	/// @ignore
 	font = fnt_styleable_text_font_default;
+	/// @ignore
 	color = c_white;
+	/// @ignore
 	alpha = 1;
+	/// @ignore
 	scale_x = 1;
+	/// @ignore
 	scale_y = 1;
+	/// @ignore
 	offset_x = 0;
+	/// @ignore
 	offset_y = 0;
+	/// @ignore
 	sprite = spr_styleable_text_sprite_default;
+	/// @ignore
 	new_line = false; // forces new line start
 	
 	/**
@@ -31,6 +42,7 @@ function TextStyle() constructor {
 		return true;
 	};
 	
+	/// @ignore
 	set_to = function(style) {
 		font = style.font;
 		color = style.color;
@@ -59,22 +71,36 @@ function TextStyle() constructor {
  * Creates a new styleable text instance.
  *
  * @param {string} text
+ * @ignore
  */
-function New_StyleableText(text, width=-1, height=-1) constructor {
+function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
+	/// @ignore
 	character_array = [];
+	/// @ignore
 	text_width = width;
+	/// @ignore
 	text_height = height;
+	/// @ignore
 	text_line_widths = []; // mapping of line indexes to line widths excluding trailing spaces
+	/// @ignore
 	text_line_heights = [];
+	/// @ignore
 	text_page_index = 0;
+	/// @ignore
 	text_page_index_max = 0;
+	/// @ignore
 	text_page_widths = [];
+	/// @ignore
 	text_page_heights = [];
+	/// @ignore
 	text_page_char_index_start = [];
+	/// @ignore
 	text_page_char_index_end = [];
+	/// @ignore
 	widest_page = -1; // used to calculate text width if not specified
+	/// @ignore
 	highest_page = -1; // use to calculate text height if not specified
-	
+	/// @ignore
 	debug = false;
 	
 	// create char array
@@ -95,7 +121,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 		});
 	}
-	
+	/// @ignore
 	character_array_length = array_length(character_array);
 	
 	/**
@@ -115,7 +141,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		draw_set_font(char.style.font);
 		return string_height(char.char) * char.style.scale_y;
 	};
-	
+	/// @ignore
 	calculate_char_positions = function() {
 		text_line_widths = [];
 		text_line_heights = [];
@@ -263,11 +289,11 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			if (text_page_heights[i] > highest_page) highest_page = text_page_heights[i];
 		}
 	};
-	
+	/// @ignore
 	get_width = function() {
 		return max(widest_page, text_width);
 	};
-	
+	/// @ignore
 	get_height = function() {
 		return max(highest_page, text_height);
 	}
@@ -278,6 +304,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	 * being merged. Drawables cannot be merged if the drawable styles differ, or if the underlying
 	 * styles of the base characters differ.
 	 */
+	/// @ignore
 	char_drawables_mergeable = function(index_a, index_b) {
 		var char_a = character_array[index_a];
 		var char_b = character_array[index_b];
@@ -293,6 +320,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	 *
 	 * @param {real} index_start first index to merge at
 	 * @param {real} index_end last index to merge at, inclusive
+	 * @ignore
 	 */
 	merge_drawables_at_index_range = function(index_start, index_end) {
 		var index = index_start == 0 ? 0 : index_start - 1;
@@ -312,7 +340,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			}
 		}
 	};
-	
+	/// @ignore
 	merge_all_drawables = function() {
 		merge_drawables_at_index_range(0, character_array_length - 1);
 	};
@@ -320,6 +348,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	/**
 	 * @param {real} index_start first index to split at
 	 * @param {real} index_end last index to split at, inclusive
+	 * @ignore
 	 */
 	split_drawables_at_index_range = function(index_start, index_end) {
 		if (index_start > index_end) return;
@@ -363,7 +392,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 	};
 	
-	// for debugging, remove later
+	/// @ignore
 	get_drawables = function() {
 		var result = [];
 		var index = 0;
@@ -374,65 +403,65 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		}
 		return result;
 	};
-	
+	/// @ignore
 	invoke_callback_on_character_range = function(index_start, index_end, callback) {
 		var index_stop = min(array_length(character_array) - 1, index_end);
 		for (var i = index_start; i <= index_stop; i++) {
 			callback(character_array[i]);
 		}
 	};
-	
+	/// @ignore
 	set_character_font = function(index_start, index_end, font) {
 		invoke_callback_on_character_range(index_start, index_end, method({ font }, function(c) {
 			c.style.font = font;
 		}));
 	};
-	
+	/// @ignore
 	set_character_color = function(index_start, index_end, color) {
 		invoke_callback_on_character_range(index_start, index_end, method({ color }, function(c) {
 			c.style.color = color;
 		}));
 	};
-	
+	/// @ignore
 	set_character_alpha = function(index_start, index_end, alpha) {
 		invoke_callback_on_character_range(index_start, index_end, method({ alpha }, function(c) {
 			c.style.alpha = alpha;
 		}));
 	};
-	
+	/// @ignore
 	set_character_scale_x = function(index_start, index_end, scale_x) {
 		invoke_callback_on_character_range(index_start, index_end, method({ scale_x }, function(c) {
 			c.style.scale_x = scale_x;
 		}));
 	};
-	
+	/// @ignore
 	set_character_scale_y = function(index_start, index_end, scale_y) {
 		invoke_callback_on_character_range(index_start, index_end, method({ scale_y }, function(c) {
 			c.style.scale_y = scale_y;
 		}));
 	};
-	
+	/// @ignore
 	set_character_offset_x = function(index_start, index_end, offset_x) {
 		invoke_callback_on_character_range(index_start, index_end, method({ offset_x }, function(c) {
 			c.style.offset_x = offset_x;
 		}));
 	};
-	
+	/// @ignore
 	set_character_offset_y = function(index_start, index_end, offset_y) {
 		invoke_callback_on_character_range(index_start, index_end, method({ offset_y }, function(c) {
 			c.style.offset_y = offset_y;
 		}));
 	};
-	
+	/// @ignore
 	set_character_new_line = function(index, new_line) {
 		character_array[index].style.new_line = new_line;
 	};
-	
+	/// @ignore
 	set_character_sprite = function(index, sprite) {
 		if (is_string(sprite) && asset_get_type(sprite) != asset_sprite) show_error("name given for sprite command is not a sprite asset", true);
 		character_array[index].style.sprite = asset_get_index(sprite);
 	};
-	
+	/// @ignore
 	build = function() {
 		calculate_char_positions();
 		merge_all_drawables();
@@ -443,6 +472,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	on page switch the drawables must be initialized or there could be
 	graphical errors.
 	*/
+	/// @ignore
 	init_page_drawables = function() {
 		var index = text_page_char_index_start[text_page_index];
 		while (index <= text_page_char_index_end[text_page_index]) {
@@ -450,19 +480,19 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			index = character_array[index].drawable.index_end + 1;
 		}
 	};
-	
+	/// @ignore
 	page_previous = function() {
 		var prev = text_page_index;
 		text_page_index = max(text_page_index - 1, 0);
 		if (text_page_index != prev) init_page_drawables();
 	};
-	
+	/// @ignore
 	page_next = function() {
 		var prev = text_page_index;
 		text_page_index = min(text_page_index + 1, text_page_index_max);
 		if (text_page_index != prev) init_page_drawables();
 	};
-	
+	/// @ignore
 	draw = function(x, y) {
 		x = floor(x);
 		y = floor(y);

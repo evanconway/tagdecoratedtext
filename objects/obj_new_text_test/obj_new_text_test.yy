@@ -9,8 +9,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "NewVersion",
-    "path": "folders/NewVersion.yy",
+    "name": "TagDecoratedText",
+    "path": "folders/TagDecoratedText.yy",
   },
   "parentObjectId": null,
   "persistent": false,

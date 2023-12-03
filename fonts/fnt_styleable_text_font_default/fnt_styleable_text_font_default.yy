@@ -119,8 +119,8 @@
   "lineHeight": 18,
   "maintainGms1Font": false,
   "parent": {
-    "name": "tagdecoratedtext",
-    "path": "tagdecoratedtext.yyp",
+    "name": "TagDecoratedText",
+    "path": "folders/TagDecoratedText.yy",
   },
   "pointRounding": 0,
   "ranges": [

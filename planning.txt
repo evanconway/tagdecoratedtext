@@ -252,3 +252,5 @@ Actually we should focus on the typing state stuff. A lot of other functions I'm
 We've added typing interface functions. We have about 6 functions left I know we need to implement. The most difficult of those is the width/height function. It's finally time to figure out our automatic width/height system. 
 
 Added all of the remaining functions we had on the previous system that were worth adding. But we haven't tested them thoroughly yet. Also it occured to me that making the typing params part of the tag system could totally work. I think we could include typing information inside of characters via a map in the typer. And the typing system would check these characters for different data when typing. 
+
+We were able to add typing settings via tags without too much trouble. This thing is starting to feel finished. Let's tidy up the function names and start hiding variables from the user, then try and make something with it.

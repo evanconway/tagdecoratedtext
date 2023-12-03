@@ -1,17 +1,17 @@
 {
   "FolderOrderSettings": [
-    {"name":"NewVersion","order":2,"path":"folders/NewVersion.yy",},
+    {"name":"TagDecoratedText","order":2,"path":"folders/TagDecoratedText.yy",},
   ],
   "ResourceOrderSettings": [
     {"name":"Setters","order":2,"path":"scripts/Setters/Setters.yy",},
-    {"name":"fnt_handwriting","order":7,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
+    {"name":"fnt_handwriting","order":8,"path":"fonts/fnt_handwriting/fnt_handwriting.yy",},
     {"name":"obj_new_text_test","order":1,"path":"objects/obj_new_text_test/obj_new_text_test.yy",},
     {"name":"StyleableTextAnimator","order":3,"path":"scripts/StyleableTextAnimator/StyleableTextAnimator.yy",},
-    {"name":"spr_button","order":5,"path":"sprites/spr_button/spr_button.yy",},
+    {"name":"spr_button","order":10,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"StyleableTextTyper","order":4,"path":"scripts/StyleableTextTyper/StyleableTextTyper.yy",},
-    {"name":"New_tag","order":5,"path":"scripts/New_tag/New_tag.yy",},
-    {"name":"spr_styleable_text_sprite_default","order":4,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
-    {"name":"snd_chirp","order":6,"path":"sounds/snd_chirp/snd_chirp.yy",},
-    {"name":"fnt_styleable_text_font_default","order":3,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
+    {"name":"TagDecoratedText","order":5,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
+    {"name":"spr_styleable_text_sprite_default","order":7,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
+    {"name":"snd_chirp","order":9,"path":"sounds/snd_chirp/snd_chirp.yy",},
+    {"name":"fnt_styleable_text_font_default","order":6,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
   ],
 }
