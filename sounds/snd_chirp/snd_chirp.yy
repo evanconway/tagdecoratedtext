@@ -12,8 +12,8 @@
   "conversionMode": 0,
   "duration": 0.115011,
   "parent": {
-    "name": "TagDecoratedText",
-    "path": "folders/TagDecoratedText.yy",
+    "name": "tagdecoratedtext",
+    "path": "tagdecoratedtext.yyp",
   },
   "preload": false,
   "sampleRate": 44100,

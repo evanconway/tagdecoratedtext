@@ -155,6 +155,17 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		magnitude = animation_enum == ANIMATED_TEXT_ANIMATIONS.SHAKE ? global.animated_text_default_shake_magnitude : global.animated_text_default_tremble_magnitude;
 		offset_individual_chars = animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
 		
+		offset_x_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
+		offset_y_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
+		
+		calc_offsets = function() {
+			for (var i = 0; i < array_length(offset_x_arr); i++) {
+				offset_x_arr[i] = floor((magnitude + 1) * 2 * random(1)) - magnitude;
+				offset_y_arr[i] = floor((magnitude + 1) * 2 * random(1)) - magnitude;
+			}
+		};
+		calc_offsets();
+		
 		if (array_length(params) == 2) {
 			offset_time = params[0];
 			magnitude = params[1];
@@ -164,23 +175,63 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 		/// @ignore
 		update = function(update_time_ms) {
 			time_ms += update_time_ms;
-			
-			var index_x = floor(time_ms / offset_time);
-			var index_y = index_x + 4321; // arbitrary character index offset 
+			if (time_ms > offset_time) {
+				calc_offsets();
+				time_ms = 0;
+			}
 			if (offset_individual_chars) {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
-					var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x + i * 4321)) - magnitude;
-					var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y + i * 4321)) - magnitude;
-					text_add_offset_x(text, i, i, offset_x);
-					text_add_offset_y(text, i, i, offset_y);
+					text_add_offset_x(text, i, i, offset_x_arr[i - animation_index_start]);
+					text_add_offset_y(text, i, i, offset_y_arr[i - animation_index_start]);
 				}
 			} else {
-				var offset_x = floor((magnitude + 1) * 2 * animated_text_get_random(index_x)) - magnitude;
-				var offset_y = floor((magnitude + 1) * 2 * animated_text_get_random(index_y)) - magnitude;
-				text_add_offset_x(text, animation_index_start, animation_index_end, offset_x);
-				text_add_offset_y(text, animation_index_start, animation_index_end, offset_y);
+				text_add_offset_x(text, i, i, offset_x_arr[i - animation_index_start]);
+				text_add_offset_y(text, i, i, offset_y_arr[i - animation_index_start]);
 			}
 		};
+	}
+
+	static red_at = function(index) {
+		index = abs(index);
+		index %= 1536;
+		if (index >= 0 && index < 256) return 255;
+		if (index >= 256 && index < 512) return 511 - index;
+		if (index >= 512 && index < 768) return 0;
+		if (index >= 768 && index < 1024) return 0;
+		if (index >= 1024 && index < 1280) return index - 1024;
+		if (index >= 1280 && index < 1536) return 255;
+		return 0;
+	}
+
+	static green_at = function(index) {
+		index = abs(index);
+		index %= 1536;
+		if (index >= 0 && index < 256) return index;
+		if (index >= 256 && index < 512) return 255;
+		if (index >= 512 && index < 768) return 255;
+		if (index >= 768 && index < 1024) return 1023 - index;
+		if (index >= 1024 && index < 1280) return 0;
+		if (index >= 1280 && index < 1536) return 0;
+		return 0;
+	}
+
+	static blue_at = function(index) {
+		index = abs(index);
+		index %= 1536;
+		if (index >= 0 && index < 256) return 0;
+		if (index >= 256 && index < 512) return 0;
+		if (index >= 512 && index < 768) return index - 512;
+		if (index >= 768 && index < 1024) return 255;
+		if (index >= 1024 && index < 1280) return 255;
+		if (index >= 1280 && index < 1536) return 1535 - index;
+		return 0;
+	}
+
+	static get_chromatic_color_at = function(index) {
+		var _red = red_at(index);
+		var _green = green_at(index);
+		var _blue = blue_at(index);
+		return make_color_rgb(_red, _green, _blue);
 	}
 	
 	if (animation_enum == ANIMATED_TEXT_ANIMATIONS.CHROMATIC || animation_enum == ANIMATED_TEXT_ANIMATIONS.WCHROMATIC) {
@@ -213,10 +264,10 @@ function New_Animation(styleable_text, animation_enum, index_start, index_end, a
 			// use char offset to determine if chromatic or wchromatic
 			if (char_offset != 0) {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
-					text_set_color(text, i, i, animated_text_get_chromatic_color_at(index + char_offset * i));
+					text_set_color(text, i, i, get_chromatic_color_at(index + char_offset * i));
 				}
 			} else {
-				text_set_color(text, animation_index_start, animation_index_end, animated_text_get_chromatic_color_at(index));
+				text_set_color(text, animation_index_start, animation_index_end, get_chromatic_color_at(index));
 			}	
 		};
 	}

@@ -75,6 +75,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	widest_page = -1; // used to calculate text width if not specified
 	highest_page = -1; // use to calculate text height if not specified
 	
+	debug = false;
+	
 	// create char array
 	var text_length = string_length(text);
 	for (var i = 1; i <= text_length; i++) {
@@ -502,28 +504,29 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 			text_box_y -= get_height();
 		}
 		
-		// debug, remove later
-		draw_set_alpha(1);
-		draw_set_font(fnt_styleable_text_font_default);
-		draw_set_color(c_lime);
-		var drawables = get_drawables();
-		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables)}");
-		// debug border overlaps text area on all sides
-		// page
-		draw_rectangle(box_x, box_y, box_x + 1, box_y + page_height, false);
-		draw_rectangle(box_x + page_width - 1, box_y, box_x + page_width, box_y + page_height, false);
-		draw_rectangle(box_x, box_y, box_x + page_width, box_y + 1, false);
-		draw_rectangle(box_x, box_y + page_height - 1, box_x + page_width, box_y + page_height, false);
+		if (debug) {
+			draw_set_alpha(1);
+			draw_set_font(fnt_styleable_text_font_default);
+			draw_set_color(c_lime);
+			var drawables = get_drawables();
+			draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables)}");
+			// debug border overlaps text area on all sides
+			// page
+			draw_rectangle(box_x, box_y, box_x + 1, box_y + page_height, false);
+			draw_rectangle(box_x + page_width - 1, box_y, box_x + page_width, box_y + page_height, false);
+			draw_rectangle(box_x, box_y, box_x + page_width, box_y + 1, false);
+			draw_rectangle(box_x, box_y + page_height - 1, box_x + page_width, box_y + page_height, false);
 		
-		// text
-		draw_set_color(c_aqua);
-		draw_rectangle(text_box_x, text_box_y, text_box_x + 1, text_box_y + get_height(), false);
-		draw_rectangle(text_box_x + get_width() - 1, text_box_y, text_box_x + get_width(), text_box_y + get_height(), false);
-		draw_rectangle(text_box_x, text_box_y, text_box_x + get_width(), text_box_y + 1, false);
-		draw_rectangle(text_box_x, text_box_y + get_height() - 1, text_box_x + get_width(), text_box_y + get_height(), false);
+			// text
+			draw_set_color(c_aqua);
+			draw_rectangle(text_box_x, text_box_y, text_box_x + 1, text_box_y + get_height(), false);
+			draw_rectangle(text_box_x + get_width() - 1, text_box_y, text_box_x + get_width(), text_box_y + get_height(), false);
+			draw_rectangle(text_box_x, text_box_y, text_box_x + get_width(), text_box_y + 1, false);
+			draw_rectangle(text_box_x, text_box_y + get_height() - 1, text_box_x + get_width(), text_box_y + get_height(), false);
 		
-		draw_set_color(c_fuchsia);
-		draw_rectangle(x, y, x + 1, y + 1, false);
+			draw_set_color(c_fuchsia);
+			draw_rectangle(x, y, x + 1, y + 1, false);
+		}
 		
 		var index = text_page_char_index_start[text_page_index]; // starting character of current page
 		while (index <= text_page_char_index_end[text_page_index]) {
