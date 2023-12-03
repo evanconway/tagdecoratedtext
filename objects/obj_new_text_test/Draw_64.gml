@@ -1,10 +1,9 @@
-//test = setup_test_text();
-
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
 draw_set_alpha(1);
 draw_set_color(c_white);
 draw_text(0, 0, fps_real);
+draw_text(0, 16, $"page {tag_get_current_page_index(test) + 1} of {tag_get_page_count(test)}");
 
 if (keyboard_check_pressed(vk_right)) tag_page_next(test);
 if (keyboard_check_pressed(vk_left)) tag_page_previous(test);
@@ -17,4 +16,4 @@ if (keyboard_check_pressed(vk_enter)) tag_type_all_pages(test);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 
-tag_draw(test, 200, 200);
+tag_draw(test, display_get_gui_width() / 2, display_get_gui_height() / 2);

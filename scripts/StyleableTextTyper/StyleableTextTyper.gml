@@ -39,13 +39,18 @@ function StyleableTextTyper(text, animator) constructor {
 	
 	punctuation_pause_map = {};
 	
-	struct_set(punctuation_pause_map, ".", 800);
-	struct_set(punctuation_pause_map, "!", 800);
-	struct_set(punctuation_pause_map, "?", 800);
-	struct_set(punctuation_pause_map, ",", 500);
-	struct_set(punctuation_pause_map, ":", 500);
-	struct_set(punctuation_pause_map, ";", 500);
-	struct_set(punctuation_pause_map, "-", 500);
+	set_character_pause = function(character, pause_time_ms) {
+		if (string_length(character) != 1) show_error("set_character_pause received string for character with length not equal to 1", true);
+		struct_set(punctuation_pause_map, character, pause_time_ms);
+	};
+	
+	set_character_pause(".", 800);
+	set_character_pause("!", 800);
+	set_character_pause("?", 800);
+	set_character_pause(",", 500);
+	set_character_pause(":", 500);
+	set_character_pause(";", 500);
+	set_character_pause("-", 500);
 
 	// pause timings for individual character indexes
 	character_pause_map = {};

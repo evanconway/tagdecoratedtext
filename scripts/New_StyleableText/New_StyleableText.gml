@@ -72,6 +72,8 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	text_page_heights = [];
 	text_page_char_index_start = [];
 	text_page_char_index_end = [];
+	widest_page = -1; // used to calculate text width if not specified
+	highest_page = -1; // use to calculate text height if not specified
 	
 	// create char array
 	var text_length = string_length(text);
@@ -253,7 +255,20 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 				line_heights_added_to_page[char.line_index] = true;
 			}
 		}
+		
+		for (var i = 0; i <= text_page_index_max; i++) {
+			if (text_page_widths[i] > widest_page) widest_page = text_page_widths[i];
+			if (text_page_heights[i] > highest_page) highest_page = text_page_heights[i];
+		}
 	};
+	
+	get_width = function() {
+		return max(widest_page, text_width);
+	};
+	
+	get_height = function() {
+		return max(highest_page, text_height);
+	}
 	
 	/**
 	 * This function is used to determine if drawables can be merged. returns false if there are any
@@ -465,12 +480,27 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var page_width = text_page_widths[text_page_index];
 		var page_height = text_page_heights[text_page_index];
 		
+		var text_box_x = x;
+		var text_box_y = y;
+		
 		var box_x = x;
 		var box_y = y;
-		if (original_halign == fa_center) box_x -= floor(page_width / 2);
-		if (original_halign == fa_right) box_x -= page_width;
-		if (original_valign == fa_middle) box_y -= floor(page_height / 2);
-		if (original_valign == fa_bottom) box_y -= page_height;
+		if (original_halign == fa_center) {
+			box_x -= floor(page_width / 2);
+			text_box_x -= floor(get_width() / 2);
+		}
+		if (original_halign == fa_right) {
+			box_x -= page_width;
+			text_box_x -= get_width();
+		}
+		if (original_valign == fa_middle) {
+			box_y -= floor(page_height / 2);
+			text_box_y -= floor(get_height() / 2);
+		}
+		if (original_valign == fa_bottom) {
+			box_y -= page_height;
+			text_box_y -= get_height();
+		}
 		
 		// debug, remove later
 		draw_set_alpha(1);
@@ -479,10 +509,19 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 		var drawables = get_drawables();
 		draw_text(box_x, box_y - 30, $"drawables: {array_length(drawables)}");
 		// debug border overlaps text area on all sides
+		// page
 		draw_rectangle(box_x, box_y, box_x + 1, box_y + page_height, false);
 		draw_rectangle(box_x + page_width - 1, box_y, box_x + page_width, box_y + page_height, false);
 		draw_rectangle(box_x, box_y, box_x + page_width, box_y + 1, false);
 		draw_rectangle(box_x, box_y + page_height - 1, box_x + page_width, box_y + page_height, false);
+		
+		// text
+		draw_set_color(c_aqua);
+		draw_rectangle(text_box_x, text_box_y, text_box_x + 1, text_box_y + get_height(), false);
+		draw_rectangle(text_box_x + get_width() - 1, text_box_y, text_box_x + get_width(), text_box_y + get_height(), false);
+		draw_rectangle(text_box_x, text_box_y, text_box_x + get_width(), text_box_y + 1, false);
+		draw_rectangle(text_box_x, text_box_y + get_height() - 1, text_box_x + get_width(), text_box_y + get_height(), false);
+		
 		draw_set_color(c_fuchsia);
 		draw_rectangle(x, y, x + 1, y + 1, false);
 		

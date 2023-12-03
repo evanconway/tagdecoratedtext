@@ -335,3 +335,95 @@ function tag_advance(tag_decorated_text) {
 	}
 	tag_page_next(tag_decorated_text);
 }
+
+/**
+ * Get the number of pages.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_get_page_count(tag_decorated_text) {
+	return tag_decorated_text.styleable_text.text_page_index_max + 1;
+}
+
+/**
+ * Get the index of the current page.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ */
+function tag_get_current_page_index(tag_decorated_text) {
+	return tag_decorated_text.styleable_text.text_page_index;
+}
+
+/**
+ * Returns the width of the given tag decorated text instance.
+ *
+ * @param {Struct.TagDecoratedText} tag_decorated_text
+ */
+function tag_get_width(tag_decorated_text) {
+	return tag_decorated_text.styleable_text.get_width();
+}
+
+/**
+ * Returns the height of the given tag decorated text instance.
+ *
+ * @param {Struct.TagDecoratedText} tag_decorated_text
+ */
+function tag_get_height(tag_decorated_text) {
+	return tag_decorated_text.styleable_text.get_height();
+}
+
+/**
+ * Set the callback function that's invoked whenever a type event occurs.
+ *
+ * @param {Struct.TagDecoratedText} tag_decorated_text
+ * @param {function} on_type_callback
+ */
+function tag_set_on_type_callback(tag_decorated_text, on_type_callback) {
+	tag_decorated_text.typer.on_type = on_type_callback;
+}
+
+/**
+ * Set the callback function that's invoked whenever a type event occurs
+ * for a specific character.
+ *
+ * @param {Struct.TagDecoratedText} tag_decorated_text
+ * @param {real} character_index
+ * @param {function} on_type_callback
+ */
+function tag_set_character_on_type_callback(tag_decorated_text, character_index, on_type_callback) {
+	tag_decorated_text.typer.set_character_index_on_type(character_index, on_type_callback);
+}
+
+/**
+ * Set specific typing pause for given character.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ * @param {string} character
+ * @param {real} pause_time_ms
+ */
+function tag_set_character_pause(tag_decorated_text, character, pause_time_ms) {
+	tag_decorated_text.typer.set_character_pause(character, pause_time_ms);
+}
+
+/**
+ * Set specific typing pause for character at given index.
+ *
+ * @param {Struct.New_Tag} tag_decorated_text
+ * @param {real} character_index
+ * @param {real} pause_time_ms
+ */
+function tag_set_character_index_pause(tag_decorated_text, character_index, pause_time_ms) {
+	tag_decorated_text.typer.set_character_index_pause(character_index, pause_time_ms);
+}
+
+/**
+ * Set the time between types and characters per type.
+ *
+ * @param {Struct.New_tag} tag_decorated_text
+ * @param {real} time_between_types_ms
+ * @param {real} chars_per_type
+ */
+function tag_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
+	tag_decorated_text.typer.time_between_types_ms = time_ms_between_types;
+	tag_decorated_text.typer.chars_per_type = chars_per_type;
+}
