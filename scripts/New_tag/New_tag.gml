@@ -6,16 +6,15 @@ function NewCommand(command, index_start) constructor {
 	var command_aarg_split = string_split(command, ":");
 	
 	name = command_aarg_split[0];
+	original_aargs = array_length(command_aarg_split) > 1 ? command_aarg_split[1] : "";
 	
 	var aarg_string = array_length(command_aarg_split) > 1 ? command_aarg_split[1] : "";
 	
 	var f_map = function(str) {
 		try {
 			var r = real(str);
-			return r
-		} catch(_error) {
-			_error = undefined;
-		}
+			return r;
+		} catch(error) {}
 
 		// Feather disable once GM1035
 		return str;
@@ -183,6 +182,24 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 		// convert string index to array index for applying effects
 		var s = commands[i].command_index_start - 1;
 		var e = commands[i].command_index_end - 1;
+		
+		// typing
+		if (cmd == "typing" || cmd == "t") {
+			if (array_length(aargs) != 2) show_error("incorrect number of arguments for typing command", true);
+			typer.set_character_indexes_typing_params(s, e, aargs[0], aargs[1]);
+		}
+		if (cmd == "charpause" || cmd == "cp") {
+			// this command requires different command text parsing
+			var org_aargs = commands[i].original_aargs
+			var char = string_char_at(org_aargs, 1);
+			if (string_char_at(org_aargs, 2) != ",") show_error("no comma in aargs of charpause command", true);
+			try {
+				var r = real(string_copy(org_aargs, 3, string_length(org_aargs) -2));
+				typer.set_character_pause(char, r);
+			} catch(error) {
+				show_error("number was not provided for second argument of character pause command", true);
+			}
+		}
 		
 		// animations
 		if (cmd == "fade") animator.add_animation(ANIMATED_TEXT_ANIMATIONS.FADE, s, e, aargs);

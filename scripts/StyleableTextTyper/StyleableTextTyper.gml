@@ -8,9 +8,27 @@ function StyleableTextTyper(text, animator) constructor {
 	
 	if (typer_animator.text != typer_text) show_error("Given animator for StyleableTextTyper does not reference given StyleableText!", true);
 	
-	time_between_types_ms = 80;
 	time_ms = 0;
-	chars_per_type = 2.4;
+	
+	// mapping between indexes of chars and typing information
+	character_typing_params = array_create(typer_text.character_array_length, {
+		time_between_types_ms: 5,
+		chars_per_type: 1
+	});
+	
+	/**
+	 * @param {real} index_start
+	 * @param {real} index_end inclusive
+	 * @param {real} new_time_between_types_ms
+	 * @param {real} new_chars_per_type
+	 */
+	set_character_indexes_typing_params = function(index_start, index_end, new_time_between_types_ms, new_chars_per_type) {
+		var params = {
+			time_between_types_ms: new_time_between_types_ms,
+			chars_per_type: new_chars_per_type
+		};
+		for (var i = index_start; i <= index_end; i++) character_typing_params[i] = params;
+	};
 	
 	// mapping between indexes of chars and array of entry animations for said chars
 	entry_animations_map = {};
@@ -43,14 +61,6 @@ function StyleableTextTyper(text, animator) constructor {
 		if (string_length(character) != 1) show_error("set_character_pause received string for character with length not equal to 1", true);
 		struct_set(punctuation_pause_map, character, pause_time_ms);
 	};
-	
-	set_character_pause(".", 800);
-	set_character_pause("!", 800);
-	set_character_pause("?", 800);
-	set_character_pause(",", 500);
-	set_character_pause(":", 500);
-	set_character_pause(";", 500);
-	set_character_pause("-", 500);
 
 	// pause timings for individual character indexes
 	character_pause_map = {};
@@ -103,39 +113,50 @@ function StyleableTextTyper(text, animator) constructor {
 		return pages_hide_start_end[typer_text.text_page_index].index_current > typer_text.text_page_char_index_end[typer_text.text_page_index];
 	}
 	
+	current_typing_params = character_typing_params[0];
+	
 	update = function(update_time_ms = 1000/game_get_speed(gamespeed_fps)) {
 		var hide = pages_hide_start_end[typer_text.text_page_index];
-		if (hide.index_current >= hide.index_end) return;
+		if (hide.index_current > hide.index_end) return;
 		time_ms -= update_time_ms;
-		if (time_ms >= 0) {
+		if (time_ms > 0) {
 			text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
 			return;
 		}
-		time_ms = time_between_types_ms;
-		var can_type_chars = true;
-		var chars_typed = 0;
-		while (can_type_chars) {
-			if (struct_exists(punctuation_pause_map, typer_text.character_array[hide.index_current].char)) {
-				time_ms = struct_get(punctuation_pause_map, typer_text.character_array[hide.index_current].char);
-				can_type_chars = false;
-			}
-			if (struct_exists(character_pause_map, hide.index_current)) {
-				time_ms = struct_get(character_pause_map, hide.index_current);
-				can_type_chars = false;
-			}
-			if (struct_exists(character_on_type_map, hide.index_current)) {
-				struct_get(character_on_type_map, hide.index_current)();
-			}
-			start_type_animation_at(hide.index_current);
-			hide.index_current++;
-			chars_typed++;
-			while (hide.index_current <= hide.index_end && typer_text.character_array[hide.index_current].char == " ") {
+		
+		while (time_ms <= 0 && hide.index_current <= hide.index_end) {
+			time_ms += current_typing_params.time_between_types_ms;
+			var can_type_chars = true;
+			var chars_typed = 0;
+			while (can_type_chars) {
+				if (character_typing_params[hide.index_current] != current_typing_params) {
+					time_ms = 0;
+					current_typing_params = character_typing_params[hide.index_current];
+					can_type_chars = false;
+				}
+				if (struct_exists(punctuation_pause_map, typer_text.character_array[hide.index_current].char)) {
+					time_ms = struct_get(punctuation_pause_map, typer_text.character_array[hide.index_current].char);
+					can_type_chars = false;
+				}
+				if (struct_exists(character_pause_map, hide.index_current)) {
+					time_ms = struct_get(character_pause_map, hide.index_current);
+					can_type_chars = false;
+				}
+				if (struct_exists(character_on_type_map, hide.index_current)) {
+					struct_get(character_on_type_map, hide.index_current)();
+				}
+				start_type_animation_at(hide.index_current);
 				hide.index_current++;
-			}
-			if (hide.index_current > hide.index_end || chars_typed >= chars_per_type) {
-				can_type_chars = false;
+				chars_typed++;
+				while (hide.index_current <= hide.index_end && typer_text.character_array[hide.index_current].char == " ") {
+					hide.index_current++;
+				}
+				if (hide.index_current > hide.index_end || chars_typed >= current_typing_params.chars_per_type) {
+					can_type_chars = false;
+				}
 			}
 		}
+
 		on_type();
 		text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
 		if (hide.index_current > hide.index_end) time_ms = 0; // avoid pauses on next page
