@@ -258,7 +258,7 @@ function tag_draw_no_update(tag_decorated_text, x, y) {
  * @param {real} update_time_ms
  */
 function tag_draw(tag_decorated_text, x, y, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
-	tag_update(tag_decorated_text);
+	tag_update(tag_decorated_text, update_time_ms);
 	tag_draw_no_update(tag_decorated_text, x, y);
 }
 

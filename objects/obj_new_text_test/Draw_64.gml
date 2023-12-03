@@ -16,4 +16,4 @@ if (keyboard_check_pressed(vk_enter)) tag_type_all_pages(test);
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
 
-tag_draw(test, display_get_gui_width() / 2, display_get_gui_height() / 2);
+tag_draw(test, display_get_gui_width() / 2, display_get_gui_height() / 2, 5);
