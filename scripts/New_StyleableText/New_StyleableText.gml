@@ -305,6 +305,7 @@ function New_StyleableText(text, width=-1, height=-1) constructor {
 	 * @param {real} index_end last index to split at, inclusive
 	 */
 	split_drawables_at_index_range = function(index_start, index_end) {
+		if (index_start > index_end) return;
 		var drawable_left = character_array[index_start].drawable;
 		if (drawable_left.index_start != index_start) {
 			var left_original_end = drawable_left.index_end;

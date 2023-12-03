@@ -124,15 +124,15 @@ function StyleableTextTyper(text, animator) constructor {
 			start_type_animation_at(hide.index_current);
 			hide.index_current++;
 			chars_typed++;
-			while (hide.index_current < hide.index_end && typer_text.character_array[hide.index_current].char == " ") {
+			while (hide.index_current <= hide.index_end && typer_text.character_array[hide.index_current].char == " ") {
 				hide.index_current++;
 			}
-			if (hide.index_current >= hide.index_end || chars_typed >= chars_per_type) {
+			if (hide.index_current > hide.index_end || chars_typed >= chars_per_type) {
 				can_type_chars = false;
 			}
 		}
 		on_type();
 		text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
-		if (hide.index_current >= hide.index_end) time_ms = 0; // avoid pauses on next page
+		if (hide.index_current > hide.index_end) time_ms = 0; // avoid pauses on next page
 	};
 }

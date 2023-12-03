@@ -162,6 +162,11 @@ function NewTagDecoratedText(source_string, default_effects = "", width = -1, he
 			styleable_text.set_character_scale_x(s, e, aargs[0]);
 			styleable_text.set_character_scale_y(s, e, aargs[1]);
 		}
+		if (cmd == "scale") {
+			if (array_length(aargs) != 1) show_error("incorrect number of arguments given for scale command", true);
+			styleable_text.set_character_scale_x(s, e, aargs[0]);
+			styleable_text.set_character_scale_y(s, e, aargs[0]);
+		}
 		if (cmd == "s" || cmd == "sprite") styleable_text.set_character_sprite(s, aargs[0]);
 	}
 	
