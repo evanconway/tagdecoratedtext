@@ -259,3 +259,12 @@ We were able to add typing settings via tags without too much trouble. This thin
 9th of December, 2023
 
 We were able to use this library in a project and ran into a bug we've yet to fix. The code doesn't correctly line break when the dimensions are too restrictive. Based on some surface level testing, the issue appears to be line height. If the height of text is higher than the limitation given my the user, something breaks.
+
+
+10th of December, 2023
+
+Looks like firstly, the line indexes end up out of wack. If the first word is too large, it ends up on line index 1, when it should be 0.
+
+It also appears that We didn't account for successive force new line commands. When starting a new line, our logic assumes that the previous characters have already been accounted for. But if we force a new line, then immediately force another line one character later, that single character never gets properly added in our line break logic.
+
+Ah, perhaps we can easily fix this simply only incrementing our line index if the char_x is not 0. That our system will only increment the line index once per condition that triggers a line change.

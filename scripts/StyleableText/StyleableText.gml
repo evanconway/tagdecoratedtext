@@ -141,6 +141,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		draw_set_font(char.style.font);
 		return string_height(char.char) * char.style.scale_y;
 	};
+	
 	/// @ignore
 	calculate_char_positions = function() {
 		text_line_widths = [];
@@ -157,14 +158,14 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		for (var i = 0; i <= character_array_length; i++) {
 			var add_word_to_line = false;
 		
-			// reset drawables
+			// reset drawable
 			if (i < character_array_length) {
 				character_array[i].drawable = {
 					index_start: i,
 					index_end: i,
 					text: character_array[i].char,
 					style: character_array[i].style.get_copy(),
-				}
+				};
 			}
 		
 			var force_new_line = i < character_array_length && character_array[i].style.new_line;
@@ -184,9 +185,9 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 			}
 
 			if (add_word_to_line && text_width >= 0 && char_x + word_width >= text_width) {
+				line_index += char_x > 0 ? 1 : 0;
 				char_x = 0;
 				char_max_height = 0;
-				line_index++;
 			}
 		
 			if (add_word_to_line) {
@@ -203,9 +204,9 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 				word_width = i < character_array_length ? get_char_width(character_array[i]) : 0;
 				word_complete = false;
 				if (force_new_line) {
+					line_index += char_x > 0 ? 1 : 0;
 					char_x = 0;
 					char_max_height = 0;
-					line_index++;
 				}
 			}
 		}
@@ -312,6 +313,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		if (!char_a.drawable.style.is_equal(char_b.drawable.style)) return false;
 		if (!char_a.style.is_equal(char_b.style)) return false;
 		if (char_a.y != char_b.y) return false;
+		if (char_a.line_index != char_b.line_index) return false;
 		return true;
 	};
 	

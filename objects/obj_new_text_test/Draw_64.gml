@@ -21,4 +21,4 @@ tag_decorated_text_draw(test, display_get_gui_width() / 2, display_get_gui_heigh
 draw_set_valign(fa_top);
 draw_set_halign(fa_left);
 
-tag_decorated_text_draw(fox, 100, 100);
+//tag_decorated_text_draw(fox, 100, 100);
