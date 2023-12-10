@@ -323,12 +323,28 @@ function tag_decorated_text_type_current_page(tag_decorated_text) {
 }
 
 /**
+ * Indicates if the current page is finished typing.
+ */
+function tag_decorated_text_get_current_page_typing_finished(tag_decorated_text) {
+	return tag_decorated_text.typer.get_current_page_finished();
+}
+
+/**
  * Sets the typing state of all pages to finished.
  *
  * @param {Struct.New_Tag} tag_decorated_text
  */
 function tag_decorated_text_type_all_pages(tag_decorated_text) {
 	tag_decorated_text.typer.finish_typing_all_pages();
+}
+
+/**
+ * Returns true if typing is completely finished for all pages.
+ */
+function tag_decorated_text_get_typing_finished(tag_decorated_text) {
+	with (tag_decorated_text) {
+		return typer.get_all_pages_finished() && styleable_text.text_page_index == styleable_text.text_page_index_max;
+	}
 }
 
 /**
@@ -387,7 +403,7 @@ function tag_decorated_text_get_current_page_index(tag_decorated_text) {
  *
  * @param {Struct.TagDecoratedText} tag_decorated_text
  */
-function tag_get_width(tag_decorated_text) {
+function tag_decorated_text_get_width(tag_decorated_text) {
 	return tag_decorated_text.styleable_text.get_width();
 }
 

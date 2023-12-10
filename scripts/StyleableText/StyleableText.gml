@@ -413,7 +413,8 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 	/// @ignore
 	set_character_font = function(index_start, index_end, font) {
 		invoke_callback_on_character_range(index_start, index_end, method({ font }, function(c) {
-			c.style.font = font;
+			if (is_string(font) && asset_get_type(font) != asset_font) show_error("name given for font command is not a font asset", true);
+			c.style.font = asset_get_index(font);
 		}));
 	};
 	/// @ignore
@@ -566,6 +567,13 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 				draw_set_color(drawable.style.color);
 				draw_set_alpha(drawable.style.alpha);
 				draw_set_font(drawable.style.font);
+				
+				// forced outline on all fonts
+				//font_enable_effects(drawable.style.font, true, {
+				//    outlineEnable: true,
+				//    outlineDistance: 6,
+				//    outlineColour: c_black
+				//});
 				
 				var width_diff = page_width - text_line_widths[c.line_index];
 				var halign_offset = 0;

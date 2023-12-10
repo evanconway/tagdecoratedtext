@@ -125,7 +125,15 @@ function StyleableTextTyper(text, animator) constructor {
 	/// @ignore
 	get_current_page_finished = function() {
 		return pages_hide_start_end[typer_text.text_page_index].index_current > typer_text.text_page_char_index_end[typer_text.text_page_index];
-	}
+	};
+	/// @ignore
+	get_all_pages_finished = function() {
+		var result = true;
+		for (var i = 0; i <= typer_text.text_page_index_max; i++) {
+			if (pages_hide_start_end[i].index_current <= typer_text.text_page_char_index_end[i]) result = false;
+		}
+		return result;
+	};
 	/// @ignore
 	current_typing_params = character_typing_params[0];
 	/// @ignore
