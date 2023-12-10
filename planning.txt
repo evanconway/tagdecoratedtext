@@ -254,3 +254,8 @@ We've added typing interface functions. We have about 6 functions left I know we
 Added all of the remaining functions we had on the previous system that were worth adding. But we haven't tested them thoroughly yet. Also it occured to me that making the typing params part of the tag system could totally work. I think we could include typing information inside of characters via a map in the typer. And the typing system would check these characters for different data when typing. 
 
 We were able to add typing settings via tags without too much trouble. This thing is starting to feel finished. Let's tidy up the function names and start hiding variables from the user, then try and make something with it.
+
+
+9th of December, 2023
+
+We were able to use this library in a project and ran into a bug we've yet to fix. The code doesn't correctly line break when the dimensions are too restrictive. Based on some surface level testing, the issue appears to be line height. If the height of text is higher than the limitation given my the user, something breaks.
