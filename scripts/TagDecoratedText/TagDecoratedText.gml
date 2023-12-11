@@ -20,6 +20,7 @@ function __TagDecoratedTextCommand(command, index_start) constructor {
 			var r = real(str);
 			return r;
 		} catch(error) {
+			/// @ignore
 			error = undefined; // avoids syntax error
 		}
 
@@ -59,6 +60,7 @@ function TagDecoratedTextDefault(source_string, default_effects = "", width = -1
 	this we need to build an array of commands and their index ranges as well as 
 	the text to display with command tags removed.
 	*/
+	/// @ignore
 	var commands = [];
 	
 	// set the end indexes of commands which haven't had their ends set yet.
@@ -226,6 +228,7 @@ function TagDecoratedTextDefault(source_string, default_effects = "", width = -1
 				var r = real(string_copy(org_aargs, 3, string_length(org_aargs) -2));
 				typer.set_character_pause(char, r);
 			} catch(error) {
+				/// @ignore
 				error = undefined; // avoids syntax warning
 				show_error("number was not provided for second argument of character pause command", true);
 			}
