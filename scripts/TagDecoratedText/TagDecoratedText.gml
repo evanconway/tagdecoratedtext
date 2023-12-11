@@ -213,6 +213,10 @@ function TagDecoratedTextDefault(source_string, default_effects = "", width = -1
 			if (array_length(aargs) != 2) show_error("incorrect number of arguments for typing command", true);
 			typer.set_character_indexes_typing_params(s, e, aargs[0], aargs[1]);
 		}
+		if (cmd == "pause" || cmd == "p") {
+			if (array_length(aargs) != 1) show_error("incorrect number of arguments for pause command", true);
+			typer.set_character_index_pause(s, aargs[0]);
+		}
 		if (cmd == "charpause" || cmd == "cp") {
 			// this command requires different command text parsing
 			var org_aargs = commands[i].original_aargs
@@ -455,28 +459,6 @@ function tag_decorated_text_set_character_on_type_callback(tag_decorated_text, c
 }
 
 /**
- * Set specific typing pause for given character.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- * @param {string} character
- * @param {real} pause_time_ms
- */
-function tag_decorated_text_set_character_pause(tag_decorated_text, character, pause_time_ms) {
-	tag_decorated_text.typer.set_character_pause(character, pause_time_ms);
-}
-
-/**
- * Set specific typing pause for character at given index.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- * @param {real} character_index
- * @param {real} pause_time_ms
- */
-function tag_decorated_text_set_character_index_pause(tag_decorated_text, character_index, pause_time_ms) {
-	tag_decorated_text.typer.set_character_index_pause(character_index, pause_time_ms);
-}
-
-/**
  * Set the time between types and characters per type.
  *
  * @param {Struct.New_tag} tag_decorated_text
@@ -484,6 +466,7 @@ function tag_decorated_text_set_character_index_pause(tag_decorated_text, charac
  * @param {real} chars_per_type
  */
 function tag_decorated_text_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
-	tag_decorated_text.typer.time_between_types_ms = time_between_types_ms;
-	tag_decorated_text.typer.chars_per_type = chars_per_type;
+	with (tag_decorated_text) {
+		tag_decorated_text.typer.set_character_indexes_typing_params(0, styleable_text.character_array_length - 1, time_between_types_ms, chars_per_type);
+	}
 }

@@ -9,7 +9,6 @@
     {"name":"snd_chirp","order":4,"path":"sounds/snd_chirp/snd_chirp.yy",},
     {"name":"StyleableTextAnimator","order":8,"path":"scripts/StyleableTextAnimator/StyleableTextAnimator.yy",},
     {"name":"spr_styleable_text_sprite_default","order":6,"path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},
-    {"name":"Setters","order":3,"path":"scripts/Setters/Setters.yy",},
     {"name":"StyleableText","order":7,"path":"scripts/StyleableText/StyleableText.yy",},
     {"name":"TagDecoratedText","order":10,"path":"scripts/TagDecoratedText/TagDecoratedText.yy",},
     {"name":"StyleableTextTyper","order":9,"path":"scripts/StyleableTextTyper/StyleableTextTyper.yy",},

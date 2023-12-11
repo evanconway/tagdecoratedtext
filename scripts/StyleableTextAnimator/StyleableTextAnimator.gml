@@ -104,7 +104,7 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 			time_ms += update_time_ms;
 			var drawn_alpha = min(1, time_ms/duration);
 			if (drawn_alpha == 1) finished = true;
-			text_apply_alpha(text, animation_index_end, animation_index_end, drawn_alpha);
+			text.drawable_apply_alpha(animation_index_start, animation_index_end, drawn_alpha);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 		
@@ -132,7 +132,7 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 			time_ms += update_time_ms;
 			var drawn_offset = max(0, offset - time_ms/duration*offset);
 			if (drawn_offset == 0) finished = true;
-			text_add_offset_y(text, animation_index_start, animation_index_end, drawn_offset);
+			text.drawable_add_offset_y(animation_index_start, animation_index_end, drawn_offset);
 			if (finished) text.merge_drawables_at_index_range(animation_index_start, animation_index_end);
 		};
 	}
@@ -162,7 +162,7 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 				check -= cycle_time;
 			}
 			var alpha = alpha_min + check/cycle_time * (alpha_max - alpha_min);
-			text_apply_alpha(text, animation_index_start, animation_index_end, alpha);
+			text.drawable_apply_alpha(animation_index_start, animation_index_end, alpha);
 		};
 	}
 	
@@ -201,12 +201,12 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 			}
 			if (offset_individual_chars) {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
-					text_add_offset_x(text, i, i, offset_x_arr[i - animation_index_start]);
-					text_add_offset_y(text, i, i, offset_y_arr[i - animation_index_start]);
+					text.drawable_add_offset_x(i, i, offset_x_arr[i - animation_index_start]);
+					text.drawable_add_offset_y(i, i, offset_y_arr[i - animation_index_start]);
 				}
 			} else {
-				text_add_offset_x(text, i, i, offset_x_arr[i - animation_index_start]);
-				text_add_offset_y(text, i, i, offset_y_arr[i - animation_index_start]);
+				text.drawable_add_offset_x(i, i, offset_x_arr[i - animation_index_start]);
+				text.drawable_add_offset_y(i, i, offset_y_arr[i - animation_index_start]);
 			}
 		};
 	}
@@ -288,10 +288,10 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 			// use char offset to determine if chromatic or wchromatic
 			if (char_offset != 0) {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
-					text_set_color(text, i, i, get_chromatic_color_at(index + char_offset * i));
+					text.drawable_set_color(i, i, get_chromatic_color_at(index + char_offset * i));
 				}
 			} else {
-				text_set_color(text, animation_index_start, animation_index_end, get_chromatic_color_at(index));
+				text.drawable_set_color(animation_index_start, animation_index_end, get_chromatic_color_at(index));
 			}	
 		};
 	}
@@ -328,11 +328,11 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 			var percent = time_into_cylce / cycle_time;
 			if (char_offset == 0) {
 				var mod_y = sin(percent * -2 * pi) * magnitude;
-				text_add_offset_y(text, animation_index_start, animation_index_end, mod_y);
+				text.drawable_add_offset_y(animation_index_start, animation_index_end, mod_y);
 			} else {
 				for (var i = animation_index_start; i <= animation_index_end; i++) {
 					var mod_y = sin(percent * -2 * pi + char_offset * i) * magnitude;
-					text_add_offset_y(text, i, i, mod_y);
+					text.drawable_add_offset_y(i, i, mod_y);
 				}
 			}
 		};
@@ -357,9 +357,9 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 		update = function(update_time_ms) {
 			time_ms += update_time_ms;
 			if ((time_ms % (cycle_time * 2)) <= cycle_time) {
-				text_apply_alpha(text, animation_index_start, animation_index_end, alpha_max);
+				text.drawable_apply_alpha(animation_index_start, animation_index_end, alpha_max);
 			} else {
-				text_apply_alpha(text, animation_index_start, animation_index_end, alpha_min);
+				text.drawable_apply_alpha(animation_index_start, animation_index_end, alpha_min);
 			}
 		};
 	}
@@ -412,15 +412,15 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 						index = irandom_range(animation_index_start, animation_index_end);
 						state = 1;
 					} else if (state == 1 && time_ms < 0) {
-						text_add_offset_x(text, index, index, 0);
-						text_add_offset_y(text, index, index, 0);
+						text.drawable_add_offset_x(index, index, 0);
+						text.drawable_add_offset_y(index, index, 0);
 						text.merge_drawables_at_index_range(index, index);
 						time_ms = irandom_range(wait_min, wait_max);
 						state = 0;
 					}
 					if (state == 1) {
-						text_add_offset_x(text, index, index, offset_x);
-						text_add_offset_y(text, index, index, offset_y);
+						text.drawable_add_offset_x(index, index, offset_x);
+						text.drawable_add_offset_y(index, index, offset_y);
 					}
 				}
 			});

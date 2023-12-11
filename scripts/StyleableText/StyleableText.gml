@@ -405,6 +405,9 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		}
 		return result;
 	};
+	
+	// character setters
+	
 	/// @ignore
 	invoke_callback_on_character_range = function(index_start, index_end, callback) {
 		var index_stop = min(array_length(character_array) - 1, index_end);
@@ -464,6 +467,49 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		if (is_string(sprite) && asset_get_type(sprite) != asset_sprite) show_error("name given for sprite command is not a sprite asset", true);
 		character_array[index].style.sprite = asset_get_index(sprite);
 	};
+	
+	// drawable setters
+	
+	/// @ignore
+	drawable_set_color = function(index_start, index_end, color) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.color = color;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	};
+	
+	/// @ignore
+	drawable_apply_alpha = function(index_start, index_end, alpha) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.alpha *= alpha;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+	
+	/// @ignore
+	drawable_add_offset_x = function(index_start, index_end, offset_x) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.offset_x += offset_x;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+	
+	/// @ignore
+	drawable_add_offset_y = function(index_start, index_end, offset_y) {
+		split_drawables_at_index_range(index_start, index_end);
+		var index = index_start;
+		while (index <= index_end) {
+			character_array[index].drawable.style.offset_y += offset_y;
+			index = character_array[index].drawable.index_end + 1;
+		}
+	}
+	
 	/// @ignore
 	build = function() {
 		calculate_char_positions();

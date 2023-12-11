@@ -142,7 +142,7 @@ function StyleableTextTyper(text, animator) constructor {
 		if (hide.index_current > hide.index_end) return;
 		time_ms -= update_time_ms;
 		if (time_ms > 0) {
-			text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
+			typer_text.drawable_apply_alpha(hide.index_current, hide.index_end, 0);
 			return;
 		}
 		
@@ -180,7 +180,7 @@ function StyleableTextTyper(text, animator) constructor {
 		}
 
 		on_type();
-		text_apply_alpha(typer_text, hide.index_current, hide.index_end, 0);
+		typer_text.drawable_apply_alpha(hide.index_current, hide.index_end, 0);
 		if (hide.index_current > hide.index_end) time_ms = 0; // avoid pauses on next page
 	};
 }

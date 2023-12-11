@@ -8,6 +8,7 @@ draw_text(0, 0, fps_real);
 draw_text(0, height, $"page {tag_decorated_text_get_current_page_index(test) + 1} of {tag_decorated_text_get_page_count(test)}");
 draw_text(0, height * 2, $"typing finished: {tag_decorated_text_get_typing_finished(test)}");
 draw_text(0, height * 3, $"dimensions: {tag_decorated_text_get_width(test)}x{tag_decorated_text_get_height(test)}");
+draw_text(0, height * 4, $"page finished?: {tag_decorated_text_get_current_page_typing_finished(test)}");
 
 if (keyboard_check_pressed(vk_right)) tag_decorated_text_page_next(test);
 if (keyboard_check_pressed(vk_left)) tag_decorated_text_page_previous(test);
