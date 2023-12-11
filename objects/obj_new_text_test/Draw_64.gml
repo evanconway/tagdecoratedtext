@@ -23,10 +23,6 @@ if (keyboard_check_pressed(vk_enter)) tag_decorated_text_type_all_pages(test);
 
 draw_set_halign(fa_center);
 draw_set_valign(fa_middle);
+draw_set_alpha(0.5);
 
 tag_decorated_text_draw(test, display_get_gui_width() / 2, display_get_gui_height() / 2);
-
-draw_set_valign(fa_top);
-draw_set_halign(fa_left);
-
-//tag_decorated_text_draw(fox, 100, 100);

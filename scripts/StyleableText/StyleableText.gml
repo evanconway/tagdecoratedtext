@@ -547,6 +547,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		y = floor(y);
 		var original_halign = draw_get_halign();
 		var original_valign = draw_get_valign();
+		var original_font = draw_get_font();
 		draw_set_halign(fa_left);
 		draw_set_valign(fa_top);
 		
@@ -584,6 +585,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		}
 		
 		if (debug) {
+			var before_debug_box_alpha = draw_get_alpha();
 			draw_set_alpha(1);
 			draw_set_font(fnt_styleable_text_font_default);
 			draw_set_color(c_lime);
@@ -605,6 +607,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		
 			draw_set_color(c_fuchsia);
 			draw_rectangle(x, y, x + 1, y + 1, false);
+			draw_set_alpha(before_debug_box_alpha);
 		}
 		
 		var index = text_page_char_index_start[text_page_index]; // starting character of current page
@@ -612,16 +615,7 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 			var c = character_array[index];
 			var drawable = c.drawable;
 			if (c.page_index == text_page_index && drawable.style.alpha > 0) {
-				draw_set_color(drawable.style.color);
-				draw_set_alpha(drawable.style.alpha);
 				draw_set_font(drawable.style.font);
-				
-				// forced outline on all fonts
-				//font_enable_effects(drawable.style.font, true, {
-				//    outlineEnable: true,
-				//    outlineDistance: 6,
-				//    outlineColour: c_black
-				//});
 				
 				var width_diff = page_width - text_line_widths[c.line_index];
 				var halign_offset = 0;
@@ -636,9 +630,31 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 				var draw_y = box_y + c.y + drawable.style.offset_y + vcentering;
 				
 				if (drawable.style.sprite == spr_styleable_text_sprite_default) {
-					draw_text_transformed(draw_x, draw_y, drawable.text, drawable.style.scale_x, drawable.style.scale_y, 0);
+					draw_text_transformed_color(
+						draw_x,
+						draw_y,
+						drawable.text,
+						drawable.style.scale_x,
+						drawable.style.scale_y,
+						0,
+						drawable.style.color,
+						drawable.style.color,
+						drawable.style.color,
+						drawable.style.color,
+						drawable.style.alpha * draw_get_alpha()
+					);
 				} else {
-					draw_sprite_ext(drawable.style.sprite, 0, draw_x, draw_y, drawable.style.scale_x, drawable.style.scale_y, 0, drawable.style.color, drawable.style.alpha);
+					draw_sprite_ext(
+						drawable.style.sprite,
+						0,
+						draw_x,
+						draw_y,
+						drawable.style.scale_x,
+						drawable.style.scale_y,
+						0,
+						drawable.style.color,
+						drawable.style.alpha * draw_get_alpha()
+					);
 				}
 			}
 			index = drawable.index_end + 1;
@@ -646,5 +662,6 @@ function __TagDecoratedTextStyleable(text, width=-1, height=-1) constructor {
 		}
 		draw_set_halign(original_halign);
 		draw_set_valign(original_valign);
+		draw_set_font(original_font);
 	};
 }
