@@ -33,12 +33,25 @@ function __TagDecoratedTextCommand(command, index_start) constructor {
 }
 
 /**
- * Creates a new TagDecoratedText instance from the given source string.
+ * Create a TagDecoratedText instance from the given string.
  *
- * @param {string} source_string the string with decorative tags
- * @param {string} default_effects (make version without this later)
+ * @param {string} source_string string with decorative tags
+ * @param {real} width maximum width of the text
+ * @param {real} height maximum height of the text
  */
-function TagDecoratedText(source_string, default_effects = "", width = -1, height = -1) constructor {
+function TagDecoratedText(source_string, width = -1, height = -1) constructor {
+	return TagDecoratedText(source_string, width, height);
+}
+
+/**
+ * Create a TagDecoratedText instance from the given string with default effects.
+ *
+ * @param {string} source_string string with decorative tags
+ * @param {string} default_effects
+ * @param {real} width maximum width of the text
+ * @param {real} height maximum height of the text
+ */
+function TagDecoratedTextDefault(source_string, default_effects = "", width = -1, height = -1) constructor {
 	/*
 	The source string contains both the tags and the text to actually display. From
 	this we need to build an array of commands and their index ranges as well as 
