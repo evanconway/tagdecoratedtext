@@ -19,7 +19,9 @@ function __TagDecoratedTextCommand(command, index_start) constructor {
 		try {
 			var r = real(str);
 			return r;
-		} catch(error) {}
+		} catch(error) {
+			error = undefined; // avoids syntax error
+		}
 
 		// Feather disable once GM1035
 		return str;
@@ -220,6 +222,7 @@ function TagDecoratedTextDefault(source_string, default_effects = "", width = -1
 				var r = real(string_copy(org_aargs, 3, string_length(org_aargs) -2));
 				typer.set_character_pause(char, r);
 			} catch(error) {
+				error = undefined; // avoids syntax warning
 				show_error("number was not provided for second argument of character pause command", true);
 			}
 		}
@@ -481,6 +484,6 @@ function tag_decorated_text_set_character_index_pause(tag_decorated_text, charac
  * @param {real} chars_per_type
  */
 function tag_decorated_text_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
-	tag_decorated_text.typer.time_between_types_ms = time_ms_between_types;
+	tag_decorated_text.typer.time_between_types_ms = time_between_types_ms;
 	tag_decorated_text.typer.chars_per_type = chars_per_type;
 }

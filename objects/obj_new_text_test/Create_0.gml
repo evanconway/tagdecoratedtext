@@ -6,6 +6,10 @@ tag_decorated_text_set_on_type_callback(test, function() {
 	audio_play_sound(snd_chirp, 0, false);
 });
 
+tag_decorated_text_set_character_on_type_callback(test, 30, function() {
+	show_debug_message("Character at index 30 typed!");
+});
+
 //fox = new TagDecoratedText("The quick brown fox jumps over the lazy dog.");
 
 test.styleable_text.debug = true;
