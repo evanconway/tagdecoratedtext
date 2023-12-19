@@ -3,7 +3,7 @@ A GameMaker package to easily create stylized, animated text.
 
 ```
 // create event
-test = new TagDecoratedTextDefault("The <shake>quick<> brown <orange>fox<> <y:-6>jumps<> over the <red wave>lazy<> dog.", "t:60,1");
+test = new TagDecoratedText("The <shake>quick<> brown <orange>fox<> <y:-6>jumps<> over the <red wave>lazy<> dog.");
 
 // draw gui event
 tag_decorated_text_draw(test, 0, 0);
@@ -15,11 +15,11 @@ With typing
 
 ```
 // create event
-test = new TagDecoratedText("The <shake>quick<> brown <orange>fox<> <y:-6>jumps<> over the <red wave>lazy<> dog.");
+test = new TagDecoratedTextDefault("The <shake>quick<> brown <orange>fox<> <y:-6>jumps<> over the <red wave>lazy<> dog.", "t:60,1");
 
 // draw gui event
 if (keyboard_check_pressed(ord("R"))) tag_decorated_text_reset_typing(test);
-tag_decorated_text_draw(test, 100, 100);
+tag_decorated_text_draw(test, 0, 0);
 ```
 
 ![Example 1](https://github.com/evanconway/tagdecoratedtext/blob/main/example%20gifs/example_typing1.gif)
