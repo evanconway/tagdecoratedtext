@@ -174,9 +174,9 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 		/// @ignore
 		offset_individual_chars = animation_enum == ANIMATED_TEXT_ANIMATIONS.TREMBLE;
 		/// @ignore
-		offset_x_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
+		offset_x_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 1);
 		/// @ignore
-		offset_y_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 0);
+		offset_y_arr = array_create(offset_individual_chars ? animation_index_end - animation_index_start + 1 : 1);
 		/// @ignore
 		calc_offsets = function() {
 			for (var i = 0; i < array_length(offset_x_arr); i++) {
@@ -205,8 +205,8 @@ function TagDecoratedTextAnimation(styleable_text, animation_enum, index_start, 
 					text.drawable_add_offset_y(i, i, offset_y_arr[i - animation_index_start]);
 				}
 			} else {
-				text.drawable_add_offset_x(i, i, offset_x_arr[i - animation_index_start]);
-				text.drawable_add_offset_y(i, i, offset_y_arr[i - animation_index_start]);
+				text.drawable_add_offset_x(animation_index_start, animation_index_end, offset_x_arr[0]);
+				text.drawable_add_offset_y(animation_index_start, animation_index_end, offset_y_arr[0]);
 			}
 		};
 	}

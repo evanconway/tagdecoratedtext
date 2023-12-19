@@ -17,7 +17,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.11.0.121",
+    "IDEVersion": "2023.11.1.129",
   },
   "resources": [
     {"id":{"name":"obj_new_text_test","path":"objects/obj_new_text_test/obj_new_text_test.yy",},},
@@ -26,6 +26,7 @@
     {"id":{"name":"snd_chirp","path":"sounds/snd_chirp/snd_chirp.yy",},},
     {"id":{"name":"StyleableTextAnimator","path":"scripts/StyleableTextAnimator/StyleableTextAnimator.yy",},},
     {"id":{"name":"spr_styleable_text_sprite_default","path":"sprites/spr_styleable_text_sprite_default/spr_styleable_text_sprite_default.yy",},},
+    {"id":{"name":"obj_examples","path":"objects/obj_examples/obj_examples.yy",},},
     {"id":{"name":"StyleableText","path":"scripts/StyleableText/StyleableText.yy",},},
     {"id":{"name":"fnt_handwriting","path":"fonts/fnt_handwriting/fnt_handwriting.yy",},},
     {"id":{"name":"TagDecoratedText","path":"scripts/TagDecoratedText/TagDecoratedText.yy",},},

@@ -43,7 +43,7 @@ function __TagDecoratedTextCommand(command, index_start) constructor {
  * @param {real} height maximum height of the text
  */
 function TagDecoratedText(source_string, width = -1, height = -1) constructor {
-	return TagDecoratedText(source_string, width, height);
+	return TagDecoratedTextDefault(source_string, "", width, height);
 }
 
 /**
