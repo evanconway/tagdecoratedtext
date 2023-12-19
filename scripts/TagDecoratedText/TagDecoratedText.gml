@@ -290,7 +290,6 @@ function tag_decorated_text_update(tag_decorated_text, update_time_ms = 1000 / g
  * @param {Struct.New_Tag} tag_decorated_text
  * @param {real} x
  * @param {real} y
- * @param {Constant.HAlign} alignment
  */
 function tag_decorated_text_draw_no_update(tag_decorated_text, x, y) {
 	with (tag_decorated_text) {

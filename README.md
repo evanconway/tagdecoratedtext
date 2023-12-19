@@ -102,167 +102,218 @@ _Returns:_  NA(`undefined`)
 
 
 
+`tag_decorated_text_update`
 
+Updates the given tag decorated text instance by the given time in ms. If no time is specified the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
 
-/**
- * Updates the given tag decorated text instance by the given time in ms. If no time is specified
- * the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- * @param {real} update_time_ms
- */
-function tag_decorated_text_update(tag_decorated_text, update_time_ms = 1000 / game_get_speed(gamespeed_fps)) {
-	with (tag_decorated_text) {
-		typer.update(update_time_ms);
-		animator.update(update_time_ms);
-		animations_updated = true;
-	}
-}
+_Full function name:_  `tag_decorated_text_update(tag_decorated_text, [update_time_ms])`
+ 
+_Returns:_  NA(`undefined`)
 
-/**
- * Draws the given tag decorated text instance without updating it.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- * @param {real} x
- * @param {real} y
- * @param {Constant.HAlign} alignment
- */
-function tag_decorated_text_draw_no_update(tag_decorated_text, x, y) {
-	with (tag_decorated_text) {
-		if (!animations_updated) animator.update(0);
-		styleable_text.draw(x, y);
-		animations_updated = false;
-	}
-}
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to advance typing state of. |
+| update_time_ms | Real | Amount of time in milliseconds to update animations and typing state by. |
+---
 
-/**
- * Resets the state of all animations of the given tag decorated text instance.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_reset_animations(tag_decorated_text) {
-	tag_decorated_text.animator.reset();
-}
+`tag_decorated_text_draw_no_update`
 
-/**
- * Sets the typing state of the current page to finished.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_type_current_page(tag_decorated_text) {
-	tag_decorated_text.typer.finish_typing_current_page();
-}
+Draws the given tag decorated text instance without updating it.
 
-/**
- * Indicates if the current page is finished typing.
- */
-function tag_decorated_text_get_current_page_typing_finished(tag_decorated_text) {
-	return tag_decorated_text.typer.get_current_page_finished();
-}
+_Full function name:_  `tag_decorated_text_draw_no_update(tag_decorated_text, x, y)`
+ 
+_Returns:_  NA(`undefined`)
 
-/**
- * Sets the typing state of all pages to finished.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_type_all_pages(tag_decorated_text) {
-	tag_decorated_text.typer.finish_typing_all_pages();
-}
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to draw. |
+| x | Real | X position to draw text. |
+| y | Real | Y position to draw text. |
+---
 
-/**
- * Returns true if typing is completely finished for all pages.
- */
-function tag_decorated_text_get_typing_finished(tag_decorated_text) {
-	with (tag_decorated_text) {
-		return typer.get_all_pages_finished() && styleable_text.text_page_index == styleable_text.text_page_index_max;
-	}
-}
+`tag_decorated_text_reset_animations`
 
-/**
- * Go to the next page.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_page_next(tag_decorated_text) {
-	tag_decorated_text.styleable_text.page_next();
-}
+Resets the state of all animations of the given tag decorated text instance.
 
-/**
- * Go to the previous page.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_page_previous(tag_decorated_text) {
-	tag_decorated_text.styleable_text.page_previous();
-}
+_Full function name:_  `tag_decorated_text_reset_animations(tag_decorated_text)`
+ 
+_Returns:_  NA(`undefined`)
 
-/**
- * Get the number of pages.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_get_page_count(tag_decorated_text) {
-	return tag_decorated_text.styleable_text.text_page_index_max + 1;
-}
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to reset animation state of. |
+---
 
-/**
- * Get the index of the current page.
- *
- * @param {Struct.New_Tag} tag_decorated_text
- */
-function tag_decorated_text_get_current_page_index(tag_decorated_text) {
-	return tag_decorated_text.styleable_text.text_page_index;
-}
+`tag_decorated_text_type_current_page`
 
-/**
- * Returns the width of the given tag decorated text instance.
- *
- * @param {Struct.TagDecoratedText} tag_decorated_text
- */
-function tag_decorated_text_get_width(tag_decorated_text) {
-	return tag_decorated_text.styleable_text.get_width();
-}
+Sets the typing state of the current page to finished.
 
-/**
- * Returns the height of the given tag decorated text instance.
- *
- * @param {Struct.TagDecoratedText} tag_decorated_text
- */
-function tag_decorated_text_get_height(tag_decorated_text) {
-	return tag_decorated_text.styleable_text.get_height();
-}
+_Full function name:_  `tag_decorated_text_type_current_page(tag_decorated_text)`
+ 
+_Returns:_  NA(`undefined`)
 
-/**
- * Set the callback function that's invoked whenever a type event occurs.
- *
- * @param {Struct.TagDecoratedText} tag_decorated_text
- * @param {function} on_type_callback
- */
-function tag_decorated_text_set_on_type_callback(tag_decorated_text, on_type_callback) {
-	tag_decorated_text.typer.on_type = on_type_callback;
-}
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to set typing state of. |
+---
 
-/**
- * Set the callback function that's invoked whenever a type event occurs
- * for a specific character.
- *
- * @param {Struct.TagDecoratedText} tag_decorated_text
- * @param {real} character_index
- * @param {function} on_type_callback
- */
-function tag_decorated_text_set_character_on_type_callback(tag_decorated_text, character_index, on_type_callback) {
-	tag_decorated_text.typer.set_character_index_on_type(character_index, on_type_callback);
-}
+`tag_decorated_text_get_current_page_typing_finished`
 
-/**
- * Set the time between types and characters per type.
- *
- * @param {Struct.New_tag} tag_decorated_text
- * @param {real} time_between_types_ms
- * @param {real} chars_per_type
- */
-function tag_decorated_text_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type) {
-	with (tag_decorated_text) {
-		tag_decorated_text.typer.set_character_indexes_typing_params(0, styleable_text.character_array_length - 1, time_between_types_ms, chars_per_type);
-	}
-}
+Indicates if the current page is finished typing.
+
+_Full function name:_  `tag_decorated_text_get_current_page_typing_finished(tag_decorated_text)`
+ 
+_Returns:_  (`Bool`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get typing state of. |
+---
+
+`tag_decorated_text_type_all_pages`
+
+Sets the typing state of all pages to finished.
+
+_Full function name:_  `tag_decorated_text_type_all_pages(tag_decorated_text)`
+ 
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to set typing state of. |
+---
+
+`tag_decorated_text_get_typing_finished`
+
+Returns true if typing is completely finished for all pages.
+
+_Full function name:_  `tag_decorated_text_get_typing_finished(tag_decorated_text)`
+ 
+_Returns:_  (`Bool`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get typing state of. |
+---
+
+`tag_decorated_text_page_next`
+
+Go to the next page.
+
+_Full function name:_  `tag_decorated_text_page_next(tag_decorated_text)`
+ 
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to go to next page of. |
+---
+
+`tag_decorated_text_page_previous`
+
+Go to the previous page.
+
+_Full function name:_  `tag_decorated_text_page_previous(tag_decorated_text)`
+ 
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to go to previous page of. |
+---
+
+`tag_decorated_text_get_page_count`
+
+Get the number of pages.
+
+_Full function name:_  `tag_decorated_text_get_page_count(tag_decorated_text)`
+ 
+_Returns:_  (`Real`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get page count of. |
+---
+
+`tag_decorated_text_get_current_page_index`
+
+Get the index of the current page.
+
+_Full function name:_  `tag_decorated_text_get_current_page_index(tag_decorated_text)`
+ 
+_Returns:_  (`Real`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get page index of. |
+---
+
+`tag_decorated_text_get_width`
+
+Returns the width of the given tag decorated text instance.
+
+_Full function name:_  `tag_decorated_text_get_width(tag_decorated_text)`
+ 
+_Returns:_  (`Real`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get width of. |
+---
+
+`tag_decorated_text_get_height`
+
+Returns the height of the given tag decorated text instance.
+
+_Full function name:_  `tag_decorated_text_get_height(tag_decorated_text)`
+ 
+_Returns:_  (`Real`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to get height of. |
+---
+
+`tag_decorated_text_set_on_type_callback`
+
+Set the callback function that's invoked whenever a type event occurs.
+
+_Full function name:_  `tag_decorated_text_set_on_type_callback(tag_decorated_text, on_type_callback)`
+ 
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to set on type callback of. |
+| on_type_callback | Function | Callback function invoked on character type. |
+---
+
+`tag_decorated_text_set_character_on_type_callback`
+
+Set the callback function that's invoked whenever a type event occurs for a specific character.
+
+_Full function name:_  `tag_decorated_text_set_character_on_type_callback(tag_decorated_text, character_index, on_type_callback)`
+
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to set character on type callback of. |
+| character_index | Real | Index of character to receive on type callback. |
+| on_type_callback | Function | Callback function invoked on character type. |
+---
+
+`tag_decorated_text_set_typing_params`
+
+Set the time between types and characters per type.
+
+_Full function name:_  `tag_decorated_text_set_typing_params(tag_decorated_text, time_between_types_ms, chars_per_type)`
+
+_Returns:_  NA(`undefined`)
+
+| Name        | DataType    |  Purpose   |
+| ----------- | ----------- | -----------|
+| tag_decorated_text | Struct.TagDecoratedText | TagDecoratedText instance to set typing params of. |
+| time_between_types_ms | Real | Time in milliseconds between type events. |
+| chars_per_type | Real | Number of characters typed per type event. |
+---
