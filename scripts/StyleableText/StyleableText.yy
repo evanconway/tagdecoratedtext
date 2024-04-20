@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "StyleableText",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "TagDecoratedText",
-    "path": "folders/TagDecoratedText.yy",
+  "$GMScript":"",
+  "%Name":"StyleableText",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"StyleableText",
+  "parent":{
+    "name":"TagDecoratedText",
+    "path":"folders/TagDecoratedText.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

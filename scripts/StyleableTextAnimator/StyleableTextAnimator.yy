@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "StyleableTextAnimator",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "TagDecoratedText",
-    "path": "folders/TagDecoratedText.yy",
+  "$GMScript":"",
+  "%Name":"StyleableTextAnimator",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"StyleableTextAnimator",
+  "parent":{
+    "name":"TagDecoratedText",
+    "path":"folders/TagDecoratedText.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

@@ -1,8 +1,8 @@
 {
-  "FolderOrderSettings": [
+  "FolderOrderSettings":[
     {"name":"TagDecoratedText","order":2,"path":"folders/TagDecoratedText.yy",},
   ],
-  "ResourceOrderSettings": [
+  "ResourceOrderSettings":[
     {"name":"obj_new_text_test","order":2,"path":"objects/obj_new_text_test/obj_new_text_test.yy",},
     {"name":"spr_button","order":5,"path":"sprites/spr_button/spr_button.yy",},
     {"name":"fnt_styleable_text_font_default","order":1,"path":"fonts/fnt_styleable_text_font_default/fnt_styleable_text_font_default.yy",},
