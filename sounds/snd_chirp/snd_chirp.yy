@@ -12,8 +12,8 @@
   "duration":0.115011,
   "name":"snd_chirp",
   "parent":{
-    "name":"TagDecoratedText",
-    "path":"folders/TagDecoratedText.yy",
+    "name":"tagdecoratedtext",
+    "path":"tagdecoratedtext.yyp",
   },
   "preload":false,
   "resourceType":"GMSound",

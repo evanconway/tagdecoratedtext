@@ -25,8 +25,8 @@
   "nineSlice":null,
   "origin":0,
   "parent":{
-    "name":"TagDecoratedText",
-    "path":"folders/TagDecoratedText.yy",
+    "name":"tagdecoratedtext",
+    "path":"tagdecoratedtext.yyp",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

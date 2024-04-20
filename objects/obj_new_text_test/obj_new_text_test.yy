@@ -9,8 +9,8 @@
   "name":"obj_new_text_test",
   "overriddenProperties":[],
   "parent":{
-    "name":"TagDecoratedText",
-    "path":"folders/TagDecoratedText.yy",
+    "name":"tagdecoratedtext",
+    "path":"tagdecoratedtext.yyp",
   },
   "parentObjectId":null,
   "persistent":false,
