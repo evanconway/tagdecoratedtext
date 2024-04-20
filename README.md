@@ -60,7 +60,7 @@ _Returns:_  `Struct.TagDecoratedText`
 
 `tag_decorated_text_draw`
 
-Updates and draws the given tag decorated text instance.
+Updates and draws the given TagDecoratedText instance.
 
 _Full function name:_  `tag_decorated_text_draw(tag_decorated_text, x, y, [update_time_ms])`
  
@@ -76,7 +76,7 @@ _Returns:_  NA(`undefined`)
 
 `tag_decorated_text_reset_typing`
 
-Resets typing state of given tag_decorated_text instance. Tag decorated text instances are "typed" by default. This function must be called before typing update will have any effect.
+Resets typing state of given tag_decorated_text instance. TagDecoratedText instances are "typed" by default. This function must be called before typing update will have any effect.
 
 _Full function name:_  `tag_decorated_text_reset_typing(tag_decorated_text)`
  
@@ -104,7 +104,7 @@ _Returns:_  NA(`undefined`)
 
 `tag_decorated_text_update`
 
-Updates the given tag decorated text instance by the given time in ms. If no time is specified the tag decorated text instance is updated by time in ms of 1 frame of the current game speed.
+Updates the given TagDecoratedText instance by the given time in ms. If no time is specified the TagDecoratedText instance is updated by time in ms of 1 frame of the current game speed.
 
 _Full function name:_  `tag_decorated_text_update(tag_decorated_text, [update_time_ms])`
  
@@ -118,7 +118,7 @@ _Returns:_  NA(`undefined`)
 
 `tag_decorated_text_draw_no_update`
 
-Draws the given tag decorated text instance without updating it.
+Draws the given TagDecoratedText instance without updating it.
 
 _Full function name:_  `tag_decorated_text_draw_no_update(tag_decorated_text, x, y)`
  
@@ -133,7 +133,7 @@ _Returns:_  NA(`undefined`)
 
 `tag_decorated_text_reset_animations`
 
-Resets the state of all animations of the given tag decorated text instance.
+Resets the state of all animations of the given TagDecoratedText instance.
 
 _Full function name:_  `tag_decorated_text_reset_animations(tag_decorated_text)`
  
@@ -250,7 +250,7 @@ _Returns:_  (`Real`)
 
 `tag_decorated_text_get_width`
 
-Returns the width of the given tag decorated text instance.
+Returns the width of the given TagDecoratedText instance.
 
 _Full function name:_  `tag_decorated_text_get_width(tag_decorated_text)`
  
@@ -263,7 +263,7 @@ _Returns:_  (`Real`)
 
 `tag_decorated_text_get_height`
 
-Returns the height of the given tag decorated text instance.
+Returns the height of the given TagDecoratedText instance.
 
 _Full function name:_  `tag_decorated_text_get_height(tag_decorated_text)`
  
